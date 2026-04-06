@@ -5,10 +5,10 @@ import { motion, useInView } from "framer-motion";
 
 const SEGMENTS = [
   { label: "Recipe", pct: 30, color: "#06B6D4", desc: "Creative system design" },
+  { label: "Inputs", pct: 25, color: "#10B981", desc: "Creative direction" },
   { label: "Voice", pct: 20, color: "#8B5CF6", desc: "Identity contribution" },
-  { label: "Input", pct: 25, color: "#10B981", desc: "Creative direction" },
   { label: "Iteration", pct: 15, color: "#F59E0B", desc: "Process refinement" },
-  { label: "AI Generation", pct: 10, color: "#334155", desc: "Automated output" },
+  { label: "Curation", pct: 10, color: "#EC4899", desc: "Final selection" },
 ];
 
 function ScoreRing({ animated }: { animated: boolean }) {
@@ -128,8 +128,7 @@ export default function ContributionScore() {
             transition={{ delay: 0.2 }}
             className="text-slate-400 max-w-xl mx-auto"
           >
-            A quantitative model representing how much of a work is driven by human
-            input versus AI generation. Creates transparency and trust across platforms.
+            The sum of all human-driven creative components across five layers. AI&apos;s role is the remainder — not a listed component. HCS = 1.0 means full human authorship. Creates legally-relevant, verifiable evidence of creative contribution.
           </motion.p>
         </div>
 
@@ -211,27 +210,51 @@ export default function ContributionScore() {
               </motion.div>
             ))}
 
-            {/* Total */}
+            {/* Total + tier */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={inView ? { opacity: 1 } : {}}
               transition={{ delay: 1.2 }}
               className="mt-2 glass rounded-xl p-4"
             >
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-mono text-slate-400">
-                  Total Human Contribution
-                </span>
-                <span className="text-lg font-bold font-mono gradient-text">90%</span>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-mono text-slate-400">HCS (Music Profile)</span>
+                <span className="text-lg font-bold font-mono gradient-text">1.00</span>
               </div>
-              <div className="mt-2 h-1 rounded-full bg-slate-800">
+              <div className="h-1 rounded-full bg-slate-800 mb-3">
                 <motion.div
                   initial={{ width: 0 }}
-                  animate={inView ? { width: "90%" } : {}}
+                  animate={inView ? { width: "100%" } : {}}
                   transition={{ duration: 1.2, delay: 1.3, ease: "easeOut" }}
                   className="h-full rounded-full animated-border"
                 />
               </div>
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-mono text-slate-600">Tier</span>
+                <span className="text-xs font-mono px-2 py-0.5 rounded-full" style={{ background: "rgba(16,185,129,0.12)", color: "#10B981", border: "1px solid rgba(16,185,129,0.25)" }}>
+                  Primary Human Authorship · 0.80–1.00
+                </span>
+              </div>
+            </motion.div>
+
+            {/* Tier reference */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={inView ? { opacity: 1 } : {}}
+              transition={{ delay: 1.4 }}
+              className="mt-3 space-y-1"
+            >
+              {[
+                { range: "0.80–1.00", tier: "Primary Human Authorship", color: "#10B981" },
+                { range: "0.50–0.79", tier: "Collaborative Authorship", color: "#06B6D4" },
+                { range: "0.20–0.49", tier: "AI-Assisted Creation", color: "#F59E0B" },
+                { range: "0.00–0.19", tier: "AI-Generated", color: "#475569" },
+              ].map((t) => (
+                <div key={t.tier} className="flex items-center justify-between px-3 py-1.5 rounded-lg" style={{ background: "rgba(255,255,255,0.02)" }}>
+                  <span className="text-[10px] font-mono" style={{ color: t.color }}>{t.range}</span>
+                  <span className="text-[10px] font-mono text-slate-500">{t.tier}</span>
+                </div>
+              ))}
             </motion.div>
           </div>
         </div>

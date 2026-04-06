@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
-import { BookOpen, Mic, PenLine, RotateCcw } from "lucide-react";
+import { BookOpen, Mic, PenLine, RotateCcw, MousePointerClick } from "lucide-react";
 
 const tracks = [
   {
@@ -11,13 +11,14 @@ const tracks = [
     title: "Recipes",
     subtitle: "Creative Systems",
     color: "#06B6D4",
-    desc: "Structured frameworks that guide AI output. Style, structure, tone, and arrangement — all defined by the human author.",
+    desc: "Structured frameworks that guide AI output — style, structure, tone, and arrangement. Recipes are ownable, licensable, and sellable independently of any output they produce.",
     tags: ["Style Tokens", "Output Constraints", "Structural Logic", "Tone Profiles"],
     code: `recipe.create({
-  style: "cinematic-dark",
+  style: "lo-fi-hip-hop",
   structure: "verse-chorus-bridge",
-  tone: "introspective-urgency",
-  arrangement: "orchestral-sparse"
+  tone: "melancholic",
+  bpm: { min: 70, max: 85 },
+  constraints: ["minor_key", "vinyl_crackle"]
 });`,
   },
   {
@@ -26,13 +27,14 @@ const tracks = [
     title: "Voice",
     subtitle: "Identity Layer",
     color: "#8B5CF6",
-    desc: "Human vocal input, identity contribution, and licensing permissions. Voice is treated as a distinct, monetizable asset class.",
-    tags: ["Voice Models", "Identity Proof", "License Terms", "Signature Hash"],
+    desc: "Human vocal identity as a distinct, monetizable asset class with granular licensing permissions. Voice data is biometric — subject to strict privacy protections and explicit consent requirements.",
+    tags: ["Voice Models", "Identity Proof", "License Terms", "Biometric Privacy"],
     code: `voice.register({
-  identity: "creator_001",
-  model: "hap_voice_v3",
-  license: "commercial",
-  signature: "0x7f3a...b291"
+  voice_id: "hap_voice_creator_001",
+  licensed_uses: ["music_generation", "remix"],
+  prohibited_uses: ["advertising", "political_content"],
+  expiry: "2027-01-01T00:00:00Z",
+  revocable: true
 });`,
   },
   {
@@ -41,13 +43,13 @@ const tracks = [
     title: "Inputs",
     subtitle: "Creative Direction",
     color: "#10B981",
-    desc: "Lyrics, edits, and compositional intent. Every piece of creative direction is logged as a contribution to the final work.",
+    desc: "Lyrics, composition guidance, and explicit creative direction. Every piece of human intent is logged, content-addressed, and tied to the authorship record.",
     tags: ["Lyric Input", "Structural Edits", "Intent Vectors", "Composition Cues"],
     code: `input.submit({
   lyrics: "Through the noise I remain",
+  note: "Climax at 1:45; chorus vocal distant, like a memory",
   edit: { line: 3, action: "extend" },
-  intent: "emotional_climax",
-  direction: "+complexity"
+  intent: "emotional_climax"
 });`,
   },
   {
@@ -56,13 +58,30 @@ const tracks = [
     title: "Iteration",
     subtitle: "Process Layer",
     color: "#F59E0B",
-    desc: "Version history, decision points, and output selection. The refinement process itself is a record of creative authorship.",
-    tags: ["Version History", "Decision Log", "Selection Events", "Process Depth"],
-    code: `iteration.log({
-  versions: ["v1", "v2", "v3"],
-  selected: "v2",
-  decisions: 4,
-  refinement_depth: "high"
+    desc: "Version history, decision points, and rejection reasoning. Rejection decisions are as meaningful as selections — they document creative judgment over time.",
+    tags: ["Version History", "Rejection Log", "Decision Trail", "Process Depth"],
+    code: `iteration.log([
+  { version: "v1", selected: false,
+    notes: "Tempo too fast, loses the late-night feel." },
+  { version: "v2", selected: false,
+    notes: "Chorus needs more reverb, lower in the mix." },
+  { version: "v3", selected: true,
+    notes: "This one. The space in the chorus is right." }
+]);`,
+  },
+  {
+    id: "curation",
+    icon: <MousePointerClick className="w-5 h-5" />,
+    title: "Curation",
+    subtitle: "Selection Layer",
+    color: "#EC4899",
+    desc: "The final act of choosing which output to keep is a distinct human contribution. Curation is tracked as its own HCS component — not collapsed into iteration.",
+    tags: ["Final Selection", "Output Decision", "Creative Choice", "HCS Component"],
+    code: `curation.finalize({
+  selected_cid: "bafybeig...out001v3",
+  decision: "primary_keep",
+  hcs_contribution: 0.10,
+  timestamp: "2025-01-01T00:00:00Z"
 });`,
   },
 ];
@@ -99,7 +118,7 @@ export default function WhatHAPTracks() {
             transition={{ delay: 0.1 }}
             className="text-4xl lg:text-5xl font-bold text-white mb-4"
           >
-            Four layers of{" "}
+            Five layers of{" "}
             <span className="gradient-text-green">human contribution</span>
           </motion.h2>
         </div>

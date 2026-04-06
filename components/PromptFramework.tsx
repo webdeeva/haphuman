@@ -12,10 +12,10 @@ const LAYERS = [
     border: "rgba(6,182,212,0.3)",
     icon: "⬡",
     lines: [
-      '{ "style": "cinematic-dark",',
-      '  "structure": "verse-chorus-bridge",',
-      '  "tone": "introspective",',
-      '  "arrangement": "orchestral" }',
+      '{ "style": "lo-fi-hip-hop",',
+      '  "bpm": { "min": 70, "max": 85 },',
+      '  "constraints": ["minor_key",',
+      '    "vinyl_crackle"] }',
     ],
   },
   {
@@ -26,10 +26,10 @@ const LAYERS = [
     border: "rgba(139,92,246,0.3)",
     icon: "◈",
     lines: [
-      "voice_id: hap_v2_creator_001",
+      "voice_id: hap_voice_creator_001",
       "identity: verified ✓",
-      "license: commercial",
-      "signature: 0x7f3a...b291",
+      "licensed: music_gen, remix",
+      "revocable: true",
     ],
   },
   {
@@ -40,10 +40,10 @@ const LAYERS = [
     border: "rgba(16,185,129,0.3)",
     icon: "◎",
     lines: [
-      '"Through the noise I still remain"',
-      '"verse_edit: line_3 → extended"',
+      '"Climax at 1:45; chorus vocal',
+      ' distant, like a memory"',
+      "lyric_cid: bafybeig...001",
       "intent: emotional_climax",
-      "direction: +complexity",
     ],
   },
   {
@@ -54,20 +54,34 @@ const LAYERS = [
     border: "rgba(245,158,11,0.3)",
     icon: "⟳",
     lines: [
-      "v1 → generated",
-      "v2 → refined [selected]",
-      "v3 → alternate",
-      "decision_log: 4 points",
+      "v1 → rejected: tempo too fast",
+      "v2 → rejected: needs reverb",
+      "v3 → candidate",
+      "decision_log: 3 rejections",
+    ],
+  },
+  {
+    id: "curation",
+    label: "CURATION",
+    color: "#EC4899",
+    bg: "rgba(236,72,153,0.08)",
+    border: "rgba(236,72,153,0.3)",
+    icon: "✦",
+    lines: [
+      'selected: "v3"',
+      '"The space in the chorus is right."',
+      "hcs_contribution: 0.10",
+      "tier: primary_human_authorship",
     ],
   },
 ];
 
 const SCORE_SEGMENTS = [
   { label: "Recipe", pct: 30, color: "#06B6D4" },
+  { label: "Inputs", pct: 25, color: "#10B981" },
   { label: "Voice", pct: 20, color: "#8B5CF6" },
-  { label: "Input", pct: 25, color: "#10B981" },
   { label: "Iteration", pct: 15, color: "#F59E0B" },
-  { label: "AI Gen", pct: 10, color: "#475569" },
+  { label: "Curation", pct: 10, color: "#EC4899" },
 ];
 
 export default function PromptFramework() {
@@ -226,15 +240,15 @@ export default function PromptFramework() {
                   <span className="text-[10px] font-mono font-bold tracking-widest text-slate-500 uppercase">
                     Human Contribution Score
                   </span>
-                  <motion.span
+                  <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.3 }}
-                    className="text-sm font-bold font-mono"
-                    style={{ color: "#06B6D4" }}
+                    className="flex items-center gap-2"
                   >
-                    90%
-                  </motion.span>
+                    <span className="text-sm font-bold font-mono" style={{ color: "#06B6D4" }}>HCS 1.00</span>
+                    <span className="text-[9px] font-mono px-1.5 py-0.5 rounded" style={{ background: "rgba(16,185,129,0.15)", color: "#10B981" }}>Primary Authorship</span>
+                  </motion.div>
                 </div>
                 <div className="flex h-2 rounded-full overflow-hidden gap-px">
                   {SCORE_SEGMENTS.map((seg, i) => (

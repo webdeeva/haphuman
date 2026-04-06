@@ -103,8 +103,8 @@ export default function Hero() {
               className="flex gap-8"
             >
               {[
-                { value: "4", label: "Core Layers", icon: <Zap size={12} /> },
-                { value: "90%", label: "Max HCS", icon: <Shield size={12} /> },
+                { value: "5", label: "HAP Layers", icon: <Zap size={12} /> },
+                { value: "4", label: "HCS Tiers", icon: <Shield size={12} /> },
                 { value: "∞", label: "Creative Systems", icon: <Zap size={12} /> },
               ].map((stat) => (
                 <div key={stat.label} className="flex flex-col">

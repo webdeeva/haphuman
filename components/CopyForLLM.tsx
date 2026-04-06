@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Copy, Check, Bot } from "lucide-react";
 
-const HAP_MARKDOWN = `# Human Authorship Protocol (HAP)
+const HAP_MARKDOWN = `# Human Authorship Protocol (HAP) — Whitepaper v2.1
 **haphuman.xyz** | Created by: Aquarius Maximus — Founder of HAP | Co-produced with Claude (Anthropic)
 
 ---
@@ -74,40 +74,70 @@ Structured frameworks that guide AI output:
 - Compositional intent
 
 ### Iteration (Process)
-- Versions
-- Refinements
-- Selection decisions
+Versions, refinements, selection decisions. Rejection decisions are as meaningful as selections — they document creative judgment.
+
+### Curation (Final Selection)
+The human act of choosing which output to keep — a distinct creative decision tracked as its own HCS component.
 
 ---
 
 ## Human Contribution Score (HCS)
 
-A measurable representation of how much of a work is driven by human input versus AI generation.
+HCS = Sum of all human-driven components. AI Remainder = 1 − HCS.
 
-| Component | Contribution |
-|-----------|-------------|
-| Recipe | 30% |
-| Voice | 20% |
-| Inputs | 25% |
-| Iteration | 15% |
-| AI Generation | 10% |
+### HCS Components (Music Profile)
 
-**Total Human Contribution: 90%**
+| Component | Intentionality | Reproducibility | Defensibility | Default Weight |
+|-----------|---------------|----------------|---------------|----------------|
+| Recipe | High | High | High | 30% |
+| Inputs | High | High | High | 25% |
+| Voice | High | High | Medium | 20% |
+| Iteration | Medium | Medium | High | 15% |
+| Curation | Medium | Low | Medium | 10% |
+
+### HCS Tiers
+
+| HCS Range | Tier | Meaning |
+|-----------|------|---------|
+| 0.80–1.00 | Primary Human Authorship | Human creative direction dominates throughout |
+| 0.50–0.79 | Collaborative Authorship | Significant human input with substantial AI generation |
+| 0.20–0.49 | AI-Assisted Creation | AI-led output with human curation and light direction |
+| 0.00–0.19 | AI-Generated | Minimal human contribution beyond prompt input |
+
+### Domain Profiles
+
+**Music (Default):** Recipe 30% / Inputs 25% / Voice 20% / Iteration 15% / Curation 10%
+**Visual Art:** Recipe 35% / Iteration 25% / Inputs 20% / Curation 15% / Voice 5%
+**Written Content:** Inputs 40% / Recipe 25% / Iteration 20% / Curation 10% / Voice 5%
 
 ---
 
-## Data Structure
-
-Each creative work is associated with a structured authorship record:
+## Data Structure (v2.1)
 
 \`\`\`json
 {
-  "recipe_id": "hap_recipe_v2_001",
-  "voice_id": "hap_voice_creator_001",
-  "inputs": ["lyric_v1", "edit_line3", "intent_climax"],
-  "iterations": ["v1", "v2_selected", "v3"],
-  "contribution_score": 0.90,
-  "timestamp": "2025-01-01T00:00:00Z",
+  "hap_version": "2.1",
+  "record_id": "hap_record_20250101_001",
+  "domain_profile": "music",
+  "recipe": { "recipe_id": "hap_recipe_v2_001", "recipe_cid": "bafybeig...abc123" },
+  "voice": {
+    "voice_id": "hap_voice_creator_001",
+    "voice_permissions": {
+      "licensed_uses": ["music_generation", "remix"],
+      "prohibited_uses": ["advertising", "political_content"],
+      "expiry": "2027-01-01T00:00:00Z",
+      "revocable": true
+    }
+  },
+  "hcs_components": { "recipe": 0.30, "inputs": 0.25, "voice": 0.20, "iteration": 0.15, "curation": 0.10 },
+  "contribution_score": 1.00,
+  "hcs_tier": "primary_human_authorship",
+  "onchain_anchor": {
+    "chain": "polygon",
+    "transaction_hash": "0xabc123...",
+    "anchored_hash": "sha256:9f86d081...",
+    "timestamp": "2025-01-01T00:00:00Z"
+  },
   "owner_identity": "0x7f3a...b291"
 }
 \`\`\`
@@ -116,35 +146,94 @@ Each creative work is associated with a structured authorship record:
 
 ## Blockchain Integration
 
-HAP supports optional on-chain anchoring.
+HAP supports optional on-chain anchoring using a hybrid architecture.
 
-**Stored On-Chain:**
-- Hash of authorship data
-- Ownership reference
-- Timestamp
-- Creator wallet address
+**On-Chain:** Hash of authorship data · Ownership reference · Timestamp · Creator wallet
+**Off-Chain (IPFS):** Audio files · Full prompt structures · Voice model data · Large datasets
 
-**Stored Off-Chain:**
-- Audio files
-- Full prompt structures
-- Voice model data
-- Large creative datasets
+**Chain selection:** Ethereum Mainnet (high-value works) · Polygon (high-volume platforms) · Arweave (archival) · Base (consumer apps)
+
+---
+
+## Legal Framework
+
+### Copyright
+The US Copyright Office requires human authorship. HAP records document the kind of intentional creative control that copyright frameworks look for.
+
+- **0.80–1.00 HCS:** Most likely to support a copyright claim
+- **0.50–0.79 HCS:** May support partial protection over human-shaped elements
+- **Below 0.50:** Unlikely to qualify under current US standards
+
+HAP is a documentation framework, not a legal service.
+
+### Voice Data and Biometric Privacy
+- GDPR Article 9: Biometric data requires explicit consent and DPIA
+- BIPA (Illinois): Written consent required; $1,000–$5,000 per violation
+- Voice models stored off-chain, encrypted; on-chain contains only non-reversible hash
+- Platforms must implement right-to-deletion workflows
+
+### Jurisdiction Notes
+- **US:** HAP records document intentional creative decisions relevant to copyright standards
+- **EU:** Recipe and Input components map to "author's own intellectual creation" standard
+- **UK:** System-level authorship aligns with CDPA s.9(3) computer-generated works provision
+
+---
+
+## Dispute Resolution
+
+Three-tier process for Ownership, Derivation, Voice Identity, and Contribution disputes.
+
+**First Principle:** The earlier on-chain anchor takes precedence in ownership disputes.
+
+- **Tier 1:** Automated similarity check (85% threshold triggers notification)
+- **Tier 2:** HAP Registry structured mediation (21-day resolution target)
+- **Tier 3:** External arbitration (WIPO, AAA, National Arbitration Forum)
+
+**Anti-gaming:** Bad faith registration voided · Dispute filing stake · 90-day cooling-off period
+
+---
+
+## Relationship to C2PA
+
+C2PA (backed by Adobe, Microsoft, Google) embeds provenance metadata into files. HAP and C2PA are complementary, not competing.
+
+| Dimension | C2PA | HAP |
+|-----------|------|-----|
+| Core question | Where did this come from? | Who shaped it, and how? |
+| Human contribution | Not measured | Measured via HCS |
+| Ownership model | Not addressed | Output, system, identity |
+| Monetization | Not addressed | Recipe markets, voice licensing |
+
+**Analogy:** C2PA is a shipping manifest. HAP is a deed of ownership.
+
+---
+
+## Worked Example — Jordan Ellis (AI-Assisted Music Track)
+
+1. **Recipe:** Lo-fi hip hop, 70–85 BPM, minor key, vinyl texture → registered on IPFS
+2. **Voice:** Encrypted voice model, music_gen + remix permitted, advertising prohibited, revocable
+3. **Inputs:** Lyric file + note: "Climax at 1:45; chorus vocal distant, like a memory"
+4. **Iteration:** v1 rejected (tempo too fast) · v2 rejected (needs reverb) · v3 selected
+5. **HCS:** Recipe(0.30) + Inputs(0.25) + Voice(0.20) + Iteration(0.15) + Curation(0.10) = 1.00
+6. **Anchored:** SHA-256 hash → Polygon smart contract → tx: 0xdef456...
+7. **Monetization:** Output license (film sync) + Recipe license + Voice license — all from one HAP record
+8. **Dispute:** 71% similarity claim → below 85% threshold → upheld in 18 days
 
 ---
 
 ## Ownership Model
 
 - **Output Ownership** — The generated work
-- **System Ownership** — The recipe and framework
-- **Identity Ownership** — Voice and creator identity
+- **System Ownership** — The recipe and framework (ownable independently)
+- **Identity Ownership** — Voice and creator identity (licensable with granular permissions)
 
 ---
 
 ## Monetization Model
 
-- Recipe marketplaces
-- Voice licensing
-- Contribution-based revenue sharing
+- Recipe marketplaces — license reusable creative systems
+- Voice licensing — monetize vocal identity under defined permissions
+- Contribution-based revenue sharing — proportional to HCS components
 - Creative asset trading on decentralized platforms
 
 ---
@@ -159,107 +248,13 @@ HAP supports optional on-chain anchoring.
 
 ---
 
-## Whitepaper
+## Future Directions
 
-### Abstract
-
-The Human Authorship Protocol (HAP) is a framework designed to define, measure, and verify human creative contribution within AI-assisted works. As generative AI systems increasingly produce content with minimal human input, traditional definitions of authorship and ownership are being challenged. HAP introduces a structured approach to capturing the human role in creative systems, enabling attribution, ownership, and monetization in an AI-driven economy.
-
-### 1. Introduction
-
-Artificial intelligence has drastically reduced the barrier to content creation. Music, art, writing, and media can now be generated with minimal effort.
-
-However, this introduces a fundamental problem: **the separation of creation from authorship.**
-
-Current systems fail to adequately represent:
-- Human intent
-- Creative direction
-- Iterative decision-making
-
-### 2. The Authorship Problem
-
-#### 2.1 Output vs Process
-Traditional authorship focuses on outputs: a song, a painting, a written work. AI systems disrupt this by generating outputs without clear human authorship.
-
-#### 2.2 The Missing Layer
-The missing layer is the system of decisions that led to the output. Without capturing this layer, authorship becomes invisible and unverifiable.
-
-### 3. Defining Human Authorship
-
-HAP defines authorship as:
-
-> The structured set of human decisions that guide and shape AI-generated outputs.
-
-This includes prompt systems (recipes), creative inputs, selection and refinement, and identity-based contributions.
-
-### 4. Core Components
-
-#### 4.1 Recipes (System Layer)
-Recipes are structured frameworks that define style, structure, tone, and output constraints. Recipes are repeatable and represent system-level authorship.
-
-#### 4.2 Voice (Identity Layer)
-Voice represents human vocal input, identity-based contribution, and licensing potential. Voice is treated as a distinct asset class.
-
-#### 4.3 Inputs (Creative Layer)
-Inputs include lyrics, composition guidance, edits and modifications.
-
-#### 4.4 Iteration (Process Layer)
-HAP captures version history, decision points, and output selection. The refinement process is itself a record of authorship.
-
-### 5. Contribution Scoring
-
-HAP introduces a quantitative model: the **Human Contribution Score (HCS)**.
-
-This score evaluates:
-- Degree of human input
-- Level of creative control
-- Iterative involvement
-
-| Component | Contribution |
-|-----------|-------------|
-| Recipe | 30% |
-| Voice | 20% |
-| Inputs | 25% |
-| Iteration | 15% |
-| AI Generation | 10% |
-
-### 6. Blockchain Integration
-
-HAP supports optional on-chain anchoring:
-- Stored on-chain: hash of authorship data, ownership reference, timestamp
-- Stored off-chain: audio files, full prompt structures, large datasets
-
-This ensures integrity, scalability, and cost efficiency.
-
-### 7. Ownership Model
-
-HAP distinguishes between:
-- **Output Ownership** — The generated work
-- **System Ownership** — The recipe and framework
-- **Identity Ownership** — Voice and creator identity
-
-### 8. Monetization Model
-
-HAP enables:
-- Recipe marketplaces
-- Voice licensing
-- Contribution-based revenue sharing
-- Creative asset trading
-
-### 9. Future Directions
-
-- Standardization across platforms
-- Integration with decentralized identity systems
-- Legal alignment with evolving copyright frameworks
-- Expansion into multiple creative industries
-
-### 10. Conclusion
-
-The Human Authorship Protocol establishes a new paradigm:
-
-**Authorship is not defined by output alone. It is defined by the system that creates it.**
-
-HAP enables a future where human creativity remains central, even in an AI-driven world.
+- Open API specification and SDK for cross-platform standardization
+- W3C DID integration for verified human identity binding
+- Legal alignment with evolving copyright frameworks across jurisdictions
+- Algorithmic HCS validation tools for platform implementers
+- Cross-platform recipe and voice marketplaces
 
 ---
 
@@ -269,10 +264,17 @@ A world where:
 - Creativity is trackable
 - Ownership is provable
 - Systems are more valuable than outputs
+- Human identity remains central in an AI-driven creative economy
 
 ---
 
-*Human Authorship Protocol v2.0 — haphuman.xyz*
+## Disclaimer
+
+HAP is a documentation and attribution framework. It is not a legal service and does not provide legal advice. Creators and platform implementers should consult qualified legal counsel regarding copyright, privacy, and regulatory compliance in their jurisdictions.
+
+---
+
+*Human Authorship Protocol v2.1 — haphuman.xyz*
 *Created by Aquarius Maximus — Founder of HAP | Co-produced with Claude (Anthropic)*
 `;
 
