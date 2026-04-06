@@ -1,7 +1,19 @@
 {
   "name": "haphuman",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "author": "Aquarius Maximus — Founder of HAP",
+  "contributors": [
+    {
+      "name": "Aquarius Maximus",
+      "role": "Founder & Creator"
+    },
+    {
+      "name": "Claude (Anthropic)",
+      "role": "Co-Producer"
+    }
+  ],
+  "license": "MIT",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -9,6 +21,10 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@tsparticles/react": "^3.0.0",
+    "@tsparticles/slim": "^3.9.1",
+    "framer-motion": "^12.38.0",
+    "lucide-react": "^1.7.0",
     "next": "16.2.2",
     "react": "19.2.4",
     "react-dom": "19.2.4"
