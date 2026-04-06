@@ -56,7 +56,7 @@ export default function SolutionSection() {
           className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed mb-12"
         >
           HAP introduces a new standard: human creativity is expressed through structured
-          systems — recipes, voice, inputs, and iteration — not just final outputs.
+          systems  -  recipes, voice, inputs, and iteration  -  not just final outputs.
         </motion.p>
 
         {/* Big statement */}

@@ -128,7 +128,7 @@ export default function ContributionScore() {
             transition={{ delay: 0.2 }}
             className="text-slate-400 max-w-xl mx-auto"
           >
-            The sum of all human-driven creative components across five layers. AI&apos;s role is the remainder — not a listed component. HCS = 1.0 means full human authorship. Creates legally-relevant, verifiable evidence of creative contribution.
+            The sum of all human-driven creative components across five layers. AI&apos;s role is the remainder  -  not a listed component. HCS = 1.0 means full human authorship. Creates legally-relevant, verifiable evidence of creative contribution.
           </motion.p>
         </div>
 
@@ -185,7 +185,7 @@ export default function ContributionScore() {
                       {seg.label}
                     </span>
                     <span className="text-xs text-slate-600 ml-2 font-mono">
-                      — {seg.desc}
+                       -  {seg.desc}
                     </span>
                   </div>
                   <span

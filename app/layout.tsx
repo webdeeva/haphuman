@@ -15,12 +15,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "HAP — Human Authorship Protocol",
+  title: "HAP  -  Human Authorship Protocol",
   description:
     "The Human Authorship Protocol is a framework for identifying, structuring, and verifying human creative contribution within AI-generated works.",
   keywords: ["human authorship", "AI creativity", "HAP", "authorship protocol", "AI content ownership"],
   openGraph: {
-    title: "HAP — Human Authorship Protocol",
+    title: "HAP  -  Human Authorship Protocol",
     description: "Proving Human Creativity in the Age of AI",
     url: "https://haphuman.xyz",
     siteName: "HAP",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "HAP — Human Authorship Protocol",
+    title: "HAP  -  Human Authorship Protocol",
     description: "Proving Human Creativity in the Age of AI",
   },
 };

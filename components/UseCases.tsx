@@ -36,7 +36,7 @@ const cases = [
   {
     icon: <Users className="w-6 h-6" />,
     title: "Creator Economies",
-    desc: "Build platforms where creative systems — not just outputs — are the primary tradeable asset.",
+    desc: "Build platforms where creative systems  -  not just outputs  -  are the primary tradeable asset.",
     color: "#EF4444",
     stat: "System Ownership",
   },

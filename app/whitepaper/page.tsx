@@ -84,7 +84,7 @@ const sections: Section[] = [
       },
       {
         title: "4.4 Iteration (Process Layer)",
-        body: "HAP captures version history, decision points, and output selection. Rejection decisions are as meaningful as selection decisions — they document creative judgment.",
+        body: "HAP captures version history, decision points, and output selection. Rejection decisions are as meaningful as selection decisions  -  they document creative judgment.",
       },
       {
         title: "4.5 Curation (Selection Layer)",
@@ -101,7 +101,7 @@ const sections: Section[] = [
     subsections: [
       {
         title: "5.1 What the HCS Measures",
-        body: "The HCS is the sum of all human-driven creative components. AI's role is the remainder — it is not listed as a component of the human score.\n\nHCS = Sum of all human-driven components\nAI Remainder = 1 − HCS",
+        body: "The HCS is the sum of all human-driven creative components. AI's role is the remainder  -  it is not listed as a component of the human score.\n\nHCS = Sum of all human-driven components\nAI Remainder = 1 − HCS",
       },
       {
         title: "5.2 Weighting Rationale",
@@ -216,18 +216,19 @@ const sections: Section[] = [
       },
       {
         title: "The Anchoring Process",
-        body: "1. Finalize the record — all off-chain assets uploaded to IPFS, CIDs written into JSON.\n2. Hash the record — SHA-256 hash of canonical JSON computed.\n3. Write to chain — hash, creator wallet, and Unix timestamp written to smart contract.\n4. Store the record — complete JSON record uploaded to IPFS.",
+        body: "1. Finalize the record  -  all off-chain assets uploaded to IPFS, CIDs written into JSON.\n2. Hash the record  -  SHA-256 hash of canonical JSON computed.\n3. Write to chain  -  hash, creator wallet, and Unix timestamp written to smart contract.\n4. Store the record  -  complete JSON record uploaded to IPFS.",
       },
     ],
     table: {
       headers: ["Chain", "Pros", "Cons", "Recommended Use"],
       rows: [
+        ["Guapcoin (EVM)", "Native HAP chain, low cost, EVM-compatible", "Purpose-built for HAP", "HAP authorship records - recommended"],
         ["Ethereum Mainnet", "Highest security, widest trust", "High gas costs", "High-value commercial works"],
         ["Polygon", "Low cost, EVM-compatible", "Less decentralized", "High-volume platforms"],
         ["Arweave", "Permanent storage built-in", "Different model, not EVM", "Archival / long-term records"],
         ["Base", "Low cost, Coinbase-backed, EVM", "Newer, less battle-tested", "Consumer apps, music platforms"],
       ],
-      colors: ["#06B6D4", "#8B5CF6", "#10B981", "#F59E0B"],
+      colors: ["#F59E0B", "#06B6D4", "#8B5CF6", "#10B981", "#EC4899"],
     },
   },
   {
@@ -238,15 +239,15 @@ const sections: Section[] = [
     subsections: [
       {
         title: "8.1 Output Ownership",
-        body: "The generated work — the final audio, image, or written piece produced by the AI system.",
+        body: "The generated work  -  the final audio, image, or written piece produced by the AI system.",
       },
       {
         title: "8.2 System Ownership",
-        body: "The recipe and creative framework — the human-designed process that guided the output. Recipes are ownable and licensable independently.",
+        body: "The recipe and creative framework  -  the human-designed process that guided the output. Recipes are ownable and licensable independently.",
       },
       {
         title: "8.3 Identity Ownership",
-        body: "Voice and creator identity — the human's unique biometric contribution that can be licensed with granular permissions and revoked at any time.",
+        body: "Voice and creator identity  -  the human's unique biometric contribution that can be licensed with granular permissions and revoked at any time.",
       },
     ],
   },
@@ -257,9 +258,9 @@ const sections: Section[] = [
     color: "#10B981",
     content: "HAP enables new economic models for creative work:",
     bullets: [
-      "Recipe marketplaces — sell or license reusable creative systems independently of any output",
-      "Voice licensing — monetize vocal identity under defined permissions (use case, expiry, jurisdiction)",
-      "Contribution-based revenue sharing — revenue split proportional to HCS components",
+      "Recipe marketplaces  -  sell or license reusable creative systems independently of any output",
+      "Voice licensing  -  monetize vocal identity under defined permissions (use case, expiry, jurisdiction)",
+      "Contribution-based revenue sharing  -  revenue split proportional to HCS components",
       "Creative asset trading on decentralized platforms",
     ],
   },
@@ -290,7 +291,7 @@ const sections: Section[] = [
       },
       {
         title: "10.4 HAP Records as Legal Evidence",
-        body: "What makes a HAP record legally useful: Timestamp integrity (on-chain anchoring proves creation date), Chain of custody (iteration history documents the process), Identity binding (owner wallet links record to a specific entity).\n\nWhat HAP records cannot do: They cannot prove that a human (rather than a script) made the documented decisions. They do not constitute legal proof of copyright ownership — they constitute evidence in support of a claim.",
+        body: "What makes a HAP record legally useful: Timestamp integrity (on-chain anchoring proves creation date), Chain of custody (iteration history documents the process), Identity binding (owner wallet links record to a specific entity).\n\nWhat HAP records cannot do: They cannot prove that a human (rather than a script) made the documented decisions. They do not constitute legal proof of copyright ownership  -  they constitute evidence in support of a claim.",
       },
       {
         title: "10.5 Liability Boundaries",
@@ -303,11 +304,11 @@ const sections: Section[] = [
     number: "11",
     title: "Off-Chain Data Integrity",
     color: "#F59E0B",
-    content: "HAP mandates content-addressed storage for all off-chain assets. The recommended implementation is IPFS, which assigns every file a CID (Content Identifier) — a cryptographic fingerprint. If a file changes by even a single byte, its CID changes, making tampering immediately detectable. Platforms must use an IPFS pinning service (e.g. Pinata, web3.storage) to guarantee off-chain asset persistence. Unpinned assets may be garbage collected and permanently lost.",
+    content: "HAP mandates content-addressed storage for all off-chain assets. The recommended implementation is IPFS, which assigns every file a CID (Content Identifier)  -  a cryptographic fingerprint. If a file changes by even a single byte, its CID changes, making tampering immediately detectable. Platforms must use an IPFS pinning service (e.g. Pinata, web3.storage) to guarantee off-chain asset persistence. Unpinned assets may be garbage collected and permanently lost.",
     subsections: [
       {
         title: "11.1 Deletion and Privacy Rights",
-        body: "On-chain data (hash, wallet, timestamp) is never personal data under GDPR. Off-chain data can be deleted — the on-chain hash becomes an orphaned proof that something existed without revealing the content. This satisfies GDPR without requiring blockchain modification.\n\nVoice model deletion must be a one-click workflow that unpins IPFS data, revokes the CID in the platform index, and logs the deletion event.",
+        body: "On-chain data (hash, wallet, timestamp) is never personal data under GDPR. Off-chain data can be deleted  -  the on-chain hash becomes an orphaned proof that something existed without revealing the content. This satisfies GDPR without requiring blockchain modification.\n\nVoice model deletion must be a one-click workflow that unpins IPFS data, revokes the CID in the platform index, and logs the deletion event.",
       },
     ],
   },
@@ -320,15 +321,15 @@ const sections: Section[] = [
     callout: "In any ownership or derivation dispute, the earlier on-chain anchor takes precedence, unless evidence of fraud or bad faith registration is demonstrated.",
     subsections: [
       {
-        title: "Tier 1 — Automated Similarity Check (Platform Level)",
+        title: "Tier 1  -  Automated Similarity Check (Platform Level)",
         body: "Before registration, the platform runs an automated similarity check. Recipes scoring above 85% similarity trigger a notification to both parties. Voice models above threshold trigger an identity verification request.",
       },
       {
-        title: "Tier 2 — Structured Mediation (HAP Registry Level)",
+        title: "Tier 2  -  Structured Mediation (HAP Registry Level)",
         body: "A formal Dispute Notice is submitted. The registered owner has 14 days to respond. A HAP Resolver reviews evidence and issues a recommendation within 21 days. Outcomes: Uphold, Transfer, Co-register, or Escalate. All proceedings logged on-chain.",
       },
       {
-        title: "Tier 3 — External Arbitration",
+        title: "Tier 3  -  External Arbitration",
         body: "For unresolved or high-value disputes. HAP provides structured evidence packages to recognized arbitration bodies including WIPO, AAA, and the National Arbitration Forum.",
       },
       {
@@ -395,7 +396,7 @@ const sections: Section[] = [
     title: "Relationship to C2PA",
     color: "#06B6D4",
     content: "The C2PA (Coalition for Content Provenance and Authenticity) specification is an open technical standard for embedding content provenance metadata into media files. It is backed by Adobe, Microsoft, Google, Sony, and others. C2PA and HAP are complementary, not competing.",
-    callout: "C2PA is the provenance layer — it tells you where a file came from. HAP is the authorship and ownership layer — it tells you who made the creative decisions and who owns the rights. C2PA is a shipping manifest. HAP is a deed of ownership.",
+    callout: "C2PA is the provenance layer  -  it tells you where a file came from. HAP is the authorship and ownership layer  -  it tells you who made the creative decisions and who owns the rights. C2PA is a shipping manifest. HAP is a deed of ownership.",
     comparisonTable: {
       headers: ["Dimension", "C2PA", "HAP"],
       rows: [
@@ -420,14 +421,14 @@ const sections: Section[] = [
   {
     id: "worked-example",
     number: "14",
-    title: "Worked Example — AI-Assisted Music Track",
+    title: "Worked Example  -  AI-Assisted Music Track",
     color: "#10B981",
     content: "Jordan Ellis | Wallet: 0x7f3a...b291 | Domain: Music | Platform: SoundForge HAP",
     steps: [
       {
         number: "01",
         title: "Design a Recipe",
-        body: "Jordan designs a reusable creative system: lo-fi hip hop, 70–85 BPM, minor key only, vinyl crackle texture required, melancholic tone, 4-layer maximum.\n\nUploaded to IPFS → CID: bafybeigdyrzt5...\nRegistered as: hap_recipe_v2_001\n\nEstablished: A reusable, timestamped, owned creative system — before any track is made.",
+        body: "Jordan designs a reusable creative system: lo-fi hip hop, 70–85 BPM, minor key only, vinyl crackle texture required, melancholic tone, 4-layer maximum.\n\nUploaded to IPFS → CID: bafybeigdyrzt5...\nRegistered as: hap_recipe_v2_001\n\nEstablished: A reusable, timestamped, owned creative system  -  before any track is made.",
       },
       {
         number: "02",
@@ -442,7 +443,7 @@ const sections: Section[] = [
       {
         number: "04",
         title: "AI Generation and Iteration",
-        body: "v1 — Rejected: \"Tempo too fast, loses the late-night feel.\"\nv2 — Rejected: \"Chorus needs to feel further away — more reverb, lower in the mix.\"\nv3 — Selected: \"This one. The space in the chorus is right. Keep.\"\n\nEstablished: Rejection decisions document creative judgment — not just the final output.",
+        body: "v1  -  Rejected: \"Tempo too fast, loses the late-night feel.\"\nv2  -  Rejected: \"Chorus needs to feel further away  -  more reverb, lower in the mix.\"\nv3  -  Selected: \"This one. The space in the chorus is right. Keep.\"\n\nEstablished: Rejection decisions document creative judgment  -  not just the final output.",
       },
       {
         number: "05",
@@ -452,17 +453,17 @@ const sections: Section[] = [
       {
         number: "06",
         title: "On-Chain Anchoring",
-        body: "1. Canonical JSON hashed: sha256:9f86d081...\n2. Hash + wallet + timestamp written to Polygon smart contract\n3. Transaction hash: 0xdef456...\n4. Complete record uploaded to IPFS\n\nEstablished: Permanent, publicly verifiable proof of authorship — tamper-evident and independently verifiable.",
+        body: "1. Canonical JSON hashed: sha256:9f86d081...\n2. Hash + wallet + timestamp written to Polygon smart contract\n3. Transaction hash: 0xdef456...\n4. Complete record uploaded to IPFS\n\nEstablished: Permanent, publicly verifiable proof of authorship  -  tamper-evident and independently verifiable.",
       },
       {
         number: "07",
         title: "Monetization",
-        body: "Three months later, a sync licensing platform finds the track:\n\n• Output license — rights to use the track in a film\n• Recipe license — a second producer licenses Jordan's recipe to make similar tracks\n• Voice license — a third party licenses Jordan's voice model for AI-generated harmonies\n\nAll three traceable to a single HAP record.",
+        body: "Three months later, a sync licensing platform finds the track:\n\n• Output license  -  rights to use the track in a film\n• Recipe license  -  a second producer licenses Jordan's recipe to make similar tracks\n• Voice license  -  a third party licenses Jordan's voice model for AI-generated harmonies\n\nAll three traceable to a single HAP record.",
       },
       {
         number: "08",
         title: "Dispute",
-        body: "Another creator claims Jordan's recipe was derived from theirs (registered December 2024).\n\nTier 1: Automated similarity check returns 71% — below 85% threshold. No hold.\nTier 2: HAP Resolver reviews both records. Overlap attributed to shared genre conventions. Recommendation: Uphold Jordan's registration.\nResolved in 18 days. Dispute record logged on-chain.",
+        body: "Another creator claims Jordan's recipe was derived from theirs (registered December 2024).\n\nTier 1: Automated similarity check returns 71%  -  below 85% threshold. No hold.\nTier 2: HAP Resolver reviews both records. Overlap attributed to shared genre conventions. Recommendation: Uphold Jordan's registration.\nResolved in 18 days. Dispute record logged on-chain.",
       },
     ],
   },
@@ -583,7 +584,7 @@ const sections: Section[] = [
   },
   {
     id: "disclaimer",
-    number: "—",
+    number: " - ",
     title: "Disclaimer",
     color: "#475569",
     disclaimer: "HAP is a documentation and attribution framework. It is not a legal service and does not provide legal advice. Nothing in this document constitutes legal, financial, or investment advice. Creators and platform implementers should consult qualified legal counsel regarding copyright, privacy, and regulatory compliance in their specific jurisdictions.",
@@ -776,7 +777,7 @@ export default function WhitepaperPage() {
             Human Authorship<br /><span className="gradient-text">Protocol</span>
           </h1>
           <p className="text-lg text-slate-400 max-w-2xl leading-relaxed mb-8">
-            A technical framework for defining, measuring, and verifying human creative contribution within AI-assisted works — including legal considerations, dispute resolution, blockchain architecture, and C2PA integration.
+            A technical framework for defining, measuring, and verifying human creative contribution within AI-assisted works  -  including legal considerations, dispute resolution, blockchain architecture, and C2PA integration.
           </p>
           <div className="flex flex-wrap gap-3">
             {[["Published", "2026"], ["Version", "2.1"], ["Status", "Open Standard"], ["Author", "Aquarius Maximus"]].map(([k, v]) => (

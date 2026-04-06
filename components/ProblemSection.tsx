@@ -76,7 +76,7 @@ export default function ProblemSection() {
           className="text-slate-400 text-lg max-w-2xl mb-16 leading-relaxed"
         >
           Artificial intelligence has eliminated the barrier to content generation. Music, art,
-          writing — produced instantly. But the fundamental questions of authorship remain
+          writing  -  produced instantly. But the fundamental questions of authorship remain
           unanswered.
         </motion.p>
 

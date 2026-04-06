@@ -64,7 +64,7 @@ export default function Hero() {
             >
               A framework for identifying, structuring, and verifying{" "}
               <span className="text-cyan-400 font-medium">human creative contribution</span>{" "}
-              within AI-generated works. Authorship is not just the output — it is{" "}
+              within AI-generated works. Authorship is not just the output  -  it is{" "}
               <span className="text-purple-400 font-medium">the system behind it</span>.
             </motion.p>
 

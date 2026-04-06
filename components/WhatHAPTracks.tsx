@@ -11,7 +11,7 @@ const tracks = [
     title: "Recipes",
     subtitle: "Creative Systems",
     color: "#06B6D4",
-    desc: "Structured frameworks that guide AI output — style, structure, tone, and arrangement. Recipes are ownable, licensable, and sellable independently of any output they produce.",
+    desc: "Structured frameworks that guide AI output  -  style, structure, tone, and arrangement. Recipes are ownable, licensable, and sellable independently of any output they produce.",
     tags: ["Style Tokens", "Output Constraints", "Structural Logic", "Tone Profiles"],
     code: `recipe.create({
   style: "lo-fi-hip-hop",
@@ -27,7 +27,7 @@ const tracks = [
     title: "Voice",
     subtitle: "Identity Layer",
     color: "#8B5CF6",
-    desc: "Human vocal identity as a distinct, monetizable asset class with granular licensing permissions. Voice data is biometric — subject to strict privacy protections and explicit consent requirements.",
+    desc: "Human vocal identity as a distinct, monetizable asset class with granular licensing permissions. Voice data is biometric  -  subject to strict privacy protections and explicit consent requirements.",
     tags: ["Voice Models", "Identity Proof", "License Terms", "Biometric Privacy"],
     code: `voice.register({
   voice_id: "hap_voice_creator_001",
@@ -58,7 +58,7 @@ const tracks = [
     title: "Iteration",
     subtitle: "Process Layer",
     color: "#F59E0B",
-    desc: "Version history, decision points, and rejection reasoning. Rejection decisions are as meaningful as selections — they document creative judgment over time.",
+    desc: "Version history, decision points, and rejection reasoning. Rejection decisions are as meaningful as selections  -  they document creative judgment over time.",
     tags: ["Version History", "Rejection Log", "Decision Trail", "Process Depth"],
     code: `iteration.log([
   { version: "v1", selected: false,
@@ -75,7 +75,7 @@ const tracks = [
     title: "Curation",
     subtitle: "Selection Layer",
     color: "#EC4899",
-    desc: "The final act of choosing which output to keep is a distinct human contribution. Curation is tracked as its own HCS component — not collapsed into iteration.",
+    desc: "The final act of choosing which output to keep is a distinct human contribution. Curation is tracked as its own HCS component  -  not collapsed into iteration.",
     tags: ["Final Selection", "Output Decision", "Creative Choice", "HCS Component"],
     code: `curation.finalize({
   selected_cid: "bafybeig...out001v3",

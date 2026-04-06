@@ -4,8 +4,8 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Copy, Check, Bot } from "lucide-react";
 
-const HAP_MARKDOWN = `# Human Authorship Protocol (HAP) — Whitepaper v2.1
-**haphuman.xyz** | Created by: Aquarius Maximus — Founder of HAP | Co-produced with Claude (Anthropic)
+const HAP_MARKDOWN = `# Human Authorship Protocol (HAP)  -  Whitepaper v2.1
+**haphuman.xyz** | Created by: Aquarius Maximus  -  Founder of HAP | Co-produced with Claude (Anthropic)
 
 ---
 
@@ -74,10 +74,10 @@ Structured frameworks that guide AI output:
 - Compositional intent
 
 ### Iteration (Process)
-Versions, refinements, selection decisions. Rejection decisions are as meaningful as selections — they document creative judgment.
+Versions, refinements, selection decisions. Rejection decisions are as meaningful as selections  -  they document creative judgment.
 
 ### Curation (Final Selection)
-The human act of choosing which output to keep — a distinct creative decision tracked as its own HCS component.
+The human act of choosing which output to keep  -  a distinct creative decision tracked as its own HCS component.
 
 ---
 
@@ -208,7 +208,7 @@ C2PA (backed by Adobe, Microsoft, Google) embeds provenance metadata into files.
 
 ---
 
-## Worked Example — Jordan Ellis (AI-Assisted Music Track)
+## Worked Example  -  Jordan Ellis (AI-Assisted Music Track)
 
 1. **Recipe:** Lo-fi hip hop, 70–85 BPM, minor key, vinyl texture → registered on IPFS
 2. **Voice:** Encrypted voice model, music_gen + remix permitted, advertising prohibited, revocable
@@ -216,24 +216,24 @@ C2PA (backed by Adobe, Microsoft, Google) embeds provenance metadata into files.
 4. **Iteration:** v1 rejected (tempo too fast) · v2 rejected (needs reverb) · v3 selected
 5. **HCS:** Recipe(0.30) + Inputs(0.25) + Voice(0.20) + Iteration(0.15) + Curation(0.10) = 1.00
 6. **Anchored:** SHA-256 hash → Polygon smart contract → tx: 0xdef456...
-7. **Monetization:** Output license (film sync) + Recipe license + Voice license — all from one HAP record
+7. **Monetization:** Output license (film sync) + Recipe license + Voice license  -  all from one HAP record
 8. **Dispute:** 71% similarity claim → below 85% threshold → upheld in 18 days
 
 ---
 
 ## Ownership Model
 
-- **Output Ownership** — The generated work
-- **System Ownership** — The recipe and framework (ownable independently)
-- **Identity Ownership** — Voice and creator identity (licensable with granular permissions)
+- **Output Ownership**  -  The generated work
+- **System Ownership**  -  The recipe and framework (ownable independently)
+- **Identity Ownership**  -  Voice and creator identity (licensable with granular permissions)
 
 ---
 
 ## Monetization Model
 
-- Recipe marketplaces — license reusable creative systems
-- Voice licensing — monetize vocal identity under defined permissions
-- Contribution-based revenue sharing — proportional to HCS components
+- Recipe marketplaces  -  license reusable creative systems
+- Voice licensing  -  monetize vocal identity under defined permissions
+- Contribution-based revenue sharing  -  proportional to HCS components
 - Creative asset trading on decentralized platforms
 
 ---
@@ -274,8 +274,8 @@ HAP is a documentation and attribution framework. It is not a legal service and 
 
 ---
 
-*Human Authorship Protocol v2.1 — haphuman.xyz*
-*Created by Aquarius Maximus — Founder of HAP | Co-produced with Claude (Anthropic)*
+*Human Authorship Protocol v2.1  -  haphuman.xyz*
+*Created by Aquarius Maximus  -  Founder of HAP | Co-produced with Claude (Anthropic)*
 `;
 
 export default function CopyForLLM() {
@@ -304,7 +304,7 @@ export default function CopyForLLM() {
               style={{ border: "1px solid rgba(6,182,212,0.2)" }}
             >
               <p className="text-xs font-mono text-slate-400 leading-relaxed mb-3">
-                Copies the full HAP protocol content as clean markdown — ready to paste into any LLM context window.
+                Copies the full HAP protocol content as clean markdown  -  ready to paste into any LLM context window.
               </p>
               <button
                 onClick={handleCopy}
