@@ -296,7 +296,7 @@ export default function PromptFramework() {
             </span>
           </div>
           <span className="text-[10px] font-mono text-slate-600">
-            HAP v2.0 · {new Date().toISOString().slice(0, 10)}
+            HAP v2.1 · {new Date().toISOString().slice(0, 10)}
           </span>
         </div>
       </div>

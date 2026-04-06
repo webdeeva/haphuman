@@ -27,7 +27,7 @@ export default function Footer() {
 
           {/* Copyright */}
           <div className="text-xs font-mono text-slate-600">
-            © 2025 HAP · Human Authorship Protocol
+            © 2026 HAP · Human Authorship Protocol
           </div>
         </div>
 

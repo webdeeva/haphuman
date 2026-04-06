@@ -779,7 +779,7 @@ export default function WhitepaperPage() {
             A technical framework for defining, measuring, and verifying human creative contribution within AI-assisted works — including legal considerations, dispute resolution, blockchain architecture, and C2PA integration.
           </p>
           <div className="flex flex-wrap gap-3">
-            {[["Published", "2025"], ["Version", "2.1"], ["Status", "Open Standard"], ["Author", "Aquarius Maximus"]].map(([k, v]) => (
+            {[["Published", "2026"], ["Version", "2.1"], ["Status", "Open Standard"], ["Author", "Aquarius Maximus"]].map(([k, v]) => (
               <div key={k} className="glass rounded-xl px-4 py-2 text-xs font-mono">
                 <span className="text-slate-600">{k}: </span>
                 <span className="text-slate-300">{v}</span>
