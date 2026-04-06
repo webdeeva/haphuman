@@ -32,10 +32,16 @@ export default function Footer() {
         </div>
 
         {/* Bottom line */}
-        <div className="mt-8 pt-6 border-t border-slate-800/40 text-center">
+        <div className="mt-8 pt-6 border-t border-slate-800/40 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs font-mono text-slate-700">
             Authorship is not defined by output alone. It is defined by the system that creates it.
           </p>
+          <div className="flex items-center gap-2">
+            <div className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+            <span className="text-xs font-mono text-amber-500/70 tracking-wide">
+              Coming to the Guapcoin Blockchain
+            </span>
+          </div>
         </div>
       </div>
     </footer>
