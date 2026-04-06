@@ -5,6 +5,7 @@ import { motion, useInView } from "framer-motion";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import CopyForLLM from "@/components/CopyForLLM";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 
 const sections = [
@@ -272,6 +273,7 @@ function SectionBlock({ section, index }: { section: typeof sections[0]; index: 
 export default function WhitepaperPage() {
   return (
     <main className="relative min-h-screen">
+      <CopyForLLM />
       {/* Background */}
       <div className="fixed inset-0 grid-bg opacity-20 pointer-events-none" />
       <div className="fixed inset-0 pointer-events-none">

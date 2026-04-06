@@ -10,11 +10,13 @@ import UseCases from "@/components/UseCases";
 import JoinSection from "@/components/JoinSection";
 import Footer from "@/components/Footer";
 import HomeClient from "@/components/HomeClient";
+import CopyForLLM from "@/components/CopyForLLM";
 
 export default function HomePage() {
   return (
     <main className="relative">
       <HomeClient />
+      <CopyForLLM />
       <Navbar />
       <Hero />
       <ProblemSection />
