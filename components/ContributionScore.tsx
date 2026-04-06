@@ -219,7 +219,7 @@ export default function ContributionScore() {
             >
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm font-mono text-slate-400">HCS (Music Profile)</span>
-                <span className="text-lg font-bold font-mono gradient-text">1.00</span>
+                <span className="text-lg font-bold font-mono gradient-text">0.90</span>
               </div>
               <div className="h-1 rounded-full bg-slate-800 mb-3">
                 <motion.div

@@ -165,11 +165,13 @@ const sections: Section[] = [
   "recipe": {
     "recipe_id": "hap_recipe_v2_001",
     "recipe_cid": "bafybeig...abc123",
+    "storage_provider": "pinata",
     "description": "Lo-fi hip hop, 70-85 BPM, minor key, vinyl texture"
   },
   "voice": {
     "voice_id": "hap_voice_creator_001",
     "voice_model_cid": "bafybeig...def456",
+    "storage_provider": "pinata",
     "voice_permissions": {
       "licensed_uses": ["music_generation", "remix"],
       "prohibited_uses": ["advertising", "political_content"],
@@ -177,7 +179,7 @@ const sections: Section[] = [
       "revocable": true
     }
   },
-  "inputs": [{ "input_id": "lyric_v1", "input_cid": "bafybeig...ghi789" }],
+  "inputs": [{ "input_id": "lyric_v1", "input_cid": "bafybeig...ghi789", "storage_provider": "pinata" }],
   "iterations": [
     { "version": "v1", "selected": false, "notes": "Tempo too fast." },
     { "version": "v2_selected", "selected": true, "notes": "This one. Keep." }
@@ -301,7 +303,7 @@ const sections: Section[] = [
     number: "11",
     title: "Off-Chain Data Integrity",
     color: "#F59E0B",
-    content: "HAP mandates content-addressed storage for all off-chain assets. The recommended implementation is IPFS, which assigns every file a CID (Content Identifier) — a cryptographic fingerprint. If a file changes by even a single byte, its CID changes, making tampering immediately detectable.",
+    content: "HAP mandates content-addressed storage for all off-chain assets. The recommended implementation is IPFS, which assigns every file a CID (Content Identifier) — a cryptographic fingerprint. If a file changes by even a single byte, its CID changes, making tampering immediately detectable. Platforms must use an IPFS pinning service (e.g. Pinata, web3.storage) to guarantee off-chain asset persistence. Unpinned assets may be garbage collected and permanently lost.",
     subsections: [
       {
         title: "11.1 Deletion and Privacy Rights",
@@ -332,6 +334,58 @@ const sections: Section[] = [
       {
         title: "Anti-Gaming Protections",
         body: "Bad faith registration penalty: Voided registration and flagged account. Dispute filing stake: A nominal token deposit required, returned if upheld. Cooling-off period: 90-day bar on re-filing the same dispute without new evidence. Timestamps cannot be backdated: On-chain anchor is set at block confirmation.",
+      },
+      {
+        title: "12.5 Dispute Record Schema",
+        body: "All disputes generate a structured on-chain record:",
+        code: `{
+  "dispute_id": "hap_dispute_20250201_001",
+  "disputed_record_id": "hap_record_20250101_001",
+  "dispute_type": "ownership",
+  "filed_by": "0xabc1...1234",
+  "filed_against": "0x7f3a...b291",
+  "filed_at": "2025-02-01T00:00:00Z",
+  "status": "resolved",
+  "tier": 2,
+  "evidence_submitted": [
+    "bafybeig...evidence001",
+    "bafybeig...evidence002"
+  ],
+  "resolver_id": "hap_resolver_007",
+  "recommendation": "uphold",
+  "resolved_at": "2025-02-19T00:00:00Z",
+  "onchain_anchor": {
+    "chain": "polygon",
+    "transaction_hash": "0xdisp789...",
+    "timestamp": "2025-02-19T00:00:00Z"
+  }
+}`,
+      },
+      {
+        title: "12.6 Collaboration and Split Attribution",
+        body: "Multi-party works use a Collaboration Record. HCS components are attributed across multiple owner_identity addresses. Contribution shares must sum to 1.0. All collaborative works should have a signed attribution agreement stored as an off-chain document with its CID in the record.",
+        code: `{
+  "hap_version": "2.1",
+  "record_id": "hap_collab_20250101_001",
+  "collaboration": true,
+  "contributors": [
+    {
+      "identity": "0x7f3a...b291",
+      "role": "recipe_author",
+      "hcs_components": { "recipe": 0.30, "iteration": 0.08 },
+      "contribution_share": 0.55
+    },
+    {
+      "identity": "0xabc1...1234",
+      "role": "vocalist",
+      "hcs_components": { "voice": 0.20, "inputs": 0.15, "curation": 0.10 },
+      "contribution_share": 0.45
+    }
+  ],
+  "total_hcs": 0.83,
+  "hcs_tier": "collaborative_authorship",
+  "attribution_agreement_cid": "bafybeig...agreement001"
+}`,
       },
     ],
   },
@@ -409,6 +463,99 @@ const sections: Section[] = [
         number: "08",
         title: "Dispute",
         body: "Another creator claims Jordan's recipe was derived from theirs (registered December 2024).\n\nTier 1: Automated similarity check returns 71% — below 85% threshold. No hold.\nTier 2: HAP Resolver reviews both records. Overlap attributed to shared genre conventions. Recommendation: Uphold Jordan's registration.\nResolved in 18 days. Dispute record logged on-chain.",
+      },
+    ],
+  },
+  {
+    id: "schemas",
+    number: "15",
+    title: "Formal Schema Specification",
+    color: "#06B6D4",
+    content: "HAP v2.1 defines three canonical JSON schemas. Full machine-readable JSON Schema 2020-12 specifications are available at haphuman.xyz/schemas/v2.1/",
+    subsections: [
+      {
+        title: "15.1 Authorship Record Schema",
+        body: "The primary HAP record. Required fields: hap_version, record_id, domain_profile, hcs_components, contribution_score, hcs_tier, onchain_anchor, owner_identity.",
+        code: `{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://haphuman.xyz/schemas/v2.1/authorship-record.json",
+  "title": "HAP Authorship Record",
+  "type": "object",
+  "required": ["hap_version","record_id","domain_profile","hcs_components",
+               "contribution_score","hcs_tier","onchain_anchor","owner_identity"],
+  "properties": {
+    "hap_version": { "type": "string", "const": "2.1" },
+    "record_id": { "type": "string" },
+    "domain_profile": { "enum": ["music","visual_art","written_content","custom"] },
+    "contribution_score": { "type": "number", "minimum": 0, "maximum": 1 },
+    "hcs_tier": {
+      "enum": ["primary_human_authorship","collaborative_authorship",
+               "ai_assisted_creation","ai_generated"]
+    },
+    "hcs_components": {
+      "type": "object",
+      "properties": {
+        "recipe":    { "type": "number", "minimum": 0, "maximum": 1 },
+        "inputs":    { "type": "number", "minimum": 0, "maximum": 1 },
+        "voice":     { "type": "number", "minimum": 0, "maximum": 1 },
+        "iteration": { "type": "number", "minimum": 0, "maximum": 1 },
+        "curation":  { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    }
+  }
+}`,
+      },
+      {
+        title: "15.2 Dispute Record Schema",
+        body: "Required fields: dispute_id, disputed_record_id, dispute_type, filed_by, filed_against, filed_at, status, tier.",
+        code: `{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://haphuman.xyz/schemas/v2.1/dispute-record.json",
+  "title": "HAP Dispute Record",
+  "type": "object",
+  "required": ["dispute_id","disputed_record_id","dispute_type",
+               "filed_by","filed_against","filed_at","status","tier"],
+  "properties": {
+    "dispute_type": {
+      "enum": ["ownership","derivation","voice_identity","contribution"]
+    },
+    "status": {
+      "enum": ["pending","under_review","resolved","escalated","withdrawn"]
+    },
+    "tier": { "type": "integer", "minimum": 1, "maximum": 3 },
+    "recommendation": {
+      "enum": ["uphold","transfer","co_register","escalate","dismissed"]
+    }
+  }
+}`,
+      },
+      {
+        title: "15.3 Collaboration Record Schema",
+        body: "Extends the authorship record for multi-party works. The sum of all contributor contribution_share values must equal 1.0.",
+        code: `{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://haphuman.xyz/schemas/v2.1/collaboration-record.json",
+  "title": "HAP Collaboration Record",
+  "allOf": [{ "$ref": "authorship-record.json" }],
+  "properties": {
+    "collaboration": { "type": "boolean", "const": true },
+    "contributors": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["identity","role","hcs_components","contribution_share"],
+        "properties": {
+          "identity":           { "type": "string" },
+          "role":               { "type": "string" },
+          "contribution_share": { "type": "number", "minimum": 0, "maximum": 1 },
+          "hcs_components":     { "type": "object" }
+        }
+      }
+    },
+    "attribution_agreement_cid": { "type": "string" }
+  }
+}`,
       },
     ],
   },

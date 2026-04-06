@@ -246,7 +246,7 @@ export default function PromptFramework() {
                     transition={{ delay: 0.3 }}
                     className="flex items-center gap-2"
                   >
-                    <span className="text-sm font-bold font-mono" style={{ color: "#06B6D4" }}>HCS 1.00</span>
+                    <span className="text-sm font-bold font-mono" style={{ color: "#06B6D4" }}>HCS 0.90</span>
                     <span className="text-[9px] font-mono px-1.5 py-0.5 rounded" style={{ background: "rgba(16,185,129,0.15)", color: "#10B981" }}>Primary Authorship</span>
                   </motion.div>
                 </div>

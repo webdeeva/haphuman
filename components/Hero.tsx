@@ -37,7 +37,7 @@ export default function Hero() {
             >
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 pulse-ring" />
               <span className="text-xs font-mono text-emerald-400 tracking-widest uppercase">
-                Protocol Active · v2.0
+                Protocol Active · v2.1
               </span>
             </motion.div>
 
