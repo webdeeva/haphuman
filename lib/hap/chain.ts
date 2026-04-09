@@ -87,9 +87,12 @@ export function hashRecordBytes32(record: HAPRecord): `0x${string}` {
 }
 
 function getPrivateKey(): `0x${string}` {
-  const key = process.env.GUAPCOIN_PRIVATE_KEY;
+  const key = (process.env.GUAPCOIN_PRIVATE_KEY ?? "").trim().replace(/^0x/, "");
   if (!key) throw new Error("GUAPCOIN_PRIVATE_KEY environment variable is not set");
-  return key.startsWith("0x") ? (key as `0x${string}`) : `0x${key}`;
+  if (!/^[0-9a-fA-F]{64}$/.test(key)) {
+    throw new Error(`GUAPCOIN_PRIVATE_KEY invalid: expected 64 hex chars, got ${key.length}`);
+  }
+  return `0x${key}`;
 }
 
 function getRegistryAddress(): `0x${string}` {
