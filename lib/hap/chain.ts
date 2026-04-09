@@ -24,7 +24,7 @@ export const guapcoin = defineChain({
   rpcUrls: {
     default: {
       http: [
-        process.env.GUAPCOIN_RPC_URL ?? "https://rpc-mainnet-1.guapcoinx.com",
+        (process.env.GUAPCOIN_RPC_URL ?? "https://rpc-mainnet-1.guapcoinx.com").trim(),
         "https://rpc-mainnet-2.guapcoinx.com",
       ],
     },
@@ -96,7 +96,7 @@ function getPrivateKey(): `0x${string}` {
 }
 
 function getRegistryAddress(): `0x${string}` {
-  const addr = process.env.HAP_REGISTRY_ADDRESS;
+  const addr = (process.env.HAP_REGISTRY_ADDRESS ?? "").trim();
   if (!addr) throw new Error("HAP_REGISTRY_ADDRESS environment variable is not set");
   return addr as `0x${string}`;
 }
