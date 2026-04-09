@@ -1,0 +1,414 @@
+openapi: "3.1.0"
+info:
+  title: Human Authorship Protocol API
+  version: "2.1.0"
+  description: |
+    The HAP API enables platforms to create, pin, and anchor verifiable human authorship records
+    for AI-assisted creative works. Records are content-addressed (IPFS) and optionally anchored
+    on the Guapcoin blockchain (chain ID 71111).
+  contact:
+    name: HAP - Human Authorship Protocol
+    url: https://haphuman.xyz
+  license:
+    name: MIT
+
+servers:
+  - url: https://haphuman.xyz/api/v1
+    description: Production
+  - url: http://localhost:3000/api/v1
+    description: Local development
+
+tags:
+  - name: Records
+    description: Create and retrieve HAP authorship records
+  - name: Anchoring
+    description: Pin records to IPFS and anchor on Guapcoin
+  - name: Schemas
+    description: JSON Schema 2020-12 specifications
+
+paths:
+  /records:
+    post:
+      operationId: createRecord
+      tags: [Records]
+      summary: Create a HAP authorship record
+      description: |
+        Assembles a HAP v2.1 record from the provided creative components, computes the HCS score,
+        and optionally pins the record to IPFS via Pinata.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateRecordRequest"
+            examples:
+              music_full:
+                summary: Full music record
+                value:
+                  domain_profile: music
+                  recipe:
+                    style: "Lo-fi Hip Hop"
+                    structure: "Verse - Chorus - Bridge"
+                    tone: "Melancholic"
+                    bpm_min: 70
+                    bpm_max: 85
+                    key: "A"
+                    mode: minor
+                    constraints: ["vinyl_crackle", "reverb_heavy"]
+                  voice:
+                    voice_id: "hap_voice_creator_001"
+                    voice_permissions:
+                      licensed_uses: ["music_generation", "remix"]
+                      prohibited_uses: ["advertising", "political_content"]
+                      expiry: "2027-01-01T00:00:00Z"
+                      revocable: true
+                  inputs:
+                    lyrics: "Through the noise I remain"
+                    note: "Climax at 1:45; chorus vocal distant, like a memory"
+                    intent: "emotional_climax"
+                  iterations:
+                    - version: v1
+                      selected: false
+                      notes: "Tempo too fast, loses the late-night feel."
+                    - version: v2
+                      selected: false
+                      notes: "Chorus needs more reverb."
+                    - version: v3
+                      selected: true
+                      notes: "This one. The space in the chorus is right."
+                  curation:
+                    decision: primary_keep
+                  owner_identity: "0x7f3a...b291"
+                  pin_to_ipfs: true
+      responses:
+        "201":
+          description: Record created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateRecordResponse"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /records/{cid}:
+    get:
+      operationId: getRecord
+      tags: [Records]
+      summary: Retrieve a HAP record by IPFS CID
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: IPFS CID of the pinned record (starts with baf or Qm)
+          example: bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi
+      responses:
+        "200":
+          description: Record found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  record:
+                    $ref: "#/components/schemas/HAPRecord"
+        "400":
+          description: Invalid ID format
+        "404":
+          description: Record not found on IPFS
+
+  /records/{cid}/anchor:
+    post:
+      operationId: anchorRecord
+      tags: [Anchoring]
+      summary: Anchor a record to the Guapcoin blockchain
+      description: |
+        Fetches the record from IPFS, computes its SHA-256 hash, and calls anchor() on the
+        HAPRegistry smart contract on Guapcoin (chain ID 71111). The first anchor wins —
+        re-anchoring the same record hash is rejected by the contract.
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: IPFS CID of the record to anchor
+      responses:
+        "200":
+          description: Successfully anchored
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnchorRecordResponse"
+        "400":
+          description: Invalid CID or record already anchored
+        "500":
+          description: Chain error (insufficient gas, RPC failure, etc.)
+
+  /schemas:
+    get:
+      operationId: getSchema
+      tags: [Schemas]
+      summary: HAP JSON Schema 2020-12 specification
+      description: Returns the canonical JSON Schema for HAP v2.1 authorship records.
+      responses:
+        "200":
+          description: JSON Schema document
+          content:
+            application/schema+json:
+              schema:
+                type: object
+
+components:
+  schemas:
+
+    CreateRecordRequest:
+      type: object
+      required: [recipe, voice]
+      properties:
+        domain_profile:
+          type: string
+          enum: [music, visual_art, written_content]
+          default: music
+        recipe:
+          $ref: "#/components/schemas/RecipeInput"
+        voice:
+          $ref: "#/components/schemas/HAPVoice"
+        inputs:
+          $ref: "#/components/schemas/HAPInputs"
+        iterations:
+          type: array
+          items:
+            $ref: "#/components/schemas/HAPIteration"
+        curation:
+          $ref: "#/components/schemas/CurationInput"
+        owner_identity:
+          type: string
+          description: Creator wallet address
+          example: "0x7f3a...b291"
+        pin_to_ipfs:
+          type: boolean
+          default: false
+          description: If true, pin the record to IPFS via Pinata after creation
+
+    RecipeInput:
+      type: object
+      required: [style]
+      properties:
+        style:
+          type: string
+          example: "Lo-fi Hip Hop"
+        structure:
+          type: string
+          example: "Verse - Chorus - Bridge"
+        tone:
+          type: string
+          example: "Melancholic"
+        bpm_min:
+          type: number
+          example: 70
+        bpm_max:
+          type: number
+          example: 85
+        key:
+          type: string
+          example: "A"
+        mode:
+          type: string
+          enum: [major, minor]
+        constraints:
+          type: array
+          items:
+            type: string
+          example: ["vinyl_crackle", "minor_key"]
+
+    HAPVoice:
+      type: object
+      required: [voice_id, voice_permissions]
+      properties:
+        voice_id:
+          type: string
+          example: "hap_voice_creator_001"
+        voice_permissions:
+          type: object
+          required: [licensed_uses, prohibited_uses, expiry, revocable]
+          properties:
+            licensed_uses:
+              type: array
+              items:
+                type: string
+              example: ["music_generation", "remix"]
+            prohibited_uses:
+              type: array
+              items:
+                type: string
+              example: ["advertising", "political_content"]
+            expiry:
+              type: string
+              format: date-time
+              example: "2027-01-01T00:00:00Z"
+            revocable:
+              type: boolean
+              example: true
+
+    HAPInputs:
+      type: object
+      properties:
+        lyrics:
+          type: string
+        note:
+          type: string
+          example: "Climax at 1:45; chorus vocal distant, like a memory"
+        intent:
+          type: string
+          example: "emotional_climax"
+
+    HAPIteration:
+      type: object
+      required: [version, selected, notes]
+      properties:
+        version:
+          type: string
+          example: "v1"
+        selected:
+          type: boolean
+        notes:
+          type: string
+          example: "Tempo too fast, loses the late-night feel."
+        timestamp:
+          type: string
+          format: date-time
+
+    CurationInput:
+      type: object
+      properties:
+        decision:
+          type: string
+          enum: [primary_keep, archive, discard]
+          default: primary_keep
+        selected_cid:
+          type: string
+          description: IPFS CID of the selected audio output (optional)
+        timestamp:
+          type: string
+          format: date-time
+
+    HCSComponents:
+      type: object
+      properties:
+        recipe:    { type: number, minimum: 0, maximum: 1 }
+        inputs:    { type: number, minimum: 0, maximum: 1 }
+        voice:     { type: number, minimum: 0, maximum: 1 }
+        iteration: { type: number, minimum: 0, maximum: 1 }
+        curation:  { type: number, minimum: 0, maximum: 1 }
+
+    OnChainAnchor:
+      type: object
+      properties:
+        chain:
+          type: string
+          example: "guapcoin"
+        chain_id:
+          type: integer
+          example: 71111
+        transaction_hash:
+          type: string
+          example: "0xabc123..."
+        anchored_hash:
+          type: string
+          example: "sha256:9f86d081..."
+        timestamp:
+          type: string
+          format: date-time
+        block_number:
+          type: integer
+
+    HAPRecord:
+      type: object
+      properties:
+        hap_version:
+          type: string
+          example: "2.1"
+        record_id:
+          type: string
+          example: "hap_record_20260408_a3f9b1c2"
+        domain_profile:
+          type: string
+          enum: [music, visual_art, written_content]
+        created_at:
+          type: string
+          format: date-time
+        recipe:
+          type: object
+        voice:
+          $ref: "#/components/schemas/HAPVoice"
+        inputs:
+          $ref: "#/components/schemas/HAPInputs"
+        iterations:
+          type: array
+          items:
+            $ref: "#/components/schemas/HAPIteration"
+        curation:
+          type: object
+        hcs_components:
+          $ref: "#/components/schemas/HCSComponents"
+        contribution_score:
+          type: number
+          minimum: 0
+          maximum: 1
+          example: 0.87
+        hcs_tier:
+          type: string
+          enum: [primary_human_authorship, collaborative_authorship, ai_assisted_creation, ai_generated]
+        ipfs_cid:
+          type: string
+        onchain_anchor:
+          $ref: "#/components/schemas/OnChainAnchor"
+        owner_identity:
+          type: string
+
+    CreateRecordResponse:
+      type: object
+      properties:
+        record:
+          $ref: "#/components/schemas/HAPRecord"
+        ipfs_cid:
+          type: string
+          description: Present if pin_to_ipfs was true and pinning succeeded
+
+    AnchorRecordResponse:
+      type: object
+      properties:
+        record_id:
+          type: string
+        transaction_hash:
+          type: string
+        anchored_hash:
+          type: string
+        chain_id:
+          type: integer
+          example: 71111
+        block_number:
+          type: integer
+        timestamp:
+          type: string
+          format: date-time
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        details:
+          type: object

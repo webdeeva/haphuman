@@ -11,6 +11,7 @@ const navLinks = [
   { label: "Score", href: "#score" },
   { label: "Vision", href: "#vision" },
   { label: "Whitepaper", href: "/whitepaper" },
+  { label: "Studio", href: "/studio" },
 ];
 
 export default function Navbar() {
