@@ -98,14 +98,15 @@ const sections: Section[] = [
     title: "Human Contribution Score (HCS)",
     color: "#8B5CF6",
     content: "HAP introduces a quantitative model: the Human Contribution Score (HCS).",
+    callout: "HCS tiers are descriptive indicators only. Copyright eligibility is determined by applicable law and cannot be established by any score or framework.",
     subsections: [
       {
         title: "5.1 What the HCS Measures",
-        body: "The HCS is the sum of all human-driven creative components. AI's role is the remainder  -  it is not listed as a component of the human score.\n\nHCS = Sum of all human-driven components\nAI Remainder = 1 − HCS",
+        body: "The HCS is the sum of all human-driven creative components. AI's role is the remainder  -  it is not listed as a component of the human score.\n\nHCS = Sum of all human-driven components\nAI Remainder = 1 − HCS\n\nImportant: HCS is a documentation metric, not a legal threshold. U.S. courts and the Copyright Office focus on qualitative human authorship, not a quantitative score. A high HCS does not guarantee copyright protection; a lower HCS with deep qualitative creative shaping may support a stronger claim than a high HCS built on minimal decisions. No score produced by HAP constitutes legal advice or a determination of copyright eligibility.",
       },
       {
         title: "5.2 Weighting Rationale",
-        body: "Weights are assigned based on three criteria: Intentionality (does this component require deliberate human decision-making?), Reproducibility (would removing this component significantly change the output?), and Defensibility (can this component be documented as evidence of authorship?).",
+        body: "Weights are assigned based on three criteria: Intentionality (does this component require deliberate human decision-making?), Reproducibility (would removing this component significantly change the output?), and Defensibility (can this component be documented as evidence of authorship?).\n\nNote on Curation: Courts have been inconsistent on whether selection alone constitutes authorship. Feist v. Rural Telephone (1991) held that selection can be creative, but only where it reflects genuine intellectual judgment. HAP tracks curation as a documented decision  -  it does not imply that curation alone creates a copyright claim.",
       },
     ],
     table: {
@@ -243,7 +244,7 @@ const sections: Section[] = [
       },
       {
         title: "8.2 System Ownership",
-        body: "The recipe and creative framework  -  the human-designed process that guided the output. Recipes are ownable and licensable independently.",
+        body: "The recipe and creative framework  -  the human-designed process that guided the output. Recipes are ownable and licensable independently.\n\nLegal basis note: In U.S. IP law, systems, methods, and processes are generally not protectable under copyright  -  that is patent or trade secret territory. Recipe ownership under HAP is structured as a combination of: (1) trade secret protection under the Defend Trade Secrets Act (DTSA) for undisclosed recipes, (2) contractual license enforced through HAP platform terms of service, and (3) sui generis rights defined by the HAP registry. Creators licensing recipes commercially should obtain qualified IP counsel to determine the appropriate legal structure in their jurisdiction.",
       },
       {
         title: "8.3 Identity Ownership",
@@ -256,13 +257,14 @@ const sections: Section[] = [
     number: "09",
     title: "Monetization Model",
     color: "#10B981",
-    content: "HAP enables new economic models for creative work:",
+    content: "HAP enables new economic models for creative work. The terms below have distinct legal meanings: license conveys permission to use under defined terms without transferring ownership; sale transfers ownership of a specific asset; revenue sharing distributes proceeds proportionally without creating ownership interests.",
     bullets: [
-      "Recipe marketplaces  -  sell or license reusable creative systems independently of any output",
+      "Recipe licensing  -  grant permission to use a creative system under defined terms (scope, duration, exclusivity)",
       "Voice licensing  -  monetize vocal identity under defined permissions (use case, expiry, jurisdiction)",
       "Contribution-based revenue sharing  -  revenue split proportional to HCS components",
-      "Creative asset trading on decentralized platforms",
+      "Creative asset licensing and transfer on decentralized platforms",
     ],
+    callout: "Securities law notice: Fractional ownership interests in creative works sold to multiple parties on decentralized platforms may constitute investment contracts subject to SEC regulation under the Howey test, particularly where buyers expect returns based on others' efforts. Platform implementers offering contribution-based revenue sharing or fractionalized creative assets must obtain qualified securities counsel before deployment.",
   },
   {
     id: "legal",
@@ -272,15 +274,15 @@ const sections: Section[] = [
     subsections: [
       {
         title: "10.1 Copyright and AI-Generated Works",
-        body: "The US Copyright Office has established that copyright requires human authorship. HAP's HCS and its components are designed to document the kind of human creative control that copyright frameworks look for.\n\nWorks in the Primary Human Authorship tier (0.80–1.00) are most likely to support a copyright claim. Works in the Collaborative Authorship tier (0.50–0.79) may support partial protection. Works below 0.50 are unlikely to qualify under current US standards.\n\nHAP is a documentation and attribution framework, not a legal service.",
+        body: "The US Copyright Office has established that copyright requires human authorship (see Thaler v. Perlmutter, 2023). HAP's HCS and its components are designed to document the kind of human creative control that copyright frameworks look for.\n\nWorks in the Primary Human Authorship tier (0.80–1.00) are most likely to support a copyright claim. Works in the Collaborative Authorship tier (0.50–0.79) may support partial protection. Works below 0.50 are unlikely to qualify under current US standards.\n\nCritical caveat: HCS tiers are descriptive indicators, not legal determinations. Copyright eligibility is a qualitative legal question that no score or framework can resolve. A high HCS does not guarantee copyright protection. HAP is a documentation framework, not a legal service.",
       },
       {
         title: "10.2 Jurisdiction Considerations",
-        body: "United States: The Copyright Office requires human authorship. HAP records document intentional creative decisions directly relevant to this standard.\n\nEuropean Union: EU copyright requires a work to be the \"author's own intellectual creation.\" HAP's Recipe and Input components map directly to this standard.\n\nUnited Kingdom: The CDPA s.9(3) provision grants copyright to the person who made the \"arrangements necessary\" for the creation. HAP's system-level authorship model aligns well with this framing.",
+        body: "United States: The Copyright Office requires human authorship. HAP records document intentional creative decisions directly relevant to this standard.\n\nEuropean Union: EU copyright requires a work to be the \"author's own intellectual creation.\" HAP's Recipe and Input components are designed to document this kind of contribution. However, EU member states implement this standard differently  -  France, Germany, and others have distinct moral rights frameworks and judicial interpretations. EU alignment requires jurisdiction-specific legal review and cannot be assumed from HAP documentation alone.\n\nUnited Kingdom: The CDPA s.9(3) provision grants copyright to the person who made the \"arrangements necessary\" for the creation. HAP's system-level authorship model is relevant to this framing. However, this provision is controversial and under active review by the UK Intellectual Property Office  -  it may be narrowed or repealed. Creators should not rely on s.9(3) as a stable legal basis without current qualified UK IP counsel.",
       },
       {
         title: "10.3 Voice Data and Biometric Privacy",
-        body: "GDPR (EU/EEA): Biometric data is a \"special category\" under Article 9. Processing requires explicit consent and a DPIA.\n\nBIPA (Illinois, USA): Requires written informed consent before collecting voiceprints. Statutory damages: $1,000–$5,000 per violation.\n\nHAP's design response: Voice models stored off-chain and encrypted. On-chain record contains only a non-reversible hash. Platforms must implement a right-to-deletion workflow.",
+        body: "GDPR (EU/EEA): Biometric data is a \"special category\" under Article 9. Processing requires explicit consent and a DPIA. Important: Regulators have taken the position that pseudonymized or hashed biometric data may still constitute personal data if re-identification is possible in context. The on-chain hash alone does not eliminate GDPR obligations  -  it is a design mitigation, not a compliance solution.\n\nBIPA (Illinois, USA): Requires written informed consent before collecting voiceprints, plus a publicly available retention and destruction policy before collection begins. Statutory damages: $1,000–$5,000 per violation. Critically, courts have interpreted BIPA liability as accruing per individual collection event  -  aggregate exposure can be substantial. Platforms should obtain qualified BIPA counsel before implementing voice data collection.\n\nState law landscape: Biometric and voice-adjacent privacy laws vary widely and are rapidly evolving. Texas (CUBI), Washington, New York, California (CCPA/CPRA), and others have overlapping frameworks. This whitepaper does not constitute a complete survey of applicable law.\n\nHAP's design response: Voice models stored off-chain and encrypted. On-chain record contains only a non-reversible hash. Platforms must implement a right-to-deletion workflow.",
         code: `"voice_permissions": {
   "licensed_uses": ["music_generation", "remix"],
   "prohibited_uses": ["advertising", "political_content"],
@@ -318,7 +320,7 @@ const sections: Section[] = [
     title: "Dispute Resolution",
     color: "#8B5CF6",
     content: "HAP defines a three-tier dispute resolution process for four dispute types: Ownership, Derivation, Voice Identity, and Contribution disputes.",
-    callout: "In any ownership or derivation dispute, the earlier on-chain anchor takes precedence, unless evidence of fraud or bad faith registration is demonstrated.",
+    callout: "On-chain anchoring creates evidentiary support for priority of creation  -  it does not confer automatic legal priority. Courts do not automatically defer to blockchain timestamps. Chain-of-title disputes, fraud, or errors in registration may override an earlier anchor. In copyright law, priority is determined by the act of creation, not registration.",
     subsections: [
       {
         title: "Tier 1  -  Automated Similarity Check (Platform Level)",
@@ -330,7 +332,7 @@ const sections: Section[] = [
       },
       {
         title: "Tier 3  -  External Arbitration",
-        body: "For unresolved or high-value disputes. HAP provides structured evidence packages to recognized arbitration bodies including WIPO, AAA, and the National Arbitration Forum.",
+        body: "For unresolved or high-value disputes. HAP provides structured evidence packages to recognized arbitration bodies including WIPO (IP-specialized, recommended for cross-border IP disputes), AAA (American Arbitration Association), JAMS, and ICC (International Chamber of Commerce). Note: Smart contracts are not uniformly enforceable as contracts in all jurisdictions. Some jurisdictions require specific formalities for IP license agreements. Parties should confirm arbitration clause enforceability with local counsel before relying on HAP dispute resolution.",
       },
       {
         title: "Anti-Gaming Protections",
@@ -561,6 +563,23 @@ const sections: Section[] = [
     ],
   },
   {
+    id: "limitations",
+    number: "15b",
+    title: "Limitations",
+    color: "#EF4444",
+    callout: "HAP is a documentation and evidence framework. It does not create legal rights, guarantee copyright protection, or substitute for qualified legal counsel.",
+    subsections: [
+      {
+        title: "What HAP Does Not Do",
+        body: "HAP cannot guarantee copyright protection for any work. No HCS score, tier, or on-chain record creates a copyright or establishes ownership as a matter of law.\n\nHAP does not replace legal counsel. Creators and platforms operating in regulated jurisdictions  -  particularly those handling voice data, offering revenue-sharing products, or asserting copyright  -  must engage qualified legal professionals.\n\nHAP does not create enforceable rights by itself. The framework documents creative decisions. The legal weight of that documentation depends on the jurisdiction, the specific facts, and applicable law at the time of any dispute.\n\nHAP records do not prove human agency. A HAP record documents what decisions were logged, not that a human (rather than an automated script) made those decisions. Platforms implementing HAP must design appropriate identity verification if human agency is material to their use case.",
+      },
+      {
+        title: "Version and Amendment Protocol",
+        body: "HAP records are interpreted under the schema version in effect at the time of creation. A record created under v2.1 is governed by v2.1 schema definitions and HCS weightings, regardless of subsequent version releases.\n\nWhen a new version is released, HAP will publish a migration guide specifying: which fields are backwards-compatible, which schema changes affect HCS calculation, and how dispute resolution handles cross-version record comparisons.\n\nPlatforms must store the hap_version field and use it when interpreting archived records. Version-specific schema definitions are available at haphuman.xyz/schemas/v{version}/.",
+      },
+    ],
+  },
+  {
     id: "future",
     number: "16",
     title: "Future Directions",
@@ -587,7 +606,7 @@ const sections: Section[] = [
     number: " - ",
     title: "Disclaimer",
     color: "#475569",
-    disclaimer: "HAP is a documentation and attribution framework. It is not a legal service and does not provide legal advice. Nothing in this document constitutes legal, financial, or investment advice. Creators and platform implementers should consult qualified legal counsel regarding copyright, privacy, and regulatory compliance in their specific jurisdictions.",
+    disclaimer: "HAP is a documentation and attribution framework. It is not a legal service and does not provide legal advice. Nothing in this document constitutes legal, financial, or investment advice.\n\nHCS scores and tiers are descriptive indicators only. They do not constitute legal determinations of copyright eligibility, ownership, or authorship. Copyright eligibility is determined solely by applicable law.\n\nOn-chain anchoring provides evidentiary support, not automatic legal priority or enforceable rights.\n\nBiometric and voice data collection is subject to complex and rapidly evolving federal, state, and international privacy law. The discussion in this document is illustrative only and does not constitute compliance guidance.\n\nRevenue-sharing and fractional ownership models may implicate securities law in certain jurisdictions. This document does not constitute securities advice.\n\nCreators, platforms, and investors should consult qualified legal counsel regarding copyright, privacy, securities, and regulatory compliance before implementing or relying on any aspect of this framework.",
   },
 ];
 

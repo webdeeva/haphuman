@@ -85,6 +85,8 @@ The human act of choosing which output to keep  -  a distinct creative decision 
 
 HCS = Sum of all human-driven components. AI Remainder = 1 − HCS.
 
+**Important:** HCS is a documentation metric, not a legal threshold. Copyright eligibility is a qualitative legal question that no score or framework can resolve. HCS tiers are descriptive indicators only — copyright eligibility is determined by applicable law and cannot be established by any score.
+
 ### HCS Components (Music Profile)
 
 | Component | Intentionality | Reproducibility | Defensibility | Default Weight |
@@ -94,6 +96,8 @@ HCS = Sum of all human-driven components. AI Remainder = 1 − HCS.
 | Voice | High | High | Medium | 20% |
 | Iteration | Medium | Medium | High | 15% |
 | Curation | Medium | Low | Medium | 10% |
+
+Note on Curation: Courts have been inconsistent on whether selection alone constitutes authorship. HAP tracks curation as a documented decision — it does not imply curation alone creates a copyright claim.
 
 ### HCS Tiers
 
@@ -158,24 +162,25 @@ HAP supports optional on-chain anchoring using a hybrid architecture.
 ## Legal Framework
 
 ### Copyright
-The US Copyright Office requires human authorship. HAP records document the kind of intentional creative control that copyright frameworks look for.
+The US Copyright Office requires human authorship (see Thaler v. Perlmutter, 2023). HAP records document the kind of intentional creative control that copyright frameworks look for.
 
 - **0.80–1.00 HCS:** Most likely to support a copyright claim
 - **0.50–0.79 HCS:** May support partial protection over human-shaped elements
 - **Below 0.50:** Unlikely to qualify under current US standards
 
-HAP is a documentation framework, not a legal service.
+HAP is a documentation framework, not a legal service. HCS tiers are descriptive indicators — they are not legal determinations.
 
 ### Voice Data and Biometric Privacy
-- GDPR Article 9: Biometric data requires explicit consent and DPIA
-- BIPA (Illinois): Written consent required; $1,000–$5,000 per violation
+- GDPR Article 9: Biometric data requires explicit consent and DPIA. Hashed biometric data may still constitute personal data under GDPR if re-identification is possible — the on-chain hash is a design mitigation, not a compliance solution.
+- BIPA (Illinois): Written consent required plus a public retention/destruction policy before collection. Liability accrues per collection event — aggregate exposure can be substantial. Obtain qualified BIPA counsel before implementing voice data collection.
+- State law: Biometric and voice-adjacent privacy laws vary widely and are rapidly evolving (Texas, Washington, New York, California, and others). This document is not a complete survey of applicable law.
 - Voice models stored off-chain, encrypted; on-chain contains only non-reversible hash
 - Platforms must implement right-to-deletion workflows
 
 ### Jurisdiction Notes
 - **US:** HAP records document intentional creative decisions relevant to copyright standards
-- **EU:** Recipe and Input components map to "author's own intellectual creation" standard
-- **UK:** System-level authorship aligns with CDPA s.9(3) computer-generated works provision
+- **EU:** Recipe and Input components are designed to document "author's own intellectual creation" — EU member states implement this standard differently; jurisdiction-specific legal review is required
+- **UK:** System-level authorship is relevant to CDPA s.9(3), but this provision is under active legislative review and may be narrowed or repealed — do not rely on it without current qualified UK IP counsel
 
 ---
 
@@ -183,11 +188,11 @@ HAP is a documentation framework, not a legal service.
 
 Three-tier process for Ownership, Derivation, Voice Identity, and Contribution disputes.
 
-**First Principle:** The earlier on-chain anchor takes precedence in ownership disputes.
+**First Principle:** On-chain anchoring creates evidentiary support for priority of creation — it does not confer automatic legal priority. Courts do not automatically defer to blockchain timestamps. Chain-of-title disputes, fraud, or errors may override an earlier anchor.
 
 - **Tier 1:** Automated similarity check (85% threshold triggers notification)
 - **Tier 2:** HAP Registry structured mediation (21-day resolution target)
-- **Tier 3:** External arbitration (WIPO, AAA, National Arbitration Forum)
+- **Tier 3:** External arbitration (WIPO, AAA, JAMS, ICC) — smart contracts are not uniformly enforceable in all jurisdictions; confirm arbitration clause enforceability with local counsel
 
 **Anti-gaming:** Bad faith registration voided · Dispute filing stake · 90-day cooling-off period
 
@@ -224,17 +229,21 @@ C2PA (backed by Adobe, Microsoft, Google) embeds provenance metadata into files.
 ## Ownership Model
 
 - **Output Ownership**  -  The generated work
-- **System Ownership**  -  The recipe and framework (ownable independently)
+- **System Ownership**  -  The recipe and framework (ownable as trade secret, contractual license, or sui generis right under HAP terms — not protectable under copyright, which excludes systems and methods; see Defend Trade Secrets Act for undisclosed recipes)
 - **Identity Ownership**  -  Voice and creator identity (licensable with granular permissions)
 
 ---
 
 ## Monetization Model
 
-- Recipe marketplaces  -  license reusable creative systems
+Note: "license," "sell," and "revenue sharing" have distinct legal meanings. A license conveys permission to use under defined terms without transferring ownership. A sale transfers ownership. Revenue sharing distributes proceeds without creating ownership interests.
+
+- Recipe licensing  -  grant permission to use a creative system under defined terms
 - Voice licensing  -  monetize vocal identity under defined permissions
 - Contribution-based revenue sharing  -  proportional to HCS components
-- Creative asset trading on decentralized platforms
+- Creative asset licensing and transfer on decentralized platforms
+
+**Securities notice:** Fractional ownership interests sold to multiple parties on decentralized platforms may constitute investment contracts subject to SEC regulation under the Howey test. Platforms offering contribution-based revenue sharing or fractionalized creative assets must obtain qualified securities counsel before deployment.
 
 ---
 
@@ -268,9 +277,33 @@ A world where:
 
 ---
 
+## Limitations
+
+HAP cannot guarantee copyright protection for any work. No HCS score, tier, or on-chain record creates a copyright or establishes ownership as a matter of law.
+
+HAP does not replace legal counsel. Creators and platforms in regulated jurisdictions must engage qualified legal professionals.
+
+HAP does not create enforceable rights by itself. The legal weight of documented decisions depends on jurisdiction and applicable law.
+
+HAP records do not prove human agency. Platforms must design appropriate identity verification if human agency is material to their use case.
+
+**Version protocol:** Records are interpreted under the schema version in effect at creation. A v2.1 record is governed by v2.1 schema definitions regardless of subsequent releases. Version-specific schemas: haphuman.xyz/schemas/v{version}/
+
+---
+
 ## Disclaimer
 
-HAP is a documentation and attribution framework. It is not a legal service and does not provide legal advice. Creators and platform implementers should consult qualified legal counsel regarding copyright, privacy, and regulatory compliance in their jurisdictions.
+HAP is a documentation and attribution framework. It is not a legal service and does not provide legal advice. Nothing in this document constitutes legal, financial, or investment advice.
+
+HCS scores and tiers are descriptive indicators only. They do not constitute legal determinations of copyright eligibility, ownership, or authorship.
+
+On-chain anchoring provides evidentiary support, not automatic legal priority or enforceable rights.
+
+Biometric and voice data collection is subject to complex and rapidly evolving federal, state, and international privacy law. This document is illustrative only and does not constitute compliance guidance.
+
+Revenue-sharing and fractional ownership models may implicate securities law. This document does not constitute securities advice.
+
+Creators, platforms, and investors should consult qualified legal counsel regarding copyright, privacy, securities, and regulatory compliance before implementing or relying on any aspect of this framework.
 
 ---
 
