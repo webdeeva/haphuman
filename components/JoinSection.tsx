@@ -2,21 +2,42 @@
 
 import { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
-import { ArrowRight, CheckCircle2, AlertCircle } from "lucide-react";
+import { ArrowRight, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 
 export default function JoinSection() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
-  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !role) { setStatus("error"); return; }
-    setStatus("success");
-    setEmail("");
-    setRole("");
+    if (!email || !role) { setErrorMsg("Please fill in all fields."); setStatus("error"); return; }
+
+    setStatus("loading");
+    setErrorMsg("");
+
+    try {
+      const res = await fetch("/api/join", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, role }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setErrorMsg(data.error || "Something went wrong. Please try again.");
+        setStatus("error");
+      } else {
+        setStatus("success");
+        setEmail("");
+        setRole("");
+      }
+    } catch {
+      setErrorMsg("Network error. Please try again.");
+      setStatus("error");
+    }
   };
 
   return (
@@ -128,23 +149,27 @@ export default function JoinSection() {
               {status === "error" && (
                 <div className="flex items-center gap-2 text-red-400 text-xs font-mono">
                   <AlertCircle size={12} />
-                  Please fill in all fields.
+                  {errorMsg}
                 </div>
               )}
 
               <button
                 type="submit"
-                className="group flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold text-sm text-white transition-all duration-300 font-mono"
+                disabled={status === "loading"}
+                className="group flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold text-sm text-white transition-all duration-300 font-mono disabled:opacity-60"
                 style={{
                   background: "linear-gradient(135deg, #06B6D4, #8B5CF6)",
                   boxShadow: "0 0 30px rgba(6,182,212,0.25)",
                 }}
               >
-                Join the Protocol
-                <ArrowRight
-                  size={16}
-                  className="group-hover:translate-x-1 transition-transform"
-                />
+                {status === "loading" ? (
+                  <Loader2 size={16} className="animate-spin" />
+                ) : (
+                  <>
+                    Join the Protocol
+                    <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                  </>
+                )}
               </button>
             </form>
           )}
