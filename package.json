@@ -2,7 +2,7 @@
   "name": "haphuman",
   "version": "0.1.0",
   "private": false,
-  "author": "Aquarius Maximus — Founder of HAP",
+  "author": "Aquarius Maximus \u2014 Founder of HAP",
   "contributors": [
     {
       "name": "Aquarius Maximus",
@@ -30,7 +30,8 @@
     "react-dom": "19.2.4",
     "uuid": "^13.0.0",
     "viem": "^2.47.10",
-    "zod": "^4.3.6"
+    "zod": "^4.3.6",
+    "@neondatabase/serverless": "^0.10.4"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^7.0.0",
