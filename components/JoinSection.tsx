@@ -166,7 +166,7 @@ export default function JoinSection() {
                   <Loader2 size={16} className="animate-spin" />
                 ) : (
                   <>
-                    Join the Protocol
+                    Join Protocol Waitlist
                     <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                   </>
                 )}
