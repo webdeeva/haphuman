@@ -2,7 +2,7 @@
 
 import type { HAPKnowledgeContext, HAPKnowledgeSource } from "@/lib/hap/types";
 
-const inputClass = "w-full rounded-lg border border-slate-600 bg-slate-950 px-4 py-3 text-sm text-white";
+const inputClass = "w-full rounded-sm border border-slate-600 bg-slate-950 px-4 py-3 text-sm text-white";
 const sourceKinds: [HAPKnowledgeSource["kind"], string][] = [
   ["original_writing", "Original writing"], ["dataset", "Dataset"], ["lecture", "Lecture / transcript"],
   ["knowledge_base", "Knowledge base"], ["training_material", "Training / instruction material"], ["other", "Other"],
@@ -28,7 +28,7 @@ export default function KnowledgeContextFields({ value, onChange }: {
     <legend className="text-lg pt-7">Knowledge & source contribution</legend>
     <p className="text-sm text-slate-400 leading-relaxed">Your contribution can begin years before the draft. Record your original research, data, lectures, and the knowledge you bring to the collaboration. You can cite a private reference without uploading its contents.</p>
     <label className="block space-y-2"><span>Domain expertise & original knowledge</span><textarea className={inputClass} rows={3} value={context.domain_expertise ?? ""} onChange={e => update({ domain_expertise: e.target.value })} placeholder="Describe your field, original framework, research, or interpretive method and how it informed this work." /></label>
-    {context.sources.map((source, index) => <fieldset className="space-y-4 border border-slate-700 rounded-lg p-4" key={index}>
+    {context.sources.map((source, index) => <fieldset className="space-y-4 border border-slate-700 rounded-sm p-4" key={index}>
       <legend className="px-2 text-sm">Source {index + 1}</legend>
       <label className="block space-y-2"><span>Source title *</span><input className={inputClass} value={source.title} onChange={e => updateSource(index, { title: e.target.value })} placeholder="Original lecture series / research dataset / manuscript" /></label>
       <div className="grid gap-4 sm:grid-cols-2">
@@ -39,7 +39,7 @@ export default function KnowledgeContextFields({ value, onChange }: {
       <label className="block space-y-2"><span>What this source contributed</span><textarea className={inputClass} rows={2} value={source.contribution ?? ""} onChange={e => updateSource(index, { contribution: e.target.value })} placeholder="Which ideas, examples, interpretations, data, or passages shaped this work?" /></label>
       <button type="button" className="text-sm text-slate-300 underline underline-offset-4" onClick={() => update({ sources: context.sources.filter((_, i) => i !== index) })}>Remove source {index + 1}</button>
     </fieldset>)}
-    <button type="button" className="border border-slate-500 rounded-lg px-4 py-2 text-sm" onClick={() => update({ sources: [...context.sources, { title: "", kind: "original_writing", relationship: "own_work" }] })}>+ Add source material</button>
+    <button type="button" className="border border-slate-500 rounded-sm px-4 py-2 text-sm" onClick={() => update({ sources: [...context.sources, { title: "", kind: "original_writing", relationship: "own_work" }] })}>+ Add source material</button>
     <fieldset className="space-y-3"><legend className="mb-3">How the AI used your material</legend>{methods.map(([key, label]) => <label key={key} className="flex items-start gap-3 text-sm"><input className="mt-1" type="checkbox" checked={context.ai_methods.includes(key)} onChange={e => update({ ai_methods: e.target.checked ? [...context.ai_methods, key] : context.ai_methods.filter(method => method !== key) })} /><span>{label}</span></label>)}<p className="text-xs text-slate-400">Documents, retrieval, and instructions can guide a model without changing its weights. Select fine-tuning only if that happened; you can record several methods.</p></fieldset>
     {([
       ["preparation", "Preparation & teaching work", "Describe how you wrote, organized, annotated, or adapted your material for the AI."],

@@ -1,12 +1,7 @@
-"use client";
-
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CopyForLLM from "@/components/CopyForLLM";
-import { ArrowLeft, ExternalLink } from "lucide-react";
 
 type Section = {
   id: string;
@@ -27,835 +22,488 @@ type Section = {
 
 const sections: Section[] = [
   {
-    id: "implementation-status",
-    number: "00",
-    title: "Implementation status & reading this proposal",
-    color: "#b7c9a5",
-    callout: "HAP currently records declarations. It does not independently verify the person, the source material, or the claimed creative contribution.",
-    content: "This whitepaper combines an implemented prototype with proposed infrastructure. Studio supports music and written works; the API also accepts visual-art records. Dispute resolution, collaboration agreements, identity verification, C2PA integration, and marketplaces are design proposals, not deployed capabilities. Examples below are illustrative, not evidence of completed registrations or disputes.",
-    subsections: [
-      { title: "Written works in the current implementation", body: "Use the written_content profile for essays, fiction, poetry, scripts, and articles. Record the outline and narrative tone in recipe; original passages in inputs.text; editorial decisions and tool use in inputs.note; purpose in inputs.intent; and draft decisions in iterations. Select the final work in curation. inputs.lyrics remains supported for existing music clients. Written works use an empty voice identifier and empty permissions because a narrative voice is not a licensed vocal model." },
-      { title: "Knowledge-led collaboration", body: "Human contribution can precede a writing session by years. A domain expert may supply original writings, lectures, research data, a knowledge base, or a curriculum they developed, then co-write with an AI. Record the provenance and specific contribution of those sources, preparation work, and the respective human and AI roles. The optional inputs.knowledge_context extension (schema_version 1.0) preserves these declarations; no source upload is required. A private reference or digest can be recorded instead of the contents.\n\nFor example, a Cardology expert co-writing with Claude may supply their own interpretations, writings, lectures, and data. The record should describe that original foundation and how it informed the resulting work, not reduce the human role to prompting or editing AI sentences. This example does not assert what any model previously knew.\n\nSupplying context, retrieving documents, writing custom instructions, and fine-tuning model weights are distinct methods. Record the method actually used, or several if appropriate. Training materials alone do not establish that model weights changed. Source authorship, domain expertise, preparation, and final expression are related but distinct contributions; the record does not automatically establish ownership of the resulting work.\n\nThe legacy v2.1 HCS does not score this extension. Studio therefore foregrounds the contribution profile and labels the numeric score as a partial legacy view rather than classifying this collaboration by that number. No arbitrary score bonus is assigned for claiming expertise or listing sources. A future rubric needs evidence review and safeguards against double-counting the same source across several stages." },
-      { title: "How to interpret HCS", body: "The current engine scores field presence, text length, iteration count, and selection status. It does not assess originality, substantive effort, or the proportion of human-written language. The inherited tier names are heuristic labels, not verified classifications. The v2.1 weights remain unchanged for compatibility: writing retains a 5% voice allocation and the recipe rubric still rewards music metadata. Without voice or music fields, a fully documented writing record reaches at most 0.89. Scores across domains should not be compared. A future version should separate documentation coverage from independently reviewed contribution and normalize only applicable fields." },
-      { title: "Integrity and publication", body: "Record fingerprints now recursively sort object keys while preserving array order and nested values. Earlier prototype hashes used a top-level key whitelist that could omit nested creative decisions; those anchors must not be treated as protecting the full record. Keep their original bytes and identify their legacy hash method when verifying. New hashes cover the exact JSON snapshot, so adding IPFS or anchor metadata changes the digest. Public IPFS pinning exposes the full record, including draft text; availability depends on continued hosting. Optional pinning and anchoring require configured services." },
-      { title: "Next protocol revision", body: "Prioritize a versioned evidence model: original and final artifact digests, parent draft links, contributor roles, declared AI tools and operations, and signed attestations. Store scoring and canonicalization versions alongside the result. Preserve confidential drafts off-chain and publish only chosen evidence or commitments. Add authenticated, rate-limited anchoring, an idempotent publication flow, and schema conformance tests before treating the prototype as production infrastructure." },
-    ],
-  },
-  {
-    id: "abstract",
-    number: "00",
-    title: "Abstract",
-    color: "#06B6D4",
-    content: `The Human Authorship Protocol (HAP) is a framework designed to define, measure, and verify human creative contribution within AI-assisted works. As generative AI systems increasingly produce content with minimal human input, traditional definitions of authorship and ownership are being challenged. HAP introduces a structured approach to capturing the human role in creative systems, enabling attribution, ownership, and monetization in an AI-driven economy.`,
-  },
-  {
-    id: "introduction",
-    number: "01",
-    title: "Introduction",
-    color: "#8B5CF6",
-    content: `Artificial intelligence has drastically reduced the barrier to content creation. Music, art, writing, and media can now be generated with minimal effort.\n\nHowever, this introduces a fundamental problem: the separation of creation from authorship.\n\nCurrent systems fail to adequately represent human intent, creative direction, and iterative decision-making. HAP addresses this gap by establishing a new framework that centers the human creative process.`,
-  },
-  {
-    id: "authorship-problem",
-    number: "02",
-    title: "The Authorship Problem",
-    color: "#10B981",
-    subsections: [
-      {
-        title: "2.1 Output vs Process",
-        body: "Traditional authorship focuses on outputs: a song, a painting, a written work. AI systems disrupt this by generating outputs without clear human authorship.",
-      },
-      {
-        title: "2.2 The Missing Layer",
-        body: "The missing layer is the system of decisions that led to the output. Without capturing this layer, authorship becomes invisible and unverifiable.",
-      },
-    ],
-  },
-  {
-    id: "defining-authorship",
-    number: "03",
-    title: "Defining Human Authorship",
-    color: "#F59E0B",
-    callout: "The structured set of human decisions that guide and shape AI-generated outputs.",
-    content: `This includes prompt systems (recipes), creative inputs, selection and refinement, curation, and identity-based contributions.`,
-  },
-  {
-    id: "core-components",
-    number: "04",
-    title: "Core Components",
-    color: "#06B6D4",
-    subsections: [
-      {
-        title: "4.1 Recipes (System Layer)",
-        body: "Recipes are structured frameworks that define style, structure, tone, and output constraints. Recipes are repeatable and represent system-level authorship. They are ownable, licensable, and sellable independently of any output they produce.",
-      },
-      {
-        title: "4.2 Voice (Identity Layer)",
-        body: "Voice represents human vocal input and identity-based contribution. Voice is treated as a distinct asset class with granular licensing permissions. Voice data is biometric in nature and subject to strict privacy protections (see Section 10).",
-      },
-      {
-        title: "4.3 Inputs (Creative Layer)",
-        body: "Inputs include lyrics, composition guidance, edits and modifications, and any explicit creative direction provided by the human.",
-      },
-      {
-        title: "4.4 Iteration (Process Layer)",
-        body: "HAP captures version history, decision points, and output selection. Rejection decisions are as meaningful as selection decisions  -  they document creative judgment.",
-      },
-      {
-        title: "4.5 Curation (Selection Layer)",
-        body: "The final act of selecting which output to keep is a distinct human contribution. Curation is tracked as its own component in the Human Contribution Score.",
-      },
-    ],
-  },
-  {
-    id: "hcs",
-    number: "05",
-    title: "Human Contribution Score (HCS)",
-    color: "#8B5CF6",
-    content: "HAP introduces a quantitative model: the Human Contribution Score (HCS).",
-    callout: "HCS tiers are descriptive indicators only. Copyright eligibility is determined by applicable law and cannot be established by any score or framework.",
-    subsections: [
-      {
-        title: "5.1 What the HCS Measures",
-        body: "The HCS is the sum of all human-driven creative components. AI's role is the remainder  -  it is not listed as a component of the human score.\n\nHCS = Sum of all human-driven components\nAI Remainder = 1 − HCS\n\nImportant: HCS is a documentation metric, not a legal threshold. U.S. courts and the Copyright Office focus on qualitative human authorship, not a quantitative score. A high HCS does not guarantee copyright protection; a lower HCS with deep qualitative creative shaping may support a stronger claim than a high HCS built on minimal decisions. No score produced by HAP constitutes legal advice or a determination of copyright eligibility.",
-      },
-      {
-        title: "5.2 Weighting Rationale",
-        body: "Weights are assigned based on three criteria: Intentionality (does this component require deliberate human decision-making?), Reproducibility (would removing this component significantly change the output?), and Defensibility (can this component be documented as evidence of authorship?).\n\nNote on Curation: Courts have been inconsistent on whether selection alone constitutes authorship. Feist v. Rural Telephone (1991) held that selection can be creative, but only where it reflects genuine intellectual judgment. HAP tracks curation as a documented decision  -  it does not imply that curation alone creates a copyright claim.",
-      },
-    ],
-    table: {
-      headers: ["Component", "Intentionality", "Reproducibility", "Defensibility", "Default Weight (Music)"],
-      rows: [
-        ["Recipe", "High", "High", "High", "30%"],
-        ["Inputs", "High", "High", "High", "25%"],
-        ["Voice", "High", "High", "Medium", "20%"],
-        ["Iteration", "Medium", "Medium", "High", "15%"],
-        ["Curation", "Medium", "Low", "Medium", "10%"],
+    "id": "implementation-status",
+    "number": "00",
+    "title": "Implementation status",
+    "color": "#b7c9a5",
+    "callout": "HAP records creative contributions and their context. A record is a declaration; verification requires evidence beyond the declaration itself.",
+    "table": {
+      "headers": [
+        "Available in this prototype",
+        "Not yet implemented"
       ],
-      colors: ["#06B6D4", "#10B981", "#8B5CF6", "#F59E0B", "#EC4899"],
+      "rows": [
+        [
+          "Studio workflows for writing and music",
+          "Independent identity or authorship verification"
+        ],
+        [
+          "Original knowledge, source references, and human/AI roles",
+          "Evidence review or expertise scoring"
+        ],
+        [
+          "JSON records, a legacy HCS heuristic, and a schema endpoint",
+          "Dispute resolution, collaboration splits, and marketplaces"
+        ],
+        [
+          "Optional Pinata/IPFS publication and Guapcoin anchoring when configured",
+          "Automatic source uploads, private evidence storage, or C2PA verification"
+        ]
+      ]
     },
+    "content": "This document distinguishes current behavior from proposed infrastructure. Examples are illustrative. HAP does not generate the creative work itself; you document a process carried out with your own tools."
   },
   {
-    id: "domain-profiles",
-    number: "05b",
-    title: "Domain Profiles & HCS Tiers",
-    color: "#10B981",
-    content: "Different creative industries have different contribution patterns. HAP defines three default domain profiles:",
-    subsections: [
-      {
-        title: "Music (Default)",
-        body: "Recipe 30% / Inputs 25% / Voice 20% / Iteration 15% / Curation 10%",
-      },
-      {
-        title: "Visual Art",
-        body: "Recipe 35% / Iteration 25% / Inputs 20% / Curation 15% / Voice 5%",
-      },
-      {
-        title: "Written Content",
-        body: "Inputs 40% / Recipe 25% / Iteration 20% / Curation 10% / Voice 5%",
-      },
-    ],
-    table: {
-      headers: ["HCS Range", "Tier", "Meaning"],
-      rows: [
-        ["0.80 – 1.00", "Primary Human Authorship", "Human creative direction dominates throughout"],
-        ["0.50 – 0.79", "Collaborative Authorship", "Significant human input with substantial AI generation"],
-        ["0.20 – 0.49", "AI-Assisted Creation", "AI-led output with human curation and light direction"],
-        ["0.00 – 0.19", "AI-Generated", "Minimal human contribution beyond prompt input"],
-      ],
-      colors: ["#10B981", "#06B6D4", "#F59E0B", "#475569"],
-    },
+    "id": "abstract",
+    "number": "01",
+    "title": "Abstract",
+    "color": "#b7c9a5",
+    "content": "The Human Authorship Protocol is an open framework for recording the human contribution to AI-assisted work. It connects creative direction, original material, domain knowledge, preparation, revisions, and selection in a portable record.\n\nHuman contribution is not confined to the words typed during a generation session. A creator may bring years of original research, lectures, data, and writing to a collaboration. HAP preserves that foundation alongside the roles of the person and the AI."
   },
   {
-    id: "data-structure",
-    number: "06",
-    title: "Data Structure",
-    color: "#F59E0B",
-    content: "Each creative work is associated with a structured authorship record:",
-    codeLabel: "authorship-record-v2.1.json",
-    codeBlock: `{
-  "hap_version": "2.1",
-  "record_id": "hap_record_20250101_001",
-  "domain_profile": "music",
-  "recipe": {
-    "recipe_id": "hap_recipe_v2_001",
-    "recipe_cid": "bafybeig...abc123",
-    "storage_provider": "pinata",
-    "description": "Lo-fi hip hop, 70-85 BPM, minor key, vinyl texture"
-  },
-  "voice": {
-    "voice_id": "hap_voice_creator_001",
-    "voice_model_cid": "bafybeig...def456",
-    "storage_provider": "pinata",
-    "voice_permissions": {
-      "licensed_uses": ["music_generation", "remix"],
-      "prohibited_uses": ["advertising", "political_content"],
-      "expiry": "2027-01-01T00:00:00Z",
-      "revocable": true
-    }
-  },
-  "inputs": [{ "input_id": "lyric_v1", "input_cid": "bafybeig...ghi789", "storage_provider": "pinata" }],
-  "iterations": [
-    { "version": "v1", "selected": false, "notes": "Tempo too fast." },
-    { "version": "v2_selected", "selected": true, "notes": "This one. Keep." }
-  ],
-  "hcs_components": {
-    "recipe": 0.30, "inputs": 0.25, "voice": 0.20,
-    "iteration": 0.15, "curation": 0.10
-  },
-  "contribution_score": 0.90,
-  "hcs_tier": "primary_human_authorship",
-  "onchain_anchor": {
-    "chain": "polygon",
-    "transaction_hash": "0xabc123...",
-    "anchored_hash": "sha256:9f86d081...",
-    "timestamp": "2025-01-01T00:00:00Z"
-  },
-  "owner_identity": "0x7f3a...b291"
-}`,
+    "id": "introduction",
+    "number": "02",
+    "title": "Introduction",
+    "color": "#b7c9a5",
+    "content": "The same AI tool can participate in very different creative processes. One person may ask for a generic draft. Another may build the underlying knowledge base, supply original interpretations, co-write the argument, and revise the result. The finished text alone does not describe that difference.\n\nHAP starts with a structured account of the process. It preserves information that a reader or reviewer can examine, while distinguishing what was declared from what was independently established."
   },
   {
-    id: "blockchain",
-    number: "07",
-    title: "Blockchain Integration",
-    color: "#8B5CF6",
-    content: "HAP supports optional on-chain anchoring using a hybrid architecture. Compact cryptographic proofs go on-chain; actual creative assets go off-chain in a content-addressed system (IPFS).",
-    subsections: [
+    "id": "authorship-problem",
+    "number": "03",
+    "title": "The documentation gap",
+    "color": "#b7c9a5",
+    "subsections": [
       {
-        title: "Stored On-Chain",
-        body: "Hash of authorship data · Ownership reference · Timestamp · Creator wallet address",
+        "title": "Output and process",
+        "body": "A final artifact can omit the source work, teaching material, choices, and judgment that shaped it. Records should describe those contributions without assuming that AI-assisted work necessarily involved little human effort."
       },
       {
-        title: "Stored Off-Chain",
-        body: "Audio files · Full prompt structures · Voice model data · Large creative datasets",
-      },
-      {
-        title: "The Anchoring Process",
-        body: "1. Finalize the record  -  all off-chain assets uploaded to IPFS, CIDs written into JSON.\n2. Hash the record  -  SHA-256 hash of canonical JSON computed.\n3. Write to chain  -  hash, creator wallet, and Unix timestamp written to smart contract.\n4. Store the record  -  complete JSON record uploaded to IPFS.",
-      },
-    ],
-    table: {
-      headers: ["Chain", "Pros", "Cons", "Recommended Use"],
-      rows: [
-        ["Guapcoin (EVM)", "Native HAP chain, low cost, EVM-compatible", "Purpose-built for HAP", "HAP authorship records - recommended"],
-        ["Ethereum Mainnet", "Highest security, widest trust", "High gas costs", "High-value commercial works"],
-        ["Polygon", "Low cost, EVM-compatible", "Less decentralized", "High-volume platforms"],
-        ["Arweave", "Permanent storage built-in", "Different model, not EVM", "Archival / long-term records"],
-        ["Base", "Low cost, Coinbase-backed, EVM", "Newer, less battle-tested", "Consumer apps, music platforms"],
-      ],
-      colors: ["#F59E0B", "#06B6D4", "#8B5CF6", "#10B981", "#EC4899"],
-    },
-  },
-  {
-    id: "ownership",
-    number: "08",
-    title: "Ownership Model",
-    color: "#06B6D4",
-    subsections: [
-      {
-        title: "8.1 Output Ownership",
-        body: "The generated work  -  the final audio, image, or written piece produced by the AI system.",
-      },
-      {
-        title: "8.2 System Ownership",
-        body: "The recipe and creative framework  -  the human-designed process that guided the output. Recipes are ownable and licensable independently.\n\nLegal basis note: In U.S. IP law, systems, methods, and processes are generally not protectable under copyright  -  that is patent or trade secret territory. Recipe ownership under HAP is structured as a combination of: (1) trade secret protection under the Defend Trade Secrets Act (DTSA) for undisclosed recipes, (2) contractual license enforced through HAP platform terms of service, and (3) sui generis rights defined by the HAP registry. Creators licensing recipes commercially should obtain qualified IP counsel to determine the appropriate legal structure in their jurisdiction.",
-      },
-      {
-        title: "8.3 Identity Ownership",
-        body: "Voice and creator identity  -  the human's unique biometric contribution that can be licensed with granular permissions and revoked at any time.",
-      },
-    ],
-  },
-  {
-    id: "monetization",
-    number: "09",
-    title: "Monetization Model",
-    color: "#10B981",
-    content: "HAP enables new economic models for creative work. The terms below have distinct legal meanings: license conveys permission to use under defined terms without transferring ownership; sale transfers ownership of a specific asset; revenue sharing distributes proceeds proportionally without creating ownership interests.",
-    bullets: [
-      "Recipe licensing  -  grant permission to use a creative system under defined terms (scope, duration, exclusivity)",
-      "Voice licensing  -  monetize vocal identity under defined permissions (use case, expiry, jurisdiction)",
-      "Contribution-based revenue sharing  -  revenue split proportional to HCS components",
-      "Creative asset licensing and transfer on decentralized platforms",
-    ],
-    callout: "Securities law notice: Fractional ownership interests in creative works sold to multiple parties on decentralized platforms may constitute investment contracts subject to SEC regulation under the Howey test, particularly where buyers expect returns based on others' efforts. Platform implementers offering contribution-based revenue sharing or fractionalized creative assets must obtain qualified securities counsel before deployment.",
-  },
-  {
-    id: "legal",
-    number: "10",
-    title: "Legal Framework",
-    color: "#EF4444",
-    subsections: [
-      {
-        title: "10.1 Copyright and AI-Generated Works",
-        body: "The US Copyright Office has established that copyright requires human authorship (see Thaler v. Perlmutter, 2023). HAP's HCS and its components are designed to document the kind of human creative control that copyright frameworks look for.\n\nWorks in the Primary Human Authorship tier (0.80–1.00) are most likely to support a copyright claim. Works in the Collaborative Authorship tier (0.50–0.79) may support partial protection. Works below 0.50 are unlikely to qualify under current US standards.\n\nCritical caveat: HCS tiers are descriptive indicators, not legal determinations. Copyright eligibility is a qualitative legal question that no score or framework can resolve. A high HCS does not guarantee copyright protection. HAP is a documentation framework, not a legal service.",
-      },
-      {
-        title: "10.2 Jurisdiction Considerations",
-        body: "United States: The Copyright Office requires human authorship. HAP records document intentional creative decisions directly relevant to this standard.\n\nEuropean Union: EU copyright requires a work to be the \"author's own intellectual creation.\" HAP's Recipe and Input components are designed to document this kind of contribution. However, EU member states implement this standard differently  -  France, Germany, and others have distinct moral rights frameworks and judicial interpretations. EU alignment requires jurisdiction-specific legal review and cannot be assumed from HAP documentation alone.\n\nUnited Kingdom: The CDPA s.9(3) provision grants copyright to the person who made the \"arrangements necessary\" for the creation. HAP's system-level authorship model is relevant to this framing. However, this provision is controversial and under active review by the UK Intellectual Property Office  -  it may be narrowed or repealed. Creators should not rely on s.9(3) as a stable legal basis without current qualified UK IP counsel.",
-      },
-      {
-        title: "10.3 Voice Data and Biometric Privacy",
-        body: "GDPR (EU/EEA): Biometric data is a \"special category\" under Article 9. Processing requires explicit consent and a DPIA. Important: Regulators have taken the position that pseudonymized or hashed biometric data may still constitute personal data if re-identification is possible in context. The on-chain hash alone does not eliminate GDPR obligations  -  it is a design mitigation, not a compliance solution.\n\nBIPA (Illinois, USA): Requires written informed consent before collecting voiceprints, plus a publicly available retention and destruction policy before collection begins. Statutory damages: $1,000–$5,000 per violation. Critically, courts have interpreted BIPA liability as accruing per individual collection event  -  aggregate exposure can be substantial. Platforms should obtain qualified BIPA counsel before implementing voice data collection.\n\nState law landscape: Biometric and voice-adjacent privacy laws vary widely and are rapidly evolving. Texas (CUBI), Washington, New York, California (CCPA/CPRA), and others have overlapping frameworks. This whitepaper does not constitute a complete survey of applicable law.\n\nHAP's design response: Voice models stored off-chain and encrypted. On-chain record contains only a non-reversible hash. Platforms must implement a right-to-deletion workflow.",
-        code: `"voice_permissions": {
-  "licensed_uses": ["music_generation", "remix"],
-  "prohibited_uses": ["advertising", "political_content"],
-  "expiry": "2026-01-01T00:00:00Z",
-  "revocable": true,
-  "jurisdiction_restrictions": ["US", "EU"]
-}`,
-      },
-      {
-        title: "10.4 HAP Records as Legal Evidence",
-        body: "What makes a HAP record legally useful: Timestamp integrity (on-chain anchoring proves creation date), Chain of custody (iteration history documents the process), Identity binding (owner wallet links record to a specific entity).\n\nWhat HAP records cannot do: They cannot prove that a human (rather than a script) made the documented decisions. They do not constitute legal proof of copyright ownership  -  they constitute evidence in support of a claim.",
-      },
-      {
-        title: "10.5 Liability Boundaries",
-        body: "HAP as a protocol does not assume liability for the legality of generated content, the accuracy of HCS scores as legal determinations, or the enforceability of voice licensing terms. Platforms implementing HAP are solely responsible for legal compliance in their operating jurisdictions.",
-      },
-    ],
-  },
-  {
-    id: "offchain",
-    number: "11",
-    title: "Off-Chain Data Integrity",
-    color: "#F59E0B",
-    content: "HAP mandates content-addressed storage for all off-chain assets. The recommended implementation is IPFS, which assigns every file a CID (Content Identifier)  -  a cryptographic fingerprint. If a file changes by even a single byte, its CID changes, making tampering immediately detectable. Platforms must use an IPFS pinning service (e.g. Pinata, web3.storage) to guarantee off-chain asset persistence. Unpinned assets may be garbage collected and permanently lost.",
-    subsections: [
-      {
-        title: "11.1 Deletion and Privacy Rights",
-        body: "On-chain data (hash, wallet, timestamp) is never personal data under GDPR. Off-chain data can be deleted  -  the on-chain hash becomes an orphaned proof that something existed without revealing the content. This satisfies GDPR without requiring blockchain modification.\n\nVoice model deletion must be a one-click workflow that unpins IPFS data, revokes the CID in the platform index, and logs the deletion event.",
-      },
-    ],
-  },
-  {
-    id: "disputes",
-    number: "12",
-    title: "Dispute Resolution",
-    color: "#8B5CF6",
-    content: "HAP defines a three-tier dispute resolution process for four dispute types: Ownership, Derivation, Voice Identity, and Contribution disputes.",
-    callout: "On-chain anchoring creates evidentiary support for priority of creation  -  it does not confer automatic legal priority. Courts do not automatically defer to blockchain timestamps. Chain-of-title disputes, fraud, or errors in registration may override an earlier anchor. In copyright law, priority is determined by the act of creation, not registration.",
-    subsections: [
-      {
-        title: "Tier 1  -  Automated Similarity Check (Platform Level)",
-        body: "Before registration, the platform runs an automated similarity check. Recipes scoring above 85% similarity trigger a notification to both parties. Voice models above threshold trigger an identity verification request.",
-      },
-      {
-        title: "Tier 2  -  Structured Mediation (HAP Registry Level)",
-        body: "A formal Dispute Notice is submitted. The registered owner has 14 days to respond. A HAP Resolver reviews evidence and issues a recommendation within 21 days. Outcomes: Uphold, Transfer, Co-register, or Escalate. All proceedings logged on-chain.",
-      },
-      {
-        title: "Tier 3  -  External Arbitration",
-        body: "For unresolved or high-value disputes. HAP provides structured evidence packages to recognized arbitration bodies including WIPO (IP-specialized, recommended for cross-border IP disputes), AAA (American Arbitration Association), JAMS, and ICC (International Chamber of Commerce). Note: Smart contracts are not uniformly enforceable as contracts in all jurisdictions. Some jurisdictions require specific formalities for IP license agreements. Parties should confirm arbitration clause enforceability with local counsel before relying on HAP dispute resolution.",
-      },
-      {
-        title: "Anti-Gaming Protections",
-        body: "Bad faith registration penalty: Voided registration and flagged account. Dispute filing stake: A nominal token deposit required, returned if upheld. Cooling-off period: 90-day bar on re-filing the same dispute without new evidence. Timestamps cannot be backdated: On-chain anchor is set at block confirmation.",
-      },
-      {
-        title: "12.5 Dispute Record Schema",
-        body: "All disputes generate a structured on-chain record:",
-        code: `{
-  "dispute_id": "hap_dispute_20250201_001",
-  "disputed_record_id": "hap_record_20250101_001",
-  "dispute_type": "ownership",
-  "filed_by": "0xabc1...1234",
-  "filed_against": "0x7f3a...b291",
-  "filed_at": "2025-02-01T00:00:00Z",
-  "status": "resolved",
-  "tier": 2,
-  "evidence_submitted": [
-    "bafybeig...evidence001",
-    "bafybeig...evidence002"
-  ],
-  "resolver_id": "hap_resolver_007",
-  "recommendation": "uphold",
-  "resolved_at": "2025-02-19T00:00:00Z",
-  "onchain_anchor": {
-    "chain": "polygon",
-    "transaction_hash": "0xdisp789...",
-    "timestamp": "2025-02-19T00:00:00Z"
-  }
-}`,
-      },
-      {
-        title: "12.6 Collaboration and Split Attribution",
-        body: "Multi-party works use a Collaboration Record. HCS components are attributed across multiple owner_identity addresses. Contribution shares must sum to 1.0. All collaborative works should have a signed attribution agreement stored as an off-chain document with its CID in the record.",
-        code: `{
-  "hap_version": "2.1",
-  "record_id": "hap_collab_20250101_001",
-  "collaboration": true,
-  "contributors": [
-    {
-      "identity": "0x7f3a...b291",
-      "role": "recipe_author",
-      "hcs_components": { "recipe": 0.30, "iteration": 0.08 },
-      "contribution_share": 0.55
-    },
-    {
-      "identity": "0xabc1...1234",
-      "role": "vocalist",
-      "hcs_components": { "voice": 0.20, "inputs": 0.15, "curation": 0.10 },
-      "contribution_share": 0.45
-    }
-  ],
-  "total_hcs": 0.83,
-  "hcs_tier": "collaborative_authorship",
-  "attribution_agreement_cid": "bafybeig...agreement001"
-}`,
-      },
-    ],
-  },
-  {
-    id: "c2pa",
-    number: "13",
-    title: "Relationship to C2PA",
-    color: "#06B6D4",
-    content: "The C2PA (Coalition for Content Provenance and Authenticity) specification is an open technical standard for embedding content provenance metadata into media files. It is backed by Adobe, Microsoft, Google, Sony, and others. C2PA and HAP are complementary, not competing.",
-    callout: "C2PA is the provenance layer  -  it tells you where a file came from. HAP is the authorship and ownership layer  -  it tells you who made the creative decisions and who owns the rights. C2PA is a shipping manifest. HAP is a deed of ownership.",
-    comparisonTable: {
-      headers: ["Dimension", "C2PA", "HAP"],
-      rows: [
-        ["Core question", "Where did this content come from?", "Who shaped this content, and how?"],
-        ["Primary mechanism", "Signed manifest embedded in file", "Structured authorship record, on-chain anchored"],
-        ["Human contribution", "Not measured", "Measured via HCS"],
-        ["Creative system capture", "Not captured", "Recipe layer"],
-        ["Voice identity", "Not addressed", "Voice layer with licensing"],
-        ["Ownership model", "Not addressed", "Output, system, and identity ownership"],
-        ["Monetization", "Not addressed", "Recipe marketplaces, voice licensing"],
-        ["Blockchain", "Not used", "Optional on-chain anchoring"],
-      ],
-    },
-    codeLabel: "c2pa-integration.json",
-    codeBlock: `"c2pa": {
-  "manifest_identifier": "urn:c2pa:manifest:abc123xyz",
-  "claim_generator": "Adobe Firefly 3.0",
-  "manifest_cid": "bafybeig...c2pa456",
-  "verified": true
-}`,
-  },
-  {
-    id: "worked-example",
-    number: "14",
-    title: "Worked Example  -  AI-Assisted Music Track",
-    color: "#10B981",
-    content: "Jordan Ellis | Wallet: 0x7f3a...b291 | Domain: Music | Platform: SoundForge HAP",
-    steps: [
-      {
-        number: "01",
-        title: "Design a Recipe",
-        body: "Jordan designs a reusable creative system: lo-fi hip hop, 70–85 BPM, minor key only, vinyl crackle texture required, melancholic tone, 4-layer maximum.\n\nUploaded to IPFS → CID: bafybeigdyrzt5...\nRegistered as: hap_recipe_v2_001\n\nEstablished: A reusable, timestamped, owned creative system  -  before any track is made.",
-      },
-      {
-        number: "02",
-        title: "Register Voice",
-        body: "Jordan records vocal reference samples. Platform creates an encrypted voice model.\n\nRegistered as: hap_voice_creator_jordy_001\nPermissions: Music generation and remix permitted. Advertising, political, and adult content prohibited. Expires January 1, 2027. Revocable.\n\nEstablished: Vocal identity as a licensed asset generating royalty income independently of any track.",
-      },
-      {
-        number: "03",
-        title: "Provide Inputs",
-        body: "Lyric file v1 and compositional note: \"Climax at 1:45; chorus vocal should feel distant, like a memory.\"\n\nEstablished: Explicit creative intent is documented and content-addressed.",
-      },
-      {
-        number: "04",
-        title: "AI Generation and Iteration",
-        body: "v1  -  Rejected: \"Tempo too fast, loses the late-night feel.\"\nv2  -  Rejected: \"Chorus needs to feel further away  -  more reverb, lower in the mix.\"\nv3  -  Selected: \"This one. The space in the chorus is right. Keep.\"\n\nEstablished: Rejection decisions document creative judgment  -  not just the final output.",
-      },
-      {
-        number: "05",
-        title: "HCS Calculation",
-        body: "Recipe (0.30) + Inputs (0.25) + Voice (0.20) + Iteration (0.15) + Curation (0.10) = 1.00\nHCS = 0.90 → Tier: Primary Human Authorship",
-      },
-      {
-        number: "06",
-        title: "On-Chain Anchoring",
-        body: "1. Canonical JSON hashed: sha256:9f86d081...\n2. Hash + wallet + timestamp written to Polygon smart contract\n3. Transaction hash: 0xdef456...\n4. Complete record uploaded to IPFS\n\nIllustrated: A timestamped record fingerprint, not independently verified authorship  -  tamper-evident and independently verifiable.",
-      },
-      {
-        number: "07",
-        title: "Monetization",
-        body: "Three months later, a sync licensing platform finds the track:\n\n• Output license  -  rights to use the track in a film\n• Recipe license  -  a second producer licenses Jordan's recipe to make similar tracks\n• Voice license  -  a third party licenses Jordan's voice model for AI-generated harmonies\n\nAll three traceable to a single HAP record.",
-      },
-      {
-        number: "08",
-        title: "Dispute",
-        body: "Another creator claims Jordan's recipe was derived from theirs (registered December 2024).\n\nTier 1: Automated similarity check returns 71%  -  below 85% threshold. No hold.\nTier 2: HAP Resolver reviews both records. Overlap attributed to shared genre conventions. Recommendation: Uphold Jordan's registration.\nResolved in 18 days. Dispute record logged on-chain.",
-      },
-    ],
-  },
-  {
-    id: "schemas",
-    number: "15",
-    title: "Formal Schema Specification",
-    color: "#06B6D4",
-    content: "HAP v2.1 defines three canonical JSON schemas. The implemented authorship JSON Schema is available at /api/v1/schemas. The dispute and collaboration schemas below are proposals.",
-    subsections: [
-      {
-        title: "15.1 Authorship Record Schema",
-        body: "The primary HAP record. Required fields: hap_version, record_id, domain_profile, hcs_components, contribution_score, hcs_tier, onchain_anchor, owner_identity.",
-        code: `{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://haphuman.xyz/schemas/v2.1/authorship-record.json",
-  "title": "HAP Authorship Record",
-  "type": "object",
-  "required": ["hap_version","record_id","domain_profile","hcs_components",
-               "contribution_score","hcs_tier","onchain_anchor","owner_identity"],
-  "properties": {
-    "hap_version": { "type": "string", "const": "2.1" },
-    "record_id": { "type": "string" },
-    "domain_profile": { "enum": ["music","visual_art","written_content"] },
-    "contribution_score": { "type": "number", "minimum": 0, "maximum": 1 },
-    "hcs_tier": {
-      "enum": ["primary_human_authorship","collaborative_authorship",
-               "ai_assisted_creation","ai_generated"]
-    },
-    "hcs_components": {
-      "type": "object",
-      "properties": {
-        "recipe":    { "type": "number", "minimum": 0, "maximum": 1 },
-        "inputs":    { "type": "number", "minimum": 0, "maximum": 1 },
-        "voice":     { "type": "number", "minimum": 0, "maximum": 1 },
-        "iteration": { "type": "number", "minimum": 0, "maximum": 1 },
-        "curation":  { "type": "number", "minimum": 0, "maximum": 1 }
+        "title": "Evidence and declarations",
+        "body": "Record who claims to have contributed what, the source references they supply, and the decisions they describe. Identity, source access, timestamps, and independent review are separate questions. A complete-looking form is not proof that its claims are true."
       }
-    }
-  }
-}`,
+    ]
+  },
+  {
+    "id": "defining-authorship",
+    "number": "04",
+    "title": "What HAP documents",
+    "color": "#b7c9a5",
+    "callout": "The original knowledge, material, preparation, and creative decisions a person contributes before and during an AI-assisted process.",
+    "content": "This is an operational description of what the record captures, not a legal definition of authorship. Source authorship, domain expertise, system preparation, and final expression are related but distinct contributions. HAP does not automatically turn any one of them into ownership of a finished work."
+  },
+  {
+    "id": "core-components",
+    "number": "05",
+    "title": "The contribution record",
+    "color": "#b7c9a5",
+    "subsections": [
+      {
+        "title": "Creative brief — recipe",
+        "body": "Record style or form, structure, tone, and constraints. Music may also specify tempo and key. A brief captures declared direction; it is not an automatically registered or licensed asset."
       },
       {
-        title: "15.2 Dispute Record Schema",
-        body: "Required fields: dispute_id, disputed_record_id, dispute_type, filed_by, filed_against, filed_at, status, tier.",
-        code: `{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://haphuman.xyz/schemas/v2.1/dispute-record.json",
-  "title": "HAP Dispute Record",
-  "type": "object",
-  "required": ["dispute_id","disputed_record_id","dispute_type",
-               "filed_by","filed_against","filed_at","status","tier"],
-  "properties": {
-    "dispute_type": {
-      "enum": ["ownership","derivation","voice_identity","contribution"]
-    },
-    "status": {
-      "enum": ["pending","under_review","resolved","escalated","withdrawn"]
-    },
-    "tier": { "type": "integer", "minimum": 1, "maximum": 3 },
-    "recommendation": {
-      "enum": ["uphold","transfer","co_register","escalate","dismissed"]
-    }
-  }
-}`,
+        "title": "Voice permissions — music",
+        "body": "Record a vocal-model identifier and declared permitted/prohibited uses, expiry, and revocability. The Studio does not create, authenticate, or license a voice model. Narrative voice in writing belongs in the brief, not this vocal-identity field."
       },
       {
-        title: "15.3 Collaboration Record Schema",
-        body: "Extends the authorship record for multi-party works. The sum of all contributor contribution_share values must equal 1.0.",
-        code: `{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://haphuman.xyz/schemas/v2.1/collaboration-record.json",
-  "title": "HAP Collaboration Record",
-  "allOf": [{ "$ref": "authorship-record.json" }],
-  "properties": {
-    "collaboration": { "type": "boolean", "const": true },
-    "contributors": {
-      "type": "array",
-      "minItems": 2,
-      "items": {
-        "type": "object",
-        "required": ["identity","role","hcs_components","contribution_share"],
-        "properties": {
-          "identity":           { "type": "string" },
-          "role":               { "type": "string" },
-          "contribution_share": { "type": "number", "minimum": 0, "maximum": 1 },
-          "hcs_components":     { "type": "object" }
-        }
+        "title": "Original inputs and knowledge",
+        "body": "Use inputs.text for prose, poetry, or scripts, and inputs.lyrics for music. Notes and intent describe editorial direction and purpose. The optional inputs.knowledge_context extension captures prior work, sources, expertise, preparation, methods, and human/AI roles."
+      },
+      {
+        "title": "Draft and version history",
+        "body": "Log each version and the reasons you retained or rejected it. These notes are not an automatic edit log or an independently verified history. Timestamps supplied by a creator or assigned by the server are not proof of when the underlying work was made."
+      },
+      {
+        "title": "Final selection",
+        "body": "Record whether the work is being kept, archived, or discarded. An optional selected_cid can reference the final artifact. The Studio does not upload the artifact or enforce a unique selected draft."
       }
+    ]
+  },
+  {
+    "id": "knowledge-contribution",
+    "number": "06",
+    "title": "Knowledge-led collaboration",
+    "color": "#b7c9a5",
+    "content": "A Cardology expert who co-writes with Claude may contribute original interpretations, datasets, writings, lectures, and a knowledge base they prepared. The record should describe that foundation and how it shaped the work, alongside what Claude drafted or revised. It should not reduce the human role to prompting or counting edited sentences.",
+    "subsections": [
+      {
+        "title": "Source provenance",
+        "body": "For each source, record its title, type, your relationship to it, a reference or version, and its specific contribution. Source types include original writing, datasets, lectures, knowledge bases, and training material. Relationships distinguish your original work from licensed, public-domain, or other third-party material. These are declarations, not validated ownership claims."
+      },
+      {
+        "title": "Preparation and teaching",
+        "body": "Describe how you wrote, organized, annotated, or adapted material for the AI. Distinguish documents supplied as context, knowledge-base retrieval, custom instructions or curriculum, and actual fine-tuning of model weights. Several methods may apply; providing material alone does not establish that weights changed."
+      },
+      {
+        "title": "Human and AI roles",
+        "body": "Describe your original ideas, expertise, interpretation, co-writing, corrections, and final decisions. Separately identify the AI system and its drafting, organization, or revision role. This describes contributions without assigning an unsupported numerical ownership split."
+      },
+      {
+        "title": "Private references",
+        "body": "A private catalog reference or digest can document a source without including its contents. This prototype does not upload or verify the referenced source. If the record is later published, its references and descriptions are public too."
+      },
+      {
+        "title": "Version and scoring",
+        "body": "The extension uses inputs.knowledge_context.schema_version = 1.0 within a v2.1 record. The legacy HCS does not measure this extension. Studio foregrounds the contribution profile and identifies the score as a partial legacy view. It assigns no arbitrary bonus for expertise claims or source counts."
+      }
+    ]
+  },
+  {
+    "id": "hcs",
+    "number": "07",
+    "title": "Human Contribution Score — legacy heuristic",
+    "color": "#b7c9a5",
+    "callout": "HCS is not a percentage of human authorship. 1 − HCS is not an estimate of AI contribution.",
+    "content": "The implemented v2.1 engine multiplies field-presence values by domain weights, adds the components, and rounds the result to two decimal places. It does not assess the originality or truth of those fields. The API keeps legacy tier identifiers for compatibility; their names must not be treated as verified authorship classifications.",
+    "subsections": [
+      {
+        "title": "What the engine actually counts",
+        "body": "Recipe: populated style, structure, tone, BPM, key, and constraints. Inputs: text/lyrics length, note length, and presence of intent. Voice: identifier and permission fields. Iteration: number of versions, rejected versions, and notes. Curation: keep, archive, or discard. This rewards documentation patterns, not independently measured creative effort."
+      },
+      {
+        "title": "What it misses",
+        "body": "The heuristic does not measure original knowledge, source creation, domain expertise, preparation of a knowledge base, or the substantive contribution of co-writing. A sparse record can describe extensive human work, and a filled-out record can be fabricated. Scores should not be compared across domains."
+      },
+      {
+        "title": "Next scoring revision — proposed",
+        "body": "Separate documentation coverage, reviewed evidence, and contribution descriptions. Normalize only applicable fields, version the rubric, evaluate it against independently reviewed examples, and avoid double-counting a source across preparation, input, and final expression. Preserve existing scores rather than silently recalculating their meaning."
+      }
+    ]
+  },
+  {
+    "id": "domain-profiles",
+    "number": "08",
+    "title": "Domain profiles and legacy tiers",
+    "color": "#b7c9a5",
+    "table": {
+      "headers": [
+        "Profile",
+        "Recipe",
+        "Inputs",
+        "Voice",
+        "Iteration",
+        "Curation"
+      ],
+      "rows": [
+        [
+          "Music",
+          "30%",
+          "25%",
+          "20%",
+          "15%",
+          "10%"
+        ],
+        [
+          "Visual art",
+          "35%",
+          "20%",
+          "5%",
+          "25%",
+          "15%"
+        ],
+        [
+          "Written works",
+          "25%",
+          "40%",
+          "5%",
+          "20%",
+          "10%"
+        ]
+      ]
     },
-    "attribution_agreement_cid": { "type": "string" }
+    "content": "Writing and music have dedicated Studio workflows. Visual art is currently an API profile. The inherited writing rubric still allocates weight to a vocal identity and rewards music-specific recipe fields. A writing record with no vocal identity, BPM, or key can reach at most 0.89 under this rubric. This limitation is explicit; it is not a judgment about the writer.",
+    "subsections": [
+      {
+        "title": "Legacy tier mapping",
+        "body": "0.80–1.00: primary_human_authorship; 0.50–0.79: collaborative_authorship; 0.20–0.49: ai_assisted_creation; below 0.20: ai_generated. These historical labels are returned by the API. For knowledge-context records, Studio instead foregrounds the declared contribution profile. No tier establishes human agency, originality, or ownership."
+      }
+    ]
+  },
+  {
+    "id": "data-structure",
+    "number": "09",
+    "title": "Data structure",
+    "color": "#b7c9a5",
+    "content": "The example below is a creation request for POST /api/v1/records, not a fabricated receipt. The server adds record and recipe IDs, a creation timestamp, curation contribution, HCS components, score, and legacy tier. inputs is an object. Anchoring and owner_identity are optional. Original-text excerpts are optional when documenting a knowledge-led collaboration.",
+    "codeLabel": "create-writing-record.json",
+    "codeBlock": "{\n  \"domain_profile\": \"written_content\",\n  \"recipe\": {\n    \"style\": \"Nonfiction\",\n    \"structure\": \"Question, interpretation, examples\",\n    \"tone\": \"Reflective\"\n  },\n  \"voice\": {\n    \"voice_id\": \"\",\n    \"voice_permissions\": {\n      \"licensed_uses\": [],\n      \"prohibited_uses\": [],\n      \"expiry\": \"\",\n      \"revocable\": false\n    }\n  },\n  \"inputs\": {\n    \"knowledge_context\": {\n      \"schema_version\": \"1.0\",\n      \"domain_expertise\": \"Original Cardology interpretations and teaching material.\",\n      \"sources\": [\n        {\n          \"title\": \"Example original lecture series\",\n          \"kind\": \"lecture\",\n          \"relationship\": \"own_work\",\n          \"reference\": \"private-catalog:lectures-v2\",\n          \"contribution\": \"Concepts and examples used in the chapter.\"\n        }\n      ],\n      \"ai_methods\": [\n        \"context\",\n        \"instructions\"\n      ],\n      \"preparation\": \"Organized original lectures and writings into instructions.\",\n      \"ai_system\": \"Claude; model version unspecified\",\n      \"human_role\": \"Original framework, interpretation, co-writing, and final review.\",\n      \"ai_role\": \"Proposed structure and revised transitions under direction.\"\n    }\n  },\n  \"iterations\": [\n    {\n      \"version\": \"draft_1\",\n      \"selected\": true,\n      \"notes\": \"Retained the interpretation; rewrote the conclusion.\"\n    }\n  ],\n  \"curation\": {\n    \"decision\": \"primary_keep\"\n  },\n  \"pin_to_ipfs\": false\n}"
+  },
+  {
+    "id": "blockchain",
+    "number": "10",
+    "title": "Publication and integrity",
+    "color": "#b7c9a5",
+    "content": "Generate and review the JSON record before choosing to publish. Pinning stores the full record on IPFS through Pinata when configured. Anchoring fetches that stored snapshot and submits its hash and CID to the configured Guapcoin contract. This repository does not implement additional chain backends.",
+    "subsections": [
+      {
+        "title": "Publication sequence",
+        "body": "1. Generate the record and copy it for your own records.\n2. Review every draft excerpt and source description.\n3. Pin the existing record to IPFS without recreating its identity or timestamps.\n4. Optionally anchor the stored record on the configured chain.\n5. Keep the publication CID and transaction receipt separately from the original snapshot."
+      },
+      {
+        "title": "What the fingerprint covers",
+        "body": "The current hash encoder recursively sorts object keys, preserves array order, and hashes the JSON snapshot with SHA-256. It includes nested source and role fields. This is a project-specific canonical encoding, not a claim of RFC 8785 conformance. Adding publication metadata to the snapshot changes its fingerprint."
+      },
+      {
+        "title": "Legacy hash limitation",
+        "body": "Earlier prototype hashing used a top-level key whitelist that could omit nested creative decisions. Those hashes do not protect omitted fields. Retain original bytes and identify the legacy hashing method when assessing old records. This revision does not migrate or re-anchor existing records."
+      },
+      {
+        "title": "What an anchor does not establish",
+        "body": "An anchor connects a submitted fingerprint and CID with a transaction. The current integration uses a service-controlled signing account; it does not verify the human creator’s wallet. A creator-provided identity string is not authenticated. The API receipt timestamp reflects server processing, not an independently verified creation date."
+      },
+      {
+        "title": "Availability and confidentiality",
+        "body": "IPFS publication is public and requires continued hosting for availability. Never assume a CID guarantees permanence or deletion. Private source storage, encryption, selective disclosure, signed creator attestations, authentication, and rate-limited anchoring remain production requirements."
+      }
+    ]
+  },
+  {
+    "id": "ownership",
+    "number": "11",
+    "title": "Attribution and permissions",
+    "color": "#b7c9a5",
+    "content": "A HAP record documents claimed contributions and declared permissions. It is not a deed of ownership, a rights registry, or a license agreement. Source ownership, permission to use a source, permission to use a vocal identity, and claims about the finished work must remain distinguishable.",
+    "subsections": [
+      {
+        "title": "Original sources",
+        "body": "Document your relationship to each source and what it contributed. A source being your own work does not, by itself, establish every right in the resulting collaboration."
+      },
+      {
+        "title": "Permissions",
+        "body": "The prototype stores permission statements; it does not enforce them, revoke third-party copies, or verify that the person making a declaration can grant those permissions. Any actual agreement belongs outside this prototype and requires appropriate review."
+      }
+    ]
+  },
+  {
+    "id": "monetization",
+    "number": "12",
+    "title": "Licensing and marketplaces — proposed",
+    "color": "#b7c9a5",
+    "content": "Structured contribution records could support discussions about attribution and licensing. This repository does not implement sales, licensing contracts, royalty distribution, revenue shares, or a marketplace. An HCS score must not be converted directly into a payment or ownership allocation."
+  },
+  {
+    "id": "privacy",
+    "number": "13",
+    "title": "Privacy and source handling",
+    "color": "#b7c9a5",
+    "content": "Record creation returns JSON; the Studio holds the record in the current browser session. It does not provide an account archive or autosaved draft history. Copy the record before leaving or reloading. Optional publication exposes the record’s complete contents.",
+    "subsections": [
+      {
+        "title": "Data minimization",
+        "body": "Prefer source references and versions when full unpublished material is unnecessary. Do not put private credentials, sensitive personal details, or restricted source contents into a public record."
+      },
+      {
+        "title": "Voice and source data",
+        "body": "The Studio stores declared voice identifiers and permission metadata, not a generated or authenticated voice model. Secure storage, consent management, retention controls, and deletion workflows would need to be designed for any future source-hosting or voice-processing service. This document is not a compliance assessment."
+      }
+    ]
+  },
+  {
+    "id": "implementation",
+    "number": "14",
+    "title": "Implementation and API",
+    "color": "#b7c9a5",
+    "table": {
+      "headers": [
+        "Route",
+        "Current behavior"
+      ],
+      "rows": [
+        [
+          "POST /api/v1/records",
+          "Validate inputs and return a new record; optional publication at creation."
+        ],
+        [
+          "POST /api/v1/records/pin",
+          "Validate and publish an existing record snapshot."
+        ],
+        [
+          "GET /api/v1/records/[id]",
+          "Fetch by IPFS CID. Direct record-ID lookup is not implemented."
+        ],
+        [
+          "POST /api/v1/records/[id]/anchor",
+          "Fetch by CID and submit an anchor through the configured service account."
+        ],
+        [
+          "GET /api/v1/schemas",
+          "Return the current authorship JSON Schema."
+        ]
+      ]
+    },
+    "content": "Studio uses the same creation API for music and writing. Music currently includes a voice-identifier step; writing omits that step and records an empty vocal-identity object. The SDK includes the optional knowledge-context types. Public deployment still needs authentication, abuse controls, and operational monitoring."
+  },
+  {
+    "id": "disputes",
+    "number": "15",
+    "title": "Disputes and multi-party attribution — proposed",
+    "color": "#b7c9a5",
+    "content": "HAP does not currently operate a dispute service, resolver registry, similarity checker, arbitration workflow, or contributor split system. Earlier numerical similarity thresholds, deadlines, and token-stake ideas were unvalidated proposals, not product commitments.",
+    "subsections": [
+      {
+        "title": "Evidence handling",
+        "body": "A future system should preserve disputed claims and supporting evidence without treating an earlier timestamp or a higher score as decisive."
+      },
+      {
+        "title": "Collaboration",
+        "body": "Future multi-person records should identify each contributor, describe their work, and attach explicit agreements where appropriate. Commercial splits and contribution descriptions are distinct. The current human/AI role fields do not implement multi-party ownership or royalty distribution."
+      }
+    ]
+  },
+  {
+    "id": "c2pa",
+    "number": "16",
+    "title": "Provenance integrations — proposed",
+    "color": "#b7c9a5",
+    "content": "Future work could connect HAP contribution records with signed media-provenance manifests, including C2PA integrations. This repository does not create or verify C2PA manifests. A linked manifest should be evaluated separately from the truth of the creative-contribution claims; no integration should convert a record into a deed of ownership."
+  },
+  {
+    "id": "worked-example",
+    "number": "17",
+    "title": "Worked example — expert co-writing",
+    "color": "#b7c9a5",
+    "content": "Illustrative workflow: a Cardology expert uses original lectures, interpretations, and a prepared knowledge base while co-writing a chapter with Claude. This example does not claim what the model previously knew or that model weights were changed.",
+    "steps": [
+      {
+        "number": "01",
+        "title": "Describe the foundation",
+        "body": "Identify your original sources and their versions. Explain the ideas, examples, or interpretations each source contributed. Use private references where full contents should not be public."
+      },
+      {
+        "number": "02",
+        "title": "Describe the preparation",
+        "body": "Record the curriculum, annotations, instructions, or retrieval setup you created. Select actual fine-tuning only if model weights were updated."
+      },
+      {
+        "number": "03",
+        "title": "Describe the collaboration",
+        "body": "Record the human’s domain judgment, original argument, writing, and review alongside the AI’s drafting or revision role. Retain draft decisions and reasons."
+      },
+      {
+        "number": "04",
+        "title": "Review the contribution profile",
+        "body": "Studio presents the knowledge and source history ahead of the legacy HCS. The score does not quantify the expertise or original source work and does not define an AI remainder."
+      },
+      {
+        "number": "05",
+        "title": "Keep or publish the record",
+        "body": "Copy the JSON for your records. If publishing, review every field first, then pin the snapshot and optionally anchor it. These are separate actions from generating the record."
+      }
+    ]
+  },
+  {
+    "id": "schemas",
+    "number": "18",
+    "title": "Schema and compatibility",
+    "color": "#b7c9a5",
+    "content": "The implemented schema is served at /api/v1/schemas. It describes the authorship record and the optional knowledge-context extension. Separate dispute and collaboration schemas are not deployed services. Static /schemas/v2.1/ files are not currently served.",
+    "subsections": [
+      {
+        "title": "Required and optional fields",
+        "body": "The current published schema requires hap_version, record_id, domain_profile, recipe, voice, hcs_components, contribution_score, and hcs_tier. The record factory also supplies created_at, inputs, iterations, and curation. owner_identity, ipfs_cid, and onchain_anchor are optional; a generated record need not be publicly stored or anchored."
+      },
+      {
+        "title": "Knowledge context",
+        "body": "inputs.knowledge_context is optional. When present, it requires schema_version = 1.0, sources, and ai_methods. Source entries require title, kind, and relationship. Prior writing clients can continue using inputs.text or inputs.lyrics without this extension."
+      },
+      {
+        "title": "Versioning",
+        "body": "Keep hap_version and extension schema versions with exported records. The current scoring weights remain v2.1. Future revisions need explicit scoring and hash-encoding versions, reproducible fixtures, migration notes, and a policy for legacy verification. This is a remaining protocol design requirement."
+      }
+    ]
+  },
+  {
+    "id": "limitations",
+    "number": "19",
+    "title": "Limitations",
+    "color": "#b7c9a5",
+    "callout": "Documentation, integrity, and independent verification are different layers.",
+    "bullets": [
+      "A creator declaration can be incomplete or false; identity and evidence review are not implemented.",
+      "HCS measures field patterns and does not assess originality, effort, expertise, or ownership.",
+      "Version notes are supplied by the creator; they are not an automatically captured edit history.",
+      "Source references and digests are stored but not independently verified.",
+      "An anchor does not authenticate the creator or prove when the underlying work was created.",
+      "The prototype is not a legal service, a rights determination, or a production-ready dispute and licensing system."
+    ]
+  },
+  {
+    "id": "future",
+    "number": "20",
+    "title": "Next protocol revision",
+    "color": "#b7c9a5",
+    "bullets": [
+      "Normalize domain-specific scoring and separate evidence coverage from reviewed contribution.",
+      "Version the hash encoding and scoring rubric explicitly.",
+      "Add artifact digests, parent-draft links, and signed creator attestations.",
+      "Design private evidence storage and selective disclosure.",
+      "Add authentication, rate limits, publication idempotency, and operational controls.",
+      "Validate the schemas and SDK against shared conformance fixtures.",
+      "Design independent review and multi-party attribution before introducing ownership or revenue features."
+    ]
+  },
+  {
+    "id": "conclusion",
+    "number": "21",
+    "title": "Conclusion",
+    "color": "#b7c9a5",
+    "callout": "Let the work carry its human story.",
+    "content": "HAP’s value is in preserving a fuller account of creative work: the knowledge that preceded it, the system a person prepared, and the decisions made during collaboration. A clear record can support understanding and review without pretending that a single number settles authorship."
+  },
+  {
+    "id": "disclaimer",
+    "number": "22",
+    "title": "Scope of this document",
+    "color": "#b7c9a5",
+    "disclaimer": "This is a technical description of a prototype and its proposed development. It is not legal, financial, or compliance advice. No record, score, permission field, or blockchain transaction establishes rights by itself. Legal and operational questions require separate, current review in the relevant context."
   }
-}`,
-      },
-    ],
-  },
-  {
-    id: "limitations",
-    number: "15b",
-    title: "Limitations",
-    color: "#EF4444",
-    callout: "HAP is a documentation and evidence framework. It does not create legal rights, guarantee copyright protection, or substitute for qualified legal counsel.",
-    subsections: [
-      {
-        title: "What HAP Does Not Do",
-        body: "HAP cannot guarantee copyright protection for any work. No HCS score, tier, or on-chain record creates a copyright or establishes ownership as a matter of law.\n\nHAP does not replace legal counsel. Creators and platforms operating in regulated jurisdictions  -  particularly those handling voice data, offering revenue-sharing products, or asserting copyright  -  must engage qualified legal professionals.\n\nHAP does not create enforceable rights by itself. The framework documents creative decisions. The legal weight of that documentation depends on the jurisdiction, the specific facts, and applicable law at the time of any dispute.\n\nHAP records do not prove human agency. A HAP record documents what decisions were logged, not that a human (rather than an automated script) made those decisions. Platforms implementing HAP must design appropriate identity verification if human agency is material to their use case.",
-      },
-      {
-        title: "Version and Amendment Protocol",
-        body: "HAP records are interpreted under the schema version in effect at the time of creation. A record created under v2.1 is governed by v2.1 schema definitions and HCS weightings, regardless of subsequent version releases.\n\nWhen a new version is released, HAP will publish a migration guide specifying: which fields are backwards-compatible, which schema changes affect HCS calculation, and how dispute resolution handles cross-version record comparisons.\n\nPlatforms must store the hap_version field and use it when interpreting archived records. Version-specific schema definitions are available at haphuman.xyz/schemas/v{version}/.",
-      },
-    ],
-  },
-  {
-    id: "future",
-    number: "16",
-    title: "Future Directions",
-    color: "#8B5CF6",
-    bullets: [
-      "Standardization across platforms via open API specification and SDK",
-      "Integration with W3C Decentralized Identifiers (DIDs) for verified human identity binding",
-      "Legal alignment with evolving copyright frameworks across jurisdictions",
-      "Expansion of domain profiles beyond music, visual art, and written content",
-      "Algorithmic HCS validation tools for platform implementers",
-      "Cross-platform recipe and voice marketplaces",
-    ],
-  },
-  {
-    id: "conclusion",
-    number: "17",
-    title: "Conclusion",
-    color: "#06B6D4",
-    callout: "Authorship is not defined by output alone. It is defined by the system that creates it.",
-    content: `HAP enables a future where human creativity remains central, even in an AI-driven world. By making the process measurable, verifiable, and monetizable, we ensure that human contribution is never lost in the age of artificial intelligence.`,
-  },
-  {
-    id: "disclaimer",
-    number: " - ",
-    title: "Disclaimer",
-    color: "#475569",
-    disclaimer: "HAP is a documentation and attribution framework. It is not a legal service and does not provide legal advice. Nothing in this document constitutes legal, financial, or investment advice.\n\nHCS scores and tiers are descriptive indicators only. They do not constitute legal determinations of copyright eligibility, ownership, or authorship. Copyright eligibility is determined solely by applicable law.\n\nOn-chain anchoring provides evidentiary support, not automatic legal priority or enforceable rights.\n\nBiometric and voice data collection is subject to complex and rapidly evolving federal, state, and international privacy law. The discussion in this document is illustrative only and does not constitute compliance guidance.\n\nRevenue-sharing and fractional ownership models may implicate securities law in certain jurisdictions. This document does not constitute securities advice.\n\nCreators, platforms, and investors should consult qualified legal counsel regarding copyright, privacy, securities, and regulatory compliance before implementing or relying on any aspect of this framework.",
-  },
 ];
 
-function CodeBlock({ code, label }: { code: string; label?: string }) {
-  return (
-    <div className="mt-4 rounded-xl overflow-hidden" style={{ background: "rgba(4,8,18,0.9)", border: "1px solid rgba(255,255,255,0.06)" }}>
-      <div className="px-4 py-2 border-b border-slate-700/30 flex items-center gap-2">
-        <div className="w-2 h-2 rounded-full bg-red-500/60" />
-        <div className="w-2 h-2 rounded-full bg-yellow-500/60" />
-        <div className="w-2 h-2 rounded-full bg-green-500/60" />
-        <span className="text-xs font-mono text-slate-600 ml-2">{label ?? "record.json"}</span>
-      </div>
-      <pre className="p-5 text-xs font-mono text-emerald-400 overflow-auto leading-relaxed">{code}</pre>
-    </div>
-  );
+export const metadata = {
+  title: "Whitepaper — Human Authorship Protocol",
+  description: "The HAP framework, implementation notes, knowledge provenance, and proposed protocol architecture.",
+};
+
+function CodeBlock({ code, label = "record.json" }: { code: string; label?: string }) {
+  return <figure className="document-code"><figcaption>{label}</figcaption><pre tabIndex={0}><code>{code}</code></pre></figure>;
 }
 
-function SectionBlock({ section, index }: { section: Section; index: number }) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 30 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay: Math.min(index * 0.04, 0.3) }}
-      className="glass rounded-2xl p-8 mb-6"
-      style={{ borderColor: `${section.color}18` }}
-      id={section.id}
-    >
-      {/* Header */}
-      <div className="flex items-baseline gap-4 mb-6">
-        <span className="text-xs font-mono font-bold opacity-30" style={{ color: section.color }}>
-          {section.number}
-        </span>
-        <h2 className="text-xl font-bold text-white">{section.title}</h2>
-      </div>
-
-      {/* Callout */}
-      {section.callout && (
-        <div className="rounded-xl px-5 py-4 mb-5 border-l-4" style={{ background: `${section.color}08`, borderColor: section.color }}>
-          <p className="text-sm font-medium italic" style={{ color: section.color }}>&ldquo;{section.callout}&rdquo;</p>
-        </div>
-      )}
-
-      {/* Content */}
-      {section.content && (
-        <div className="text-slate-400 leading-relaxed whitespace-pre-line mb-4">{section.content}</div>
-      )}
-
-      {/* Disclaimer */}
-      {section.disclaimer && (
-        <div className="rounded-xl px-5 py-4 border" style={{ background: "rgba(71,85,105,0.1)", borderColor: "rgba(71,85,105,0.3)" }}>
-          <p className="text-sm text-slate-500 leading-relaxed">{section.disclaimer}</p>
-        </div>
-      )}
-
-      {/* Subsections */}
-      {section.subsections && (
-        <div className="space-y-5 mt-4">
-          {section.subsections.map((sub) => (
-            <div key={sub.title} className="pl-4 border-l-2" style={{ borderColor: `${section.color}30` }}>
-              <h3 className="text-sm font-bold mb-2" style={{ color: section.color }}>{sub.title}</h3>
-              <p className="text-sm text-slate-400 leading-relaxed whitespace-pre-line">{sub.body}</p>
-              {sub.code && <CodeBlock code={sub.code} />}
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Standard table */}
-      {section.table && (
-        <div className="mt-6 overflow-x-auto rounded-xl border border-slate-700/40">
-          <table className="w-full text-sm font-mono">
-            <thead>
-              <tr style={{ background: "rgba(255,255,255,0.03)" }}>
-                {section.table.headers.map((h) => (
-                  <th key={h} className="px-4 py-3 text-left text-xs text-slate-500 font-bold uppercase tracking-widest whitespace-nowrap">{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {section.table.rows.map((row, i) => (
-                <tr key={row[0]} className="border-t border-slate-700/30">
-                  <td className="px-4 py-3 font-medium whitespace-nowrap" style={{ color: section.table!.colors?.[i] ?? section.color }}>{row[0]}</td>
-                  {row.slice(1).map((cell, j) => (
-                    <td key={j} className="px-4 py-3 text-slate-400 text-xs leading-relaxed">{cell}</td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {/* Comparison table */}
-      {section.comparisonTable && (
-        <div className="mt-6 overflow-x-auto rounded-xl border border-slate-700/40">
-          <table className="w-full text-sm font-mono">
-            <thead>
-              <tr style={{ background: "rgba(255,255,255,0.03)" }}>
-                {section.comparisonTable.headers.map((h, i) => (
-                  <th key={h} className="px-4 py-3 text-left text-xs font-bold uppercase tracking-widest whitespace-nowrap"
-                    style={{ color: i === 1 ? "#475569" : i === 2 ? "#06B6D4" : "#64748b" }}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {section.comparisonTable.rows.map((row) => (
-                <tr key={row[0]} className="border-t border-slate-700/30">
-                  <td className="px-4 py-3 text-slate-500 text-xs font-medium whitespace-nowrap">{row[0]}</td>
-                  <td className="px-4 py-3 text-slate-500 text-xs leading-relaxed">{row[1]}</td>
-                  <td className="px-4 py-3 text-cyan-400 text-xs leading-relaxed">{row[2]}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {/* Code block */}
-      {section.codeBlock && <CodeBlock code={section.codeBlock} label={section.codeLabel} />}
-
-      {/* Bullets */}
-      {section.bullets && (
-        <ul className="mt-4 space-y-2">
-          {section.bullets.map((b) => (
-            <li key={b} className="flex items-start gap-3 text-sm text-slate-400">
-              <div className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0" style={{ background: section.color }} />
-              {b}
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {/* Steps */}
-      {section.steps && (
-        <div className="mt-4 space-y-4">
-          {section.steps.map((step) => (
-            <div key={step.number} className="rounded-xl p-5" style={{ background: `${section.color}06`, border: `1px solid ${section.color}15` }}>
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold font-mono shrink-0"
-                  style={{ background: `${section.color}20`, color: section.color }}>
-                  {step.number}
-                </div>
-                <h4 className="text-sm font-bold text-white">{step.title}</h4>
-              </div>
-              <p className="text-sm text-slate-400 leading-relaxed whitespace-pre-line pl-10">{step.body}</p>
-              {step.code && <div className="pl-10 mt-2"><CodeBlock code={step.code} /></div>}
-            </div>
-          ))}
-        </div>
-      )}
-    </motion.div>
-  );
+function DataTable({ table }: { table: { headers: string[]; rows: string[][] } }) {
+  return <div className="document-table" role="region" aria-label={table.headers.join(", ")} tabIndex={0}><table><thead><tr>{table.headers.map(h => <th key={h} scope="col">{h}</th>)}</tr></thead><tbody>{table.rows.map((row, i) => <tr key={i}>{row.map((cell, j) => j === 0 ? <th scope="row" key={j}>{cell}</th> : <td key={j}>{cell}</td>)}</tr>)}</tbody></table></div>;
 }
+
+function SectionBlock({ section }: { section: Section }) {
+  return <section className="document-section" id={section.id}>
+    <header><span>{section.number}</span><h2>{section.title}</h2></header>
+    {section.callout && <blockquote>{section.callout}</blockquote>}
+    {section.content && <p>{section.content}</p>}
+    {section.disclaimer && <p className="document-disclaimer">{section.disclaimer}</p>}
+    {section.subsections?.map(sub => <div className="document-subsection" key={sub.title}><h3>{sub.title}</h3><p>{sub.body}</p>{sub.code && <CodeBlock code={sub.code} />}</div>)}
+    {section.table && <DataTable table={section.table} />}
+    {section.comparisonTable && <DataTable table={section.comparisonTable} />}
+    {section.codeBlock && <CodeBlock code={section.codeBlock} label={section.codeLabel} />}
+    {section.bullets && <ul>{section.bullets.map(b => <li key={b}>{b}</li>)}</ul>}
+    {section.steps && <ol className="document-steps">{section.steps.map(step => <li key={step.number}><h3>{step.number}. {step.title}</h3><p>{step.body}</p>{step.code && <CodeBlock code={step.code} />}</li>)}</ol>}
+  </section>;
+}
+
+// Export the same content the reader sees, including current implementation notes.
+const fence = String.fromCharCode(96).repeat(3);
+const markdownCode = (code?: string) => code ? `\n\n${fence}json\n${code}\n${fence}` : "";
+const markdown = ["# Human Authorship Protocol\n\nWhitepaper v2.1 · Aquarius Maximus\n\nStatus: Prototype / proposal", ...sections.map(s => [
+  `## ${s.title}`, s.callout, s.content, s.disclaimer,
+  ...(s.subsections ?? []).map(sub => `### ${sub.title}\n\n${sub.body}${markdownCode(sub.code)}`),
+  ...[s.table, s.comparisonTable].filter(t => t !== undefined).map(t => [t.headers.join(" | "), t.headers.map(() => "---").join(" | "), ...t.rows.map(row => row.join(" | "))].join("\n")),
+  markdownCode(s.codeBlock),
+  ...(s.bullets ?? []).map(b => `- ${b}`),
+  ...(s.steps ?? []).map(step => `### ${step.number}. ${step.title}\n\n${step.body}${markdownCode(step.code)}`),
+].filter(Boolean).join("\n\n"))].join("\n\n");
 
 export default function WhitepaperPage() {
-  return (
-    <main className="relative min-h-screen">
-      <CopyForLLM />
-      <div className="fixed inset-0 grid-bg opacity-20 pointer-events-none" />
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] opacity-5"
-          style={{ background: "radial-gradient(circle, #8B5CF6 0%, transparent 70%)" }} />
-      </div>
-
-      <Navbar />
-
-      <div className="max-w-4xl mx-auto px-6 pt-28 pb-16 relative z-10">
-        {/* Back */}
-        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="mb-10">
-          <Link href="/" className="inline-flex items-center gap-2 text-sm font-mono text-slate-500 hover:text-cyan-400 transition-colors">
-            <ArrowLeft size={14} />
-            Back to Protocol
-          </Link>
-        </motion.div>
-
-        {/* Header */}
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }} className="mb-16">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="h-px w-8 bg-cyan-500/60" />
-            <span className="text-xs font-mono text-cyan-400/80 tracking-widest uppercase">Whitepaper · v2.1</span>
-          </div>
-          <h1 className="text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-            Human Authorship<br /><span className="gradient-text">Protocol</span>
-          </h1>
-          <p className="text-lg text-slate-400 max-w-2xl leading-relaxed mb-8">
-            A technical framework for defining, measuring, and verifying human creative contribution within AI-assisted works  -  including legal considerations, dispute resolution, blockchain architecture, and C2PA integration.
-          </p>
-          <div className="flex flex-wrap gap-3">
-            {[["Published", "2026"], ["Version", "2.1"], ["Status", "Prototype / proposal"], ["Author", "Aquarius Maximus"]].map(([k, v]) => (
-              <div key={k} className="glass rounded-xl px-4 py-2 text-xs font-mono">
-                <span className="text-slate-600">{k}: </span>
-                <span className="text-slate-300">{v}</span>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Table of contents */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-          className="glass rounded-2xl p-6 mb-12">
-          <h2 className="text-xs font-bold font-mono text-slate-500 uppercase tracking-widest mb-4">Table of Contents</h2>
-          <div className="grid sm:grid-cols-2 gap-1">
-            {sections.map((s) => (
-              <a key={s.id} href={`#${s.id}`}
-                className="flex items-center gap-3 text-sm font-mono text-slate-400 hover:text-cyan-400 transition-colors py-1">
-                <span className="text-xs opacity-40 w-6 shrink-0" style={{ color: s.color }}>{s.number}</span>
-                {s.title}
-              </a>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Sections */}
-        {sections.map((section, i) => (
-          <SectionBlock key={section.id} section={section} index={i} />
-        ))}
-
-        {/* CTA */}
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mt-16 text-center">
-          <div className="inline-flex items-center gap-2 px-1 py-1 rounded-2xl"
-            style={{ background: "linear-gradient(135deg, #06B6D4, #8B5CF6)" }}>
-            <Link href="/#join"
-              className="flex items-center gap-2 px-6 py-3 rounded-[14px] bg-bg-primary text-white font-bold text-sm font-mono hover:bg-transparent transition-colors duration-300">
-              Join the Protocol <ExternalLink size={14} />
-            </Link>
-          </div>
-        </motion.div>
-      </div>
-
-      <Footer />
-    </main>
-  );
+  return <div className="hap-surface"><a className="skip-link" href="#main">Skip to whitepaper</a><Navbar />
+    <main id="main" className="hap-wrap">
+      <header className="interior-heading document-heading"><Link className="hap-text-link" href="/">← Back to HAP</Link><p className="hap-eyebrow">The protocol / Whitepaper v2.1</p><h1>Human Authorship<br /><em>Protocol.</em></h1><p>A framework for documenting creative contribution, from original knowledge and source material to the decisions behind a finished work.</p><div className="document-meta"><span>By Aquarius Maximus</span><span>2026 / v2.1</span><span>Prototype & proposal</span></div><CopyForLLM content={markdown} /></header>
+      <div className="document-layout"><nav className="document-toc" aria-label="Whitepaper contents"><p className="hap-eyebrow">In this document</p>{sections.map(section => <a key={section.id} href={`#${section.id}`}><span>{section.number}</span>{section.title}</a>)}</nav><article className="document-body">{sections.map(section => <SectionBlock key={section.id} section={section} />)}<div className="interior-bottom-links"><Link className="hap-button" href="/studio">Put it into practice ↗</Link><a className="hap-text-link" href="#main">Back to top ↑</a></div></article></div>
+    </main><Footer />
+  </div>;
 }

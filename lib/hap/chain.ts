@@ -139,6 +139,10 @@ export async function anchorOnGuapcoin(
     confirmations: 1,
   });
 
+  if (receipt.status !== "success") {
+    throw new Error("The anchoring transaction reverted; the record was not anchored.");
+  }
+
   return {
     transaction_hash: txHash,
     anchored_hash: `sha256:${recordHash.slice(2)}`,

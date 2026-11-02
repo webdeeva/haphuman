@@ -4,7 +4,8 @@ import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { WritingBrief, WritingInputs } from "@/components/studio/steps/WritingStep";
-import { ArrowLeft } from "lucide-react";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import WizardShell from "@/components/studio/WizardShell";
 import RecipeStep from "@/components/studio/steps/RecipeStep";
 import VoiceStep from "@/components/studio/steps/VoiceStep";
@@ -84,24 +85,18 @@ function CreateWizard() {
   const handlePin = async () => {
     if (!record) return;
     setPinning(true);
+    setError(null);
     try {
-      const res = await fetch("/api/v1/records", {
+      const res = await fetch("/api/v1/records/pin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          domain_profile: record.domain_profile,
-          recipe: record.recipe,
-          voice: record.voice,
-          inputs: record.inputs,
-          iterations: record.iterations,
-          curation: record.curation,
-          pin_to_ipfs: true,
-        }),
+        body: JSON.stringify({ record }),
       });
       const data = await res.json();
-      if (data.ipfs_cid) setIpfsCid(data.ipfs_cid);
+      if (!res.ok || !data.ipfs_cid) throw new Error(data.error ?? "Publication failed. Please try again.");
+      setIpfsCid(data.ipfs_cid);
     } catch (err) {
-      console.error("Pin error:", err);
+      setError(err instanceof Error ? err.message : "Publication failed.");
     } finally {
       setPinning(false);
     }
@@ -110,12 +105,14 @@ function CreateWizard() {
   const handleAnchor = async () => {
     if (!ipfsCid) return;
     setAnchoring(true);
+    setError(null);
     try {
       const res = await fetch(`/api/v1/records/${ipfsCid}/anchor`, { method: "POST" });
       const data = await res.json();
-      if (data.transaction_hash) setTxHash(data.transaction_hash);
+      if (!res.ok || !data.transaction_hash) throw new Error(data.error ?? "Anchoring failed. Please try again.");
+      setTxHash(data.transaction_hash);
     } catch (err) {
-      console.error("Anchor error:", err);
+      setError(err instanceof Error ? err.message : "Anchoring failed.");
     } finally {
       setAnchoring(false);
     }
@@ -124,19 +121,15 @@ function CreateWizard() {
   // Result screen
   if (record) {
     return (
-      <div className="min-h-screen bg-bg-primary text-white">
-        <div className="fixed inset-0 grid-bg opacity-20 pointer-events-none" />
-        <div className="relative max-w-3xl mx-auto px-6 pt-10 pb-24">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <div className="text-xs font-mono text-emerald-400/70 mb-1">Record generated</div>
-              <h1 className="text-2xl font-bold text-white">Your HAP Record</h1>
-            </div>
-            <Link href="/studio"
-              className="flex items-center gap-2 text-xs font-mono text-slate-500 hover:text-white transition-colors">
-              <ArrowLeft size={13} /> New record
-            </Link>
-          </div>
+      <div className="hap-surface">
+        <a className="skip-link" href="#main">Skip to record</a><Navbar />
+        <main id="main" className="hap-wrap result-wrap">
+          <header className="interior-heading result-heading">
+            <p className="hap-eyebrow">HAP Studio / Record generated</p>
+            <h1>Your work.<br /><em>Your record.</em></h1>
+            <Link className="hap-text-link" href="/studio">Start another record ↗</Link>
+          </header>
+          {error && <p className="form-error" role="alert">{error}</p>}
           <HCSResult
             record={record}
             onPin={handlePin}
@@ -146,21 +139,13 @@ function CreateWizard() {
             ipfsCid={ipfsCid}
             txHash={txHash}
           />
-        </div>
+        </main><Footer />
       </div>
     );
   }
 
   return (
     <>
-      {/* Back link above wizard */}
-      <div className="fixed top-5 left-6 z-50">
-        <Link href="/studio"
-          className="flex items-center gap-2 text-xs font-mono text-slate-600 hover:text-slate-300 transition-colors">
-          <ArrowLeft size={13} /> Studio
-        </Link>
-      </div>
-
       <WizardShell
         currentStep={state.step}
         stepLabels={writing ? ["Writing brief", "Voice (not applicable)", "Writing & knowledge", "Draft history", "Final selection"] : undefined}
@@ -180,8 +165,7 @@ function CreateWizard() {
         isFinalStep={state.step === 4}
       >
         {error && (
-          <div className="mb-4 p-3 rounded-xl text-xs font-mono text-red-400"
-            style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}>
+          <div className="form-error" role="alert">
             {error}
           </div>
         )}
@@ -211,5 +195,5 @@ function CreateWizard() {
 }
 
 export default function CreatePage() {
-  return <Suspense fallback={<p className="p-10">Loading Studio…</p>}><CreateWizard /></Suspense>;
+  return <Suspense fallback={<div className="hap-surface"><Navbar /><main className="hap-wrap interior-heading" role="status"><p className="hap-eyebrow">HAP Studio</p><h1>Preparing your workspace…</h1></main></div>}><CreateWizard /></Suspense>;
 }

@@ -9,7 +9,7 @@ const relationshipLabels = {
 };
 
 export default function KnowledgeSummary({ context }: { context: HAPKnowledgeContext }) {
-  return <section className="rounded-xl border border-slate-600 p-6 space-y-5">
+  return <section className="knowledge-summary space-y-5">
     <div><p className="text-xs text-slate-400 mb-2">Creator-declared contribution profile</p><h2 className="text-2xl">Knowledge-led collaboration</h2><p className="text-sm text-slate-400 mt-3 leading-relaxed">This record includes contributions made before and during co-writing. Read the source history and roles alongside the draft history; the legacy score does not assess these contributions.</p></div>
     <dl className="space-y-4">{([
       ["Domain expertise", context.domain_expertise], ["Preparation & teaching", context.preparation],

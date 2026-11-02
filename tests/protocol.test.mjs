@@ -36,3 +36,38 @@ test('knowledge provenance is hash-protected without inflating the legacy score'
     assert.notEqual(recordDigest(record), recordDigest(edited));
   }
 });
+
+test('publishing a validated snapshot preserves identity, timestamps, and nested evidence', async () => {
+  const { recordSnapshotSchema } = await import('../lib/hap/validation.ts');
+  const { pinRecord } = await import('../lib/hap/ipfs.ts');
+  const record = {
+    hap_version: '2.1', record_id: 'hap_record_20261102_aabbccdd', created_at: '2026-11-02T12:00:00.000Z', domain_profile: 'written_content',
+    recipe: { recipe_id: 'hap_recipe_aabbccdd', style: 'Essay', structure: '', tone: '', constraints: [] },
+    voice: { voice_id: '', voice_permissions: { licensed_uses: [], prohibited_uses: [], expiry: '', revocable: false } },
+    inputs: { text: 'Original draft preserved exactly.' }, iterations: [],
+    curation: { decision: 'primary_keep', timestamp: '2026-11-02T12:00:00.000Z', hcs_contribution: 0 },
+  };
+  const { score, tier, components } = calculateHCS(record);
+  Object.assign(record, { hcs_components: components, contribution_score: score, hcs_tier: tier });
+  record.curation.hcs_contribution = components.curation;
+  const parsed = recordSnapshotSchema.parse(record);
+  assert.equal(recordDigest(parsed), recordDigest(record));
+  assert.equal(recordSnapshotSchema.safeParse({ ...record, record_id: 'invalid' }).success, false);
+  const originalFetch = globalThis.fetch;
+  const originalJWT = process.env.PINATA_JWT;
+  let published;
+  try {
+    process.env.PINATA_JWT = 'local-test-only';
+    globalThis.fetch = async (url, options) => {
+      assert.equal(url, 'https://api.pinata.cloud/pinning/pinJSONToIPFS');
+      published = JSON.parse(options.body).pinataContent;
+      return new Response(JSON.stringify({ IpfsHash: 'bafy-local-mock' }), { status: 200 });
+    };
+    assert.equal(await pinRecord(parsed), 'bafy-local-mock');
+    assert.deepEqual(published, record);
+  } finally {
+    globalThis.fetch = originalFetch;
+    if (originalJWT === undefined) delete process.env.PINATA_JWT;
+    else process.env.PINATA_JWT = originalJWT;
+  }
+});

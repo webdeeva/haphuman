@@ -1,108 +1,28 @@
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
-import { ArrowRight, Music, Shield, Zap } from "lucide-react";
+import Footer from "@/components/Footer";
 
 export const metadata = {
-  title: "HAP Studio - Human Authorship Protocol",
-  description: "Log your creative decisions and generate a verifiable HAP authorship record.",
+  title: "Studio — Human Authorship Protocol",
+  description: "Document your writing, knowledge, and music in a portable record of creative contribution.",
 };
 
-const features = [
-  {
-    icon: <Music className="w-5 h-5" />,
-    title: "Music & written works",
-    desc: "Document lyrics, prose, poetry, scripts, creative direction, and revisions.",
-    color: "#06B6D4",
-  },
-  {
-    icon: <Shield className="w-5 h-5" />,
-    title: "Verifiable Record",
-    desc: "Export your decisions as JSON. Optional anchoring records a fingerprint when the service is configured.",
-    color: "#8B5CF6",
-  },
-  {
-    icon: <Zap className="w-5 h-5" />,
-    title: "IPFS Pinned",
-    desc: "Optional public storage on IPFS. Availability depends on continued pinning.",
-    color: "#10B981",
-  },
-];
-
 export default function StudioPage() {
-  return (
-    <main className="min-h-screen bg-bg-primary text-white">
-      <Navbar />
-      <div className="fixed inset-0 grid-bg opacity-20 pointer-events-none" />
-
-      <div className="relative pt-32 pb-24 px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-8 font-mono text-xs"
-            style={{ background: "rgba(6,182,212,0.08)", border: "1px solid rgba(6,182,212,0.2)", color: "#06B6D4" }}>
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-            HAP Studio - Music & written works
-          </div>
-
-          <h1 className="text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-            Document your
-            <br />
-            <span className="gradient-text">creative authorship</span>
-          </h1>
-
-          <p className="text-lg text-slate-400 mb-12 max-w-2xl mx-auto leading-relaxed">
-            Log the decisions behind your writing or music. Generate a structured record of your process and review the information before choosing whether to publish it.
-          </p>
-
-          <Link
-            href="/studio/create"
-            className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl font-bold text-white text-base transition-all duration-300 hover:scale-[1.02]"
-            style={{
-              background: "linear-gradient(135deg, #06B6D4, #8B5CF6)",
-              boxShadow: "0 0 40px rgba(6,182,212,0.3)",
-            }}
-          >
-            Start a new record
-            <ArrowRight className="w-5 h-5" />
-          </Link>
-
-          {/* Features */}
-          <div className="grid md:grid-cols-3 gap-5 mt-20">
-            {features.map((f) => (
-              <div
-                key={f.title}
-                className="glass rounded-2xl p-6 text-left"
-                style={{ borderColor: `${f.color}18` }}
-              >
-                <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center mb-4"
-                  style={{ background: `${f.color}12`, color: f.color }}
-                >
-                  {f.icon}
-                </div>
-                <h3 className="font-bold text-white mb-2 text-sm">{f.title}</h3>
-                <p className="text-xs text-slate-400 leading-relaxed">{f.desc}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Steps preview */}
-          <div className="mt-16 glass rounded-2xl p-8 text-left"
-            style={{ border: "1px solid rgba(6,182,212,0.15)" }}>
-            <p className="text-xs font-mono text-cyan-400/70 tracking-widest uppercase mb-6">Music: 5 steps · Written works: 4 steps</p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              {["Recipe", "Voice", "Inputs", "Iteration", "Curation"].map((step, i) => (
-                <div key={step} className="flex items-center gap-2 flex-1">
-                  <div className="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold font-mono shrink-0"
-                    style={{ background: "rgba(6,182,212,0.1)", color: "#06B6D4", border: "1px solid rgba(6,182,212,0.2)" }}>
-                    {i + 1}
-                  </div>
-                  <span className="text-sm text-slate-300 font-mono">{step}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
-  );
+  return <div className="hap-surface">
+    <a className="skip-link" href="#main">Skip to content</a>
+    <Navbar />
+    <main id="main" className="hap-wrap">
+      <header className="interior-heading">
+        <p className="hap-eyebrow">HAP Studio / Your creative record</p>
+        <h1>Give your process<br /><em>a place to live.</em></h1>
+        <p>Keep the ideas, source material, and decisions behind your work together. Start with a practice. Build a record in your own words.</p>
+      </header>
+      <section className="studio-paths" aria-label="Choose your creative practice">
+        <article><p className="hap-eyebrow">01 / Written works</p><div className="studio-specimen" aria-hidden="true">Every word has<br /><em>a history.</em></div><h2>Writing & knowledge</h2><p>Essays, books, scripts, poetry, and articles. Document original passages, domain expertise, source material, and the work of co-writing with AI.</p><Link className="hap-button" href="/studio/create?domain=written_content">Start a writing record <span aria-hidden="true">↗</span></Link><span className="studio-path-note">4 stages · Original sources welcome</span></article>
+        <article><p className="hap-eyebrow">02 / Music & sound</p><div className="studio-specimen studio-wave" aria-hidden="true">∿∿∿∿∿</div><h2>Sound & composition</h2><p>Document your musical direction, voice permissions, lyrics, revisions, and final selection. Keep the decisions behind the track.</p><Link className="hap-button" href="/studio/create">Start a music record <span aria-hidden="true">↗</span></Link><span className="studio-path-note">5 stages · From direction to selection</span></article>
+      </section>
+      <section className="studio-notes hap-section"><div><p className="hap-eyebrow">Before you begin</p><h2>A record you can<br />read, keep, and share.</h2></div><dl className="evidence-list"><div><dt>Start with what you have</dt><dd>Use notes, excerpts, or references to your own material. You do not need to upload a finished work.</dd></div><div><dt>Review before publishing</dt><dd>Generate and copy your JSON record first. IPFS publication and blockchain anchoring are optional and require configured services.</dd></div><div><dt>Read the score in context</dt><dd>The legacy HCS describes supplied information. Your expertise and source contributions have their own profile.</dd></div></dl></section>
+      <div className="interior-bottom-links"><Link href="/whitepaper" className="hap-text-link">Read the protocol ↗</Link><Link href="/api/v1/schemas" className="hap-text-link">Explore the record schema ↗</Link></div>
+    </main><Footer />
+  </div>;
 }

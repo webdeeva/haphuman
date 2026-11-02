@@ -19,14 +19,15 @@ export default function InputsStep({ value, onChange }: Props) {
           Lyrics / Text Input
         </label>
         <textarea
+          aria-label="Lyrics or text input"
           rows={6}
           placeholder={"Through the noise I remain\nBeneath the weight of what I've claimed..."}
           value={value.lyrics ?? ""}
           onChange={(e) => set("lyrics", e.target.value)}
-          className="w-full bg-transparent border rounded-xl px-4 py-3 text-sm font-mono text-white focus:outline-none resize-none leading-relaxed"
-          style={{ borderColor: "rgba(16,185,129,0.25)" }}
+          className="w-full bg-transparent border rounded-sm px-4 py-3 text-sm font-mono text-white focus:outline-none resize-none leading-relaxed"
+          style={{ borderColor: "rgba(183,201,165,0.25)" }}
         />
-        <p className="text-[11px] text-slate-600 font-mono mt-1.5">
+        <p className="text-[11px] text-slate-400 font-mono mt-1.5">
           Paste your lyrics or any text you submitted as input to the AI.
         </p>
       </div>
@@ -36,14 +37,15 @@ export default function InputsStep({ value, onChange }: Props) {
           Composition Note
         </label>
         <textarea
+          aria-label="Composition note"
           rows={3}
           placeholder="Climax at 1:45; chorus vocal distant, like a memory. Keep the hi-hats sparse."
           value={value.note ?? ""}
           onChange={(e) => set("note", e.target.value)}
-          className="w-full bg-transparent border rounded-xl px-4 py-3 text-sm font-mono text-white focus:outline-none resize-none leading-relaxed"
-          style={{ borderColor: "rgba(16,185,129,0.25)" }}
+          className="w-full bg-transparent border rounded-sm px-4 py-3 text-sm font-mono text-white focus:outline-none resize-none leading-relaxed"
+          style={{ borderColor: "rgba(183,201,165,0.25)" }}
         />
-        <p className="text-[11px] text-slate-600 font-mono mt-1.5">
+        <p className="text-[11px] text-slate-400 font-mono mt-1.5">
           Any direction you gave the AI about structure, feel, or specific moments.
         </p>
       </div>
@@ -58,11 +60,12 @@ export default function InputsStep({ value, onChange }: Props) {
               key={intent}
               type="button"
               onClick={() => set("intent", value.intent === intent ? "" : intent)}
-              className="px-3 py-1.5 rounded-lg text-xs font-mono transition-all duration-200"
+              aria-pressed={value.intent === intent}
+              className="px-3 py-1.5 rounded-sm text-xs font-mono transition-all duration-200"
               style={{
-                background: value.intent === intent ? "rgba(16,185,129,0.12)" : "rgba(255,255,255,0.03)",
-                border: `1px solid ${value.intent === intent ? "#10B981" : "rgba(255,255,255,0.08)"}`,
-                color: value.intent === intent ? "#10B981" : "#64748b",
+                background: value.intent === intent ? "rgba(183,201,165,0.12)" : "rgba(255,255,255,0.03)",
+                border: `1px solid ${value.intent === intent ? "#b7c9a5" : "rgba(255,255,255,0.08)"}`,
+                color: value.intent === intent ? "#b7c9a5" : "#aab4ac",
               }}
             >
               {intent}

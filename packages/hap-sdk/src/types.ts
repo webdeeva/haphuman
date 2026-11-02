@@ -124,6 +124,7 @@ export interface CreateRecordRequest {
 export interface CreateRecordResponse {
   record: HAPRecord;
   ipfs_cid?: string;
+  publication_error?: string;
 }
 
 export interface AnchorRecordResponse {
