@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import JoinSection from "@/components/JoinSection";
 import SpiralField from "@/components/SpiralField";
 
 const steps = [
@@ -57,7 +58,8 @@ export default function HomePage() {
           <dl className="evidence-list"><div><dt>Declaration</dt><dd>The creator describes their inputs and decisions. This is self-reported.</dd></div><div><dt>Integrity</dt><dd>A fingerprint can reveal changes to a record. An anchor can link it to a blockchain transaction.</dd></div><div><dt>Verification</dt><dd>Identity, source evidence, and independent review are separate requirements. A score or timestamp alone cannot establish authorship.</dd></div></dl>
         </section>
 
-        <section id="vision" className="hap-wrap hap-section closing-section"><p className="hap-eyebrow">An open framework / An ongoing conversation</p><h2>Let the work carry<br /><em>its human story.</em></h2><div id="join" className="hap-actions"><Link className="hap-button" href="/studio">Open the Studio ↗</Link><Link className="hap-text-link" href="/whitepaper">Explore the whitepaper ↗</Link></div></section>
+        <section id="vision" className="hap-wrap hap-section closing-section"><p className="hap-eyebrow">An open framework / An ongoing conversation</p><h2>Let the work carry<br /><em>its human story.</em></h2><div className="hap-actions"><Link className="hap-button" href="/studio">Open the Studio ↗</Link><Link className="hap-text-link" href="/whitepaper">Explore the whitepaper ↗</Link></div></section>
+        <JoinSection />
       </main>
       <Footer />
     </div>

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { neon } from "@neondatabase/serverless";
 
 // Requires DATABASE_URL env var set in Vercel (Neon connection string)
-const sql = neon(process.env.DATABASE_URL!);
+
 
 export async function POST(req: NextRequest) {
   try {
@@ -11,6 +11,11 @@ export async function POST(req: NextRequest) {
     if (!email || !role) {
       return NextResponse.json({ error: "Email and role are required" }, { status: 400 });
     }
+
+    if (!process.env.DATABASE_URL) {
+      return NextResponse.json({ error: "Waitlist registration is temporarily unavailable." }, { status: 503 });
+    }
+    const sql = neon(process.env.DATABASE_URL);
 
     // Check for duplicate
     const existing = await sql`SELECT id FROM waitlist WHERE email = ${email}`;
