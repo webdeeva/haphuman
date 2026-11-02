@@ -8,7 +8,7 @@ import {
   type Hash,
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { createHash } from "crypto";
+import { recordDigest } from "./hash";
 import type { HAPRecord } from "./types";
 
 // ─── Chain definition ─────────────────────────────────────────────────────────
@@ -81,9 +81,7 @@ export const HAP_REGISTRY_ABI = [
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 export function hashRecordBytes32(record: HAPRecord): `0x${string}` {
-  const json = JSON.stringify(record, Object.keys(record).sort());
-  const hex = createHash("sha256").update(json).digest("hex");
-  return `0x${hex}`;
+  return `0x${recordDigest(record)}`;
 }
 
 function getPrivateKey(): `0x${string}` {

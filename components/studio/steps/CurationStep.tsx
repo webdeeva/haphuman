@@ -29,7 +29,7 @@ export default function CurationStep({ value, iterations, onChange }: Props) {
         <div>
           <p className="text-sm font-bold text-white mb-1">The act of choosing matters</p>
           <p className="text-xs text-slate-400 leading-relaxed">
-            Curation is a distinct HAP component. The decision to keep a specific output is itself a human creative act — separate from iteration — and contributes 10% to your HCS.
+            Curation is a distinct HAP component. The current scoring heuristic assigns weight to your selection. This records a declared choice; it does not verify human agency or establish authorship.
           </p>
         </div>
       </div>
@@ -84,7 +84,7 @@ export default function CurationStep({ value, iterations, onChange }: Props) {
         </label>
         <input
           type="text"
-          placeholder="bafybeig... (IPFS CID of the audio file, if you have it)"
+          placeholder="bafybeig... (IPFS CID of the final work, if you have it)"
           value={value.selected_cid ?? ""}
           onChange={(e) => onChange({ ...value, selected_cid: e.target.value })}
           className="w-full bg-transparent border rounded-xl px-4 py-2.5 text-sm font-mono text-white focus:outline-none"

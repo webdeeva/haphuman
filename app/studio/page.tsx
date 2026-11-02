@@ -10,20 +10,20 @@ export const metadata = {
 const features = [
   {
     icon: <Music className="w-5 h-5" />,
-    title: "Music Domain",
-    desc: "Optimized for AI-assisted music: recipe, voice, lyrics, iterations, curation.",
+    title: "Music & written works",
+    desc: "Document lyrics, prose, poetry, scripts, creative direction, and revisions.",
     color: "#06B6D4",
   },
   {
     icon: <Shield className="w-5 h-5" />,
     title: "Verifiable Record",
-    desc: "Your creative decisions are hashed and anchored on Guapcoin. Immutable proof.",
+    desc: "Export your decisions as JSON. Optional anchoring records a fingerprint when the service is configured.",
     color: "#8B5CF6",
   },
   {
     icon: <Zap className="w-5 h-5" />,
     title: "IPFS Pinned",
-    desc: "The full HAP record is pinned to IPFS. Content-addressed and permanent.",
+    desc: "Optional public storage on IPFS. Availability depends on continued pinning.",
     color: "#10B981",
   },
 ];
@@ -40,7 +40,7 @@ export default function StudioPage() {
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-8 font-mono text-xs"
             style={{ background: "rgba(6,182,212,0.08)", border: "1px solid rgba(6,182,212,0.2)", color: "#06B6D4" }}>
             <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-            HAP Studio - Music Domain
+            HAP Studio - Music & written works
           </div>
 
           <h1 className="text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
@@ -50,8 +50,7 @@ export default function StudioPage() {
           </h1>
 
           <p className="text-lg text-slate-400 mb-12 max-w-2xl mx-auto leading-relaxed">
-            Log the human decisions behind your AI-assisted track. Get a verifiable HAP record,
-            an HCS score, and an on-chain anchor — in under 5 minutes.
+            Log the decisions behind your writing or music. Generate a structured record of your process and review the information before choosing whether to publish it.
           </p>
 
           <Link
@@ -89,7 +88,7 @@ export default function StudioPage() {
           {/* Steps preview */}
           <div className="mt-16 glass rounded-2xl p-8 text-left"
             style={{ border: "1px solid rgba(6,182,212,0.15)" }}>
-            <p className="text-xs font-mono text-cyan-400/70 tracking-widest uppercase mb-6">5 steps · ~5 minutes</p>
+            <p className="text-xs font-mono text-cyan-400/70 tracking-widest uppercase mb-6">Music: 5 steps · Written works: 4 steps</p>
             <div className="flex flex-col sm:flex-row gap-3">
               {["Recipe", "Voice", "Inputs", "Iteration", "Curation"].map((step, i) => (
                 <div key={step} className="flex items-center gap-2 flex-1">

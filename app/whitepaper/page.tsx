@@ -27,6 +27,20 @@ type Section = {
 
 const sections: Section[] = [
   {
+    id: "implementation-status",
+    number: "00",
+    title: "Implementation status & reading this proposal",
+    color: "#b7c9a5",
+    callout: "HAP currently records declarations. It does not independently verify the person, the source material, or the claimed creative contribution.",
+    content: "This whitepaper combines an implemented prototype with proposed infrastructure. Studio supports music and written works; the API also accepts visual-art records. Dispute resolution, collaboration agreements, identity verification, C2PA integration, and marketplaces are design proposals, not deployed capabilities. Examples below are illustrative, not evidence of completed registrations or disputes.",
+    subsections: [
+      { title: "Written works in the current implementation", body: "Use the written_content profile for essays, fiction, poetry, scripts, and articles. Record the outline and narrative tone in recipe; original passages in inputs.text; editorial decisions and tool use in inputs.note; purpose in inputs.intent; and draft decisions in iterations. Select the final work in curation. inputs.lyrics remains supported for existing music clients. Written works use an empty voice identifier and empty permissions because a narrative voice is not a licensed vocal model." },
+      { title: "How to interpret HCS", body: "The current engine scores field presence, text length, iteration count, and selection status. It does not assess originality, substantive effort, or the proportion of human-written language. The inherited tier names are heuristic labels, not verified classifications. The v2.1 weights remain unchanged for compatibility: writing retains a 5% voice allocation and the recipe rubric still rewards music metadata. Without voice or music fields, a fully documented writing record reaches at most 0.89. Scores across domains should not be compared. A future version should separate documentation coverage from independently reviewed contribution and normalize only applicable fields." },
+      { title: "Integrity and publication", body: "Record fingerprints now recursively sort object keys while preserving array order and nested values. Earlier prototype hashes used a top-level key whitelist that could omit nested creative decisions; those anchors must not be treated as protecting the full record. Keep their original bytes and identify their legacy hash method when verifying. New hashes cover the exact JSON snapshot, so adding IPFS or anchor metadata changes the digest. Public IPFS pinning exposes the full record, including draft text; availability depends on continued hosting. Optional pinning and anchoring require configured services." },
+      { title: "Next protocol revision", body: "Prioritize a versioned evidence model: original and final artifact digests, parent draft links, contributor roles, declared AI tools and operations, and signed attestations. Store scoring and canonicalization versions alongside the result. Preserve confidential drafts off-chain and publish only chosen evidence or commitments. Add authenticated, rate-limited anchoring, an idempotent publication flow, and schema conformance tests before treating the prototype as production infrastructure." },
+    ],
+  },
+  {
     id: "abstract",
     number: "00",
     title: "Abstract",
@@ -455,7 +469,7 @@ const sections: Section[] = [
       {
         number: "06",
         title: "On-Chain Anchoring",
-        body: "1. Canonical JSON hashed: sha256:9f86d081...\n2. Hash + wallet + timestamp written to Polygon smart contract\n3. Transaction hash: 0xdef456...\n4. Complete record uploaded to IPFS\n\nEstablished: Permanent, publicly verifiable proof of authorship  -  tamper-evident and independently verifiable.",
+        body: "1. Canonical JSON hashed: sha256:9f86d081...\n2. Hash + wallet + timestamp written to Polygon smart contract\n3. Transaction hash: 0xdef456...\n4. Complete record uploaded to IPFS\n\nIllustrated: A timestamped record fingerprint, not independently verified authorship  -  tamper-evident and independently verifiable.",
       },
       {
         number: "07",
@@ -474,7 +488,7 @@ const sections: Section[] = [
     number: "15",
     title: "Formal Schema Specification",
     color: "#06B6D4",
-    content: "HAP v2.1 defines three canonical JSON schemas. Full machine-readable JSON Schema 2020-12 specifications are available at haphuman.xyz/schemas/v2.1/",
+    content: "HAP v2.1 defines three canonical JSON schemas. The implemented authorship JSON Schema is available at /api/v1/schemas. The dispute and collaboration schemas below are proposals.",
     subsections: [
       {
         title: "15.1 Authorship Record Schema",
@@ -489,7 +503,7 @@ const sections: Section[] = [
   "properties": {
     "hap_version": { "type": "string", "const": "2.1" },
     "record_id": { "type": "string" },
-    "domain_profile": { "enum": ["music","visual_art","written_content","custom"] },
+    "domain_profile": { "enum": ["music","visual_art","written_content"] },
     "contribution_score": { "type": "number", "minimum": 0, "maximum": 1 },
     "hcs_tier": {
       "enum": ["primary_human_authorship","collaborative_authorship",
@@ -799,7 +813,7 @@ export default function WhitepaperPage() {
             A technical framework for defining, measuring, and verifying human creative contribution within AI-assisted works  -  including legal considerations, dispute resolution, blockchain architecture, and C2PA integration.
           </p>
           <div className="flex flex-wrap gap-3">
-            {[["Published", "2026"], ["Version", "2.1"], ["Status", "Open Standard"], ["Author", "Aquarius Maximus"]].map(([k, v]) => (
+            {[["Published", "2026"], ["Version", "2.1"], ["Status", "Prototype / proposal"], ["Author", "Aquarius Maximus"]].map(([k, v]) => (
               <div key={k} className="glass rounded-xl px-4 py-2 text-xs font-mono">
                 <span className="text-slate-600">{k}: </span>
                 <span className="text-slate-300">{v}</span>

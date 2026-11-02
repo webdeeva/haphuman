@@ -13,6 +13,8 @@ const STEPS = [
 
 interface Props {
   currentStep: number;
+  stepLabels?: string[];
+  visibleSteps?: number[];
   children: React.ReactNode;
   onBack?: () => void;
   onNext?: () => void;
@@ -23,6 +25,8 @@ interface Props {
 
 export default function WizardShell({
   currentStep,
+  stepLabels,
+  visibleSteps = [0, 1, 2, 3, 4],
   children,
   onBack,
   onNext,
@@ -30,7 +34,8 @@ export default function WizardShell({
   nextDisabled,
   isFinalStep,
 }: Props) {
-  const step = STEPS[currentStep];
+  const steps = STEPS.map((s, i) => ({ ...s, label: stepLabels?.[i] ?? s.label }));
+  const step = steps[currentStep];
 
   return (
     <div className="min-h-screen bg-bg-primary text-white">
@@ -39,7 +44,8 @@ export default function WizardShell({
       <div className="relative max-w-3xl mx-auto px-6 pt-10 pb-24">
         {/* Step indicators */}
         <div className="flex items-center gap-2 mb-10">
-          {STEPS.map((s, i) => {
+          {visibleSteps.map((i, position) => {
+            const s = steps[i];
             const done = i < currentStep;
             const active = i === currentStep;
             return (
@@ -53,14 +59,14 @@ export default function WizardShell({
                       color: done ? "#000" : active ? s.color : "#475569",
                     }}
                   >
-                    {done ? <Check size={12} /> : i + 1}
+                    {done ? <Check size={12} /> : position + 1}
                   </motion.div>
                   <span className="text-[10px] font-mono hidden sm:block"
                     style={{ color: active ? s.color : done ? "#64748b" : "#334155" }}>
                     {s.label}
                   </span>
                 </div>
-                {i < STEPS.length - 1 && (
+                {position < visibleSteps.length - 1 && (
                   <div className="flex-1 h-px mb-5"
                     style={{ background: i < currentStep ? STEPS[i].color : "rgba(255,255,255,0.06)" }} />
                 )}
@@ -72,7 +78,7 @@ export default function WizardShell({
         {/* Step label */}
         <div className="mb-6">
           <span className="text-xs font-mono tracking-widest uppercase" style={{ color: step.color }}>
-            Step {currentStep + 1} of {STEPS.length}
+            Step {visibleSteps.indexOf(currentStep) + 1} of {visibleSteps.length}
           </span>
           <h2 className="text-2xl font-bold text-white mt-1">{step.label}</h2>
         </div>

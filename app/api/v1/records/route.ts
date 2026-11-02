@@ -26,10 +26,11 @@ const schema = z.object({
     constraints: z.array(z.string()).default([]),
   }),
   voice: z.object({
-    voice_id: z.string().min(1),
+    voice_id: z.string(),
     voice_permissions: voicePermissionsSchema,
   }),
   inputs: z.object({
+    text: z.string().optional(),
     lyrics: z.string().optional(),
     note: z.string().optional(),
     intent: z.string().optional(),
@@ -48,6 +49,10 @@ const schema = z.object({
   }).default({ decision: "primary_keep" }),
   owner_identity: z.string().optional(),
   pin_to_ipfs: z.boolean().default(false),
+}).superRefine((data, ctx) => {
+  if (data.domain_profile === "music" && !data.voice.voice_id.trim()) {
+    ctx.addIssue({ code: "custom", path: ["voice", "voice_id"], message: "A voice identifier is required for the music profile." });
+  }
 });
 
 export async function POST(req: NextRequest) {

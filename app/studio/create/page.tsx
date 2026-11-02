@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { WritingBrief, WritingInputs } from "@/components/studio/steps/WritingStep";
 import { ArrowLeft } from "lucide-react";
 import WizardShell from "@/components/studio/WizardShell";
 import RecipeStep from "@/components/studio/steps/RecipeStep";
@@ -21,7 +23,10 @@ const INITIAL_STATE: StudioState = {
   curation: { decision: "primary_keep" },
 };
 
-export default function CreatePage() {
+function CreateWizard() {
+  const searchParams = useSearchParams();
+  const [domain, setDomain] = useState<"music" | "written_content">(searchParams.get("domain") === "written_content" ? "written_content" : "music");
+  const writing = domain === "written_content";
   const [state, setState] = useState<StudioState>(INITIAL_STATE);
   const [record, setRecord] = useState<HAPRecord | null>(null);
   const [loading, setLoading] = useState(false);
@@ -36,7 +41,7 @@ export default function CreatePage() {
 
   const canAdvance = () => {
     if (state.step === 0) return !!state.recipe.style;
-    if (state.step === 1) return !!state.voice.voice_id;
+    if (state.step === 1) return writing || !!state.voice.voice_id;
     return true;
   };
 
@@ -45,9 +50,9 @@ export default function CreatePage() {
     setError(null);
     try {
       const body = {
-        domain_profile: "music",
+        domain_profile: domain,
         recipe: state.recipe,
-        voice: state.voice,
+        voice: writing ? { voice_id: "", voice_permissions: { licensed_uses: [], prohibited_uses: [], expiry: "", revocable: false } } : state.voice,
         inputs: state.inputs,
         iterations: state.iterations,
         curation: state.curation,
@@ -157,10 +162,12 @@ export default function CreatePage() {
 
       <WizardShell
         currentStep={state.step}
-        onBack={state.step > 0 ? () => set("step", state.step - 1) : undefined}
+        stepLabels={writing ? ["Writing brief", "Voice (not applicable)", "Original writing", "Draft history", "Final selection"] : undefined}
+        visibleSteps={writing ? [0, 2, 3, 4] : undefined}
+        onBack={state.step > 0 ? () => set("step", writing && state.step === 2 ? 0 : state.step - 1) : undefined}
         onNext={
           state.step < 4
-            ? () => set("step", state.step + 1)
+            ? () => set("step", writing && state.step === 0 ? 2 : state.step + 1)
             : submit
         }
         onNextLabel={
@@ -179,13 +186,13 @@ export default function CreatePage() {
         )}
 
         {state.step === 0 && (
-          <RecipeStep value={state.recipe} onChange={(v) => set("recipe", v)} />
+          <div className="space-y-7"><label className="block space-y-2"><span className="text-sm">What are you documenting?</span><select aria-label="Work type" className="w-full bg-slate-900 border border-slate-600 rounded-lg p-3" value={domain} onChange={e => { setDomain(e.target.value as typeof domain); setState(INITIAL_STATE); }}><option value="music">Music & sound</option><option value="written_content">Written work</option></select></label>{writing ? <WritingBrief value={state.recipe} onChange={v => set("recipe", v)} /> : <RecipeStep value={state.recipe} onChange={(v) => set("recipe", v)} />}</div>
         )}
         {state.step === 1 && (
           <VoiceStep value={state.voice} onChange={(v) => set("voice", v)} />
         )}
         {state.step === 2 && (
-          <InputsStep value={state.inputs} onChange={(v) => set("inputs", v)} />
+          writing ? <WritingInputs value={state.inputs} onChange={v => set("inputs", v)} /> : <InputsStep value={state.inputs} onChange={(v) => set("inputs", v)} />
         )}
         {state.step === 3 && (
           <IterationStep value={state.iterations} onChange={(v) => set("iterations", v)} />
@@ -200,4 +207,8 @@ export default function CreatePage() {
       </WizardShell>
     </>
   );
+}
+
+export default function CreatePage() {
+  return <Suspense fallback={<p className="p-10">Loading Studio…</p>}><CreateWizard /></Suspense>;
 }

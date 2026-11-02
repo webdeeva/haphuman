@@ -50,7 +50,7 @@ function voicePresence(voice: HAPRecord["voice"]): number {
 
 function inputsPresence(inputs: HAPRecord["inputs"]): number {
   let score = 0;
-  if ((inputs.lyrics ?? "").length > 20) score += 0.5;
+  if ((inputs.text ?? inputs.lyrics ?? "").trim().length > 20) score += 0.5;
   if ((inputs.note ?? "").length > 10) score += 0.3;
   if (inputs.intent) score += 0.2;
   return Math.min(score, 1);

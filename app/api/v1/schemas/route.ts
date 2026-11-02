@@ -40,7 +40,7 @@ const AUTHORSHIP_SCHEMA = {
           "properties": {
             "licensed_uses": { "type": "array", "items": { "type": "string" } },
             "prohibited_uses": { "type": "array", "items": { "type": "string" } },
-            "expiry": { "type": "string", "format": "date-time" },
+            "expiry": { "type": "string", "description": "ISO 8601 expiry, or empty when no voice is used." },
             "revocable": { "type": "boolean" }
           }
         }
@@ -49,6 +49,7 @@ const AUTHORSHIP_SCHEMA = {
     "inputs": {
       "type": "object",
       "properties": {
+        "text": { "type": "string", "description": "Original writing supplied by the creator." },
         "lyrics": { "type": "string" },
         "note": { "type": "string" },
         "intent": { "type": "string" }

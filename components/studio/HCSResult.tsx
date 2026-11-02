@@ -24,7 +24,7 @@ const SEGMENT_COLORS: Record<string, string> = {
   curation: "#EC4899",
 };
 
-function MiniRing({ score }: { score: number }) {
+function MiniRing({ score, tier }: { score: number; tier: HAPRecord["hcs_tier"] }) {
   const size = 160;
   const stroke = 12;
   const radius = (size - stroke) / 2;
@@ -37,12 +37,12 @@ function MiniRing({ score }: { score: number }) {
         <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth={stroke} />
         <motion.circle
           cx={size / 2} cy={size / 2} r={radius} fill="none"
-          stroke={tierColor(record.hcs_tier ?? "ai_generated")}
+          stroke={tierColor(tier)}
           strokeWidth={stroke} strokeLinecap="round"
           initial={{ strokeDasharray: `0 ${circumference}` }}
           animate={{ strokeDasharray: `${filled} ${circumference}` }}
           transition={{ duration: 1.2, ease: "easeOut" }}
-          style={{ filter: `drop-shadow(0 0 6px ${tierColor(record.hcs_tier ?? "ai_generated")}80)` }}
+          style={{ filter: `drop-shadow(0 0 6px ${tierColor(tier)}80)` }}
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
@@ -52,7 +52,7 @@ function MiniRing({ score }: { score: number }) {
           transition={{ delay: 0.8 }}
           className="text-3xl font-bold font-mono gradient-text"
         >
-          {Math.round(score * 100)}%
+          {score.toFixed(2)}
         </motion.div>
         <div className="text-[10px] font-mono text-slate-500 mt-0.5">HCS</div>
       </div>
@@ -60,11 +60,8 @@ function MiniRing({ score }: { score: number }) {
   );
 }
 
-// Need to declare record at module level for MiniRing
-let record: HAPRecord;
 
 export default function HCSResult({ record: r, onAnchor, onPin, pinning, anchoring, ipfsCid, txHash }: Props) {
-  record = r;
   const [copied, setCopied] = useState(false);
   const json = JSON.stringify(r, null, 2);
 
@@ -86,12 +83,12 @@ export default function HCSResult({ record: r, onAnchor, onPin, pinning, anchori
         className="glass rounded-2xl p-6 flex flex-col sm:flex-row items-center gap-8"
         style={{ border: `1px solid ${tc}25` }}
       >
-        <MiniRing score={r.contribution_score} />
+        <MiniRing score={r.contribution_score} tier={r.hcs_tier} />
 
         <div className="flex-1 w-full">
           <div className="text-xs font-mono mb-1" style={{ color: tc }}>{r.record_id}</div>
           <div className="text-xl font-bold text-white mb-1">{tl}</div>
-          <div className="text-xs text-slate-500 font-mono mb-4">HCS {r.contribution_score.toFixed(2)} · Music Profile</div>
+          <div className="text-xs text-slate-500 font-mono mb-4">HCS {r.contribution_score.toFixed(2)} · {r.domain_profile === "written_content" ? "Written works" : r.domain_profile === "music" ? "Music" : "Visual art"} profile</div>
 
           {/* Component bars */}
           <div className="space-y-2">
@@ -116,6 +113,7 @@ export default function HCSResult({ record: r, onAnchor, onPin, pinning, anchori
         </div>
       </motion.div>
 
+      <p className="text-xs text-slate-400 leading-relaxed">HCS is a self-reported documentation heuristic, not a percentage of human authorship. Legacy tier labels do not verify identity, originality, or ownership.</p>
       {/* IPFS + Anchor actions */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -143,7 +141,7 @@ export default function HCSResult({ record: r, onAnchor, onPin, pinning, anchori
             </div>
           ) : (
             <div>
-              <p className="text-xs text-slate-500 mb-3">Pin this record to IPFS for permanent storage.</p>
+              <p className="text-xs text-slate-500 mb-3">Publish the full record to IPFS. Anyone with its CID can read it. Availability depends on continued hosting.</p>
               <button
                 onClick={onPin}
                 disabled={pinning}
@@ -170,7 +168,7 @@ export default function HCSResult({ record: r, onAnchor, onPin, pinning, anchori
           ) : (
             <div>
               <p className="text-xs text-slate-500 mb-3">
-                {ipfsCid ? "Anchor the IPFS CID on Guapcoin for immutable proof." : "Pin to IPFS first, then anchor on Guapcoin."}
+                {ipfsCid ? "Anchor the IPFS CID on Guapcoin for a timestamped integrity record." : "Pin to IPFS first, then anchor on Guapcoin."}
               </p>
               <button
                 onClick={onAnchor}

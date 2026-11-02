@@ -1,6 +1,6 @@
 // HAP v2.1 — Record factory
 
-import { createHash } from "crypto";
+import { recordDigest } from "./hash";
 import { v4 as uuidv4 } from "uuid";
 import { calculateHCS } from "./hcs";
 import type {
@@ -22,8 +22,7 @@ export function buildRecipeId(): string {
 }
 
 export function hashRecord(record: HAPRecord): string {
-  const json = JSON.stringify(record, Object.keys(record).sort());
-  return "sha256:" + createHash("sha256").update(json).digest("hex");
+  return "sha256:" + recordDigest(record);
 }
 
 export function assembleRecord(req: CreateRecordRequest): HAPRecord {

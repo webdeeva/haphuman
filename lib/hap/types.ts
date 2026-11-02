@@ -41,6 +41,7 @@ export interface HAPVoice {
 // ─── Inputs ──────────────────────────────────────────────────────────────────
 
 export interface HAPInputs {
+  text?: string; // Original prose, poetry, or script; lyrics remains supported for music.
   lyrics?: string;
   note?: string;
   intent?: string;
