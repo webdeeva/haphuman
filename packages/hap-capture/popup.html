@@ -1,0 +1,13 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>HAP Capture</title><link rel="stylesheet" href="popup.css"></head><body>
+<p class="eyebrow">HAP / CAPTURE PREVIEW</p><h1>Keep the process.</h1>
+<p>Explicit checkpoints only. Stored on this device, unencrypted. No background recording or uploads.</p>
+<label>Project title<input id="title" maxlength="300"></label><button id="start">Start project</button><p id="project"></p>
+<label>Contribution<select id="kind"><option value="source">Original source</option><option value="exchange">AI exchange</option><option value="draft">Draft</option><option value="decision">Decision / correction</option><option value="final">Final work</option><option value="gap">Missing history / capture gap</option></select></label>
+<button id="selection">Read selected text from this tab</button>
+<label>Checkpoint label<input id="label" maxlength="300"></label>
+<label>Text to preserve<textarea id="content" rows="6" maxlength="200000"></textarea></label>
+<label>Source reference<input id="reference" maxlength="2000" placeholder="Private reference or source URL"></label>
+<label>Related checkpoint numbers<input id="links" placeholder="1, 2"></label>
+<p id="origin">Evidence origin: creator declaration</p><button id="save">Save checkpoint</button><button id="export">Export evidence JSON</button>
+<p>Local times and hashes do not verify identity, originality, or a complete history. Exports include the full text.</p>
+<button id="delete">Delete local project</button><p id="status" role="status"></p><script type="module" src="popup.js"></script></body></html>

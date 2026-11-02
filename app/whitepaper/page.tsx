@@ -47,11 +47,11 @@ const sections: Section[] = [
         ],
         [
           "Optional Pinata/IPFS publication and Guapcoin anchoring when configured",
-          "Automatic source uploads, private evidence storage, or C2PA verification"
+          "Automatic source uploads, encrypted evidence storage, or C2PA verification"
         ]
       ]
     },
-    "content": "This document distinguishes current behavior from proposed infrastructure. Examples are illustrative. HAP does not generate the creative work itself; you document a process carried out with your own tools."
+    "content": "HAP Capture is a separate evidence-format 0.1 developer preview: explicit browser selections and assistant checkpoints can be exported to Studio for local hash-chain review. Storage is local and unencrypted; timestamps and capture origins are assertions, not independent attestations. The preview has no signatures or trusted timestamp receipts and does not establish completeness. This document distinguishes current behavior from proposed infrastructure. Examples are illustrative. HAP does not generate the creative work itself; you document a process carried out with your own tools."
   },
   {
     "id": "abstract",

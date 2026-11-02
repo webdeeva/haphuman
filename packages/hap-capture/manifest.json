@@ -1,0 +1,8 @@
+{
+  "manifest_version": 3,
+  "name": "HAP Capture",
+  "version": "0.1.0",
+  "description": "Save selected text and creative checkpoints locally as a portable HAP evidence history.",
+  "permissions": ["activeTab", "scripting", "storage"],
+  "action": { "default_popup": "popup.html", "default_title": "HAP Capture" }
+}

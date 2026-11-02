@@ -36,3 +36,9 @@ npm run dev
 **Co-produced with:** Claude (Anthropic)
 
 © 2025 Human Authorship Protocol
+
+### HAP Capture developer preview
+
+Capture selected browser text and creative checkpoints locally, then inspect the exported package at `/studio/evidence`. See [extension setup and evidence limitations](packages/hap-capture/README.md). The [HAP evidence skill](skills/hap-evidence/SKILL.md) provides the same workflow for assistants with local Node execution. Capture evidence format 0.1 is separate from record v2.1 and does not use the legacy authorship score.
+
+Run `node --test tests/evidence.test.mjs` for capture integrity, extension workflow, and assistant CLI checks.
