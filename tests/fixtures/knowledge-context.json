@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "domain_expertise": "Illustrative Cardology expert contributing an original interpretive framework.",
+  "sources": [
+    {
+      "title": "Example original lecture series",
+      "kind": "lecture",
+      "relationship": "own_work",
+      "reference": "private-catalog:lectures-v2",
+      "contribution": "Supplied the explanations and examples used in the chapter."
+    },
+    {
+      "title": "Example annotated knowledge base",
+      "kind": "knowledge_base",
+      "relationship": "own_work",
+      "reference": "private-catalog:knowledge-v3",
+      "contribution": "Supplied the domain definitions and cross-references."
+    }
+  ],
+  "ai_methods": ["context", "instructions"],
+  "preparation": "Organized original lectures and writings into teaching material and instructions.",
+  "ai_system": "Claude (illustrative example; model version unspecified)",
+  "human_role": "Developed the framework, supplied sources, co-wrote interpretations, and approved the final chapter.",
+  "ai_role": "Proposed organization and draft transitions from the supplied material, revised with expert direction."
+}

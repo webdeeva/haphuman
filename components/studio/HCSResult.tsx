@@ -1,5 +1,6 @@
 "use client";
 
+import KnowledgeSummary from "./KnowledgeSummary";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Copy, Check, ExternalLink, Loader2, Shield, Zap } from "lucide-react";
@@ -76,6 +77,7 @@ export default function HCSResult({ record: r, onAnchor, onPin, pinning, anchori
 
   return (
     <div className="space-y-6">
+      {r.inputs.knowledge_context && <KnowledgeSummary context={r.inputs.knowledge_context} />}
       {/* Score + tier */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -87,7 +89,7 @@ export default function HCSResult({ record: r, onAnchor, onPin, pinning, anchori
 
         <div className="flex-1 w-full">
           <div className="text-xs font-mono mb-1" style={{ color: tc }}>{r.record_id}</div>
-          <div className="text-xl font-bold text-white mb-1">{tl}</div>
+          <div className="text-xl font-bold text-white mb-1">{r.inputs.knowledge_context ? "Legacy HCS · partial view" : tl}</div>
           <div className="text-xs text-slate-500 font-mono mb-4">HCS {r.contribution_score.toFixed(2)} · {r.domain_profile === "written_content" ? "Written works" : r.domain_profile === "music" ? "Music" : "Visual art"} profile</div>
 
           {/* Component bars */}
@@ -113,7 +115,7 @@ export default function HCSResult({ record: r, onAnchor, onPin, pinning, anchori
         </div>
       </motion.div>
 
-      <p className="text-xs text-slate-400 leading-relaxed">HCS is a self-reported documentation heuristic, not a percentage of human authorship. Legacy tier labels do not verify identity, originality, or ownership.</p>
+      <p className="text-xs text-slate-400 leading-relaxed">HCS is a self-reported documentation heuristic, not a percentage of human authorship. It does not measure original knowledge, source material, or preparation of a knowledge base. Legacy tier labels do not verify identity, originality, or ownership.</p>
       {/* IPFS + Anchor actions */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}

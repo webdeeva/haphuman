@@ -26,3 +26,12 @@ The core idea makes sense: preserve creative decisions as structured evidence ra
 Production build and TypeScript check pass. Regression tests cover nested-content hashing, key ordering, array ordering, and original-text scoring with legacy lyrics compatibility. The landing page was visually inspected in the local browser. No IPFS content was published and no blockchain transaction was submitted.
 
 Full-repository lint reports existing errors in `ContributionScore.tsx` (render-time accumulator mutation) and `PromptFramework.tsx` (synchronous state updates in an effect). These legacy landing components are not rendered by the new homepage.
+
+
+## Knowledge-led collaboration
+
+The writing workflow now includes an optional `inputs.knowledge_context` extension, version 1.0. It captures domain expertise; original writing, datasets, lectures, knowledge bases, and training material; the creator’s relationship to each source; private references or digests; source-specific contributions; preparation work; AI methods; and human/AI roles.
+
+This addresses the expert who co-writes with Claude using their own body of Cardology knowledge, rather than starting from general model output. It does not presume the model lacked all prior knowledge of the topic or that supplying a knowledge base necessarily changed model weights. Context, retrieval, custom instructions, and fine-tuning are recorded separately.
+
+These dimensions are displayed ahead of the legacy score. HCS remains unchanged and does not classify this expanded contribution profile in the UI. The exported legacy tier remains for API compatibility and must not be treated as an assessment of knowledge contribution. A future score requires a versioned, validated methodology; counting sources or claiming expertise is not enough. Distinguish source provenance, preparation, domain judgment, and final expression without counting the same contribution several times.

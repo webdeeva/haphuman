@@ -49,6 +49,34 @@ const AUTHORSHIP_SCHEMA = {
     "inputs": {
       "type": "object",
       "properties": {
+        "knowledge_context": {
+          "type": "object",
+          "description": "Creator-declared source provenance and human/AI roles. Not included in the legacy HCS calculation.",
+          "required": ["schema_version", "sources", "ai_methods"],
+          "properties": {
+            "schema_version": { "const": "1.0" },
+            "domain_expertise": { "type": "string" },
+            "sources": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["title", "kind", "relationship"],
+                "properties": {
+                  "title": { "type": "string", "minLength": 1 },
+                  "kind": { "enum": ["original_writing", "dataset", "lecture", "knowledge_base", "training_material", "other"] },
+                  "relationship": { "enum": ["own_work", "licensed", "public_domain", "third_party"] },
+                  "reference": { "type": "string" },
+                  "contribution": { "type": "string" }
+                }
+              }
+            },
+            "ai_methods": { "type": "array", "items": { "enum": ["context", "retrieval", "instructions", "fine_tuning", "other"] } },
+            "preparation": { "type": "string" },
+            "ai_system": { "type": "string" },
+            "human_role": { "type": "string" },
+            "ai_role": { "type": "string" }
+          }
+        },
         "text": { "type": "string", "description": "Original writing supplied by the creator." },
         "lyrics": { "type": "string" },
         "note": { "type": "string" },

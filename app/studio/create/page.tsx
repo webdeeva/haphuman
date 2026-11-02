@@ -42,6 +42,7 @@ function CreateWizard() {
   const canAdvance = () => {
     if (state.step === 0) return !!state.recipe.style;
     if (state.step === 1) return writing || !!state.voice.voice_id;
+    if (writing && state.step === 2) return (state.inputs.knowledge_context?.sources ?? []).every(source => source.title.trim().length > 0);
     return true;
   };
 
@@ -162,7 +163,7 @@ function CreateWizard() {
 
       <WizardShell
         currentStep={state.step}
-        stepLabels={writing ? ["Writing brief", "Voice (not applicable)", "Original writing", "Draft history", "Final selection"] : undefined}
+        stepLabels={writing ? ["Writing brief", "Voice (not applicable)", "Writing & knowledge", "Draft history", "Final selection"] : undefined}
         visibleSteps={writing ? [0, 2, 3, 4] : undefined}
         onBack={state.step > 0 ? () => set("step", writing && state.step === 2 ? 0 : state.step - 1) : undefined}
         onNext={

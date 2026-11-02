@@ -24,3 +24,15 @@ test('writing scores original text without a vocal identity, retaining legacy ly
   assert.ok(result.score >= 0 && result.score <= 1);
   assert.deepEqual(calculateHCS({ ...record, inputs: { ...record.inputs, text: undefined, lyrics: record.inputs.text } }), result);
 });
+
+test('knowledge provenance is hash-protected without inflating the legacy score', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const context = JSON.parse(await readFile(new URL('./fixtures/knowledge-context.json', import.meta.url), 'utf8'));
+  const record = { domain_profile: 'written_content', recipe: { style: 'Nonfiction' }, voice: { voice_id: '', voice_permissions: {} }, inputs: { knowledge_context: context }, iterations: [], curation: { decision: 'primary_keep' } };
+  assert.deepEqual(calculateHCS(record), calculateHCS({ ...record, inputs: {} }), 'Legacy score must not silently claim to quantify expertise');
+  for (const change of [r => r.inputs.knowledge_context.sources[0].contribution = 'Changed source role', r => r.inputs.knowledge_context.ai_methods.push('fine_tuning'), r => r.inputs.knowledge_context.human_role = 'Different human contribution']) {
+    const edited = structuredClone(record);
+    change(edited);
+    assert.notEqual(recordDigest(record), recordDigest(edited));
+  }
+});

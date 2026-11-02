@@ -5,6 +5,8 @@ export type {
   HAPRecipe,
   HAPVoice,
   HAPInputs,
+  HAPKnowledgeSource,
+  HAPKnowledgeContext,
   HAPIteration,
   HAPCuration,
   HCSComponents,

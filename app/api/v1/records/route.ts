@@ -30,6 +30,22 @@ const schema = z.object({
     voice_permissions: voicePermissionsSchema,
   }),
   inputs: z.object({
+    knowledge_context: z.object({
+      schema_version: z.literal("1.0"),
+      domain_expertise: z.string().optional(),
+      sources: z.array(z.object({
+        title: z.string().trim().min(1),
+        kind: z.enum(["original_writing", "dataset", "lecture", "knowledge_base", "training_material", "other"]),
+        relationship: z.enum(["own_work", "licensed", "public_domain", "third_party"]),
+        reference: z.string().optional(),
+        contribution: z.string().optional(),
+      })),
+      ai_methods: z.array(z.enum(["context", "retrieval", "instructions", "fine_tuning", "other"])),
+      preparation: z.string().optional(),
+      ai_system: z.string().optional(),
+      human_role: z.string().optional(),
+      ai_role: z.string().optional(),
+    }).optional(),
     text: z.string().optional(),
     lyrics: z.string().optional(),
     note: z.string().optional(),

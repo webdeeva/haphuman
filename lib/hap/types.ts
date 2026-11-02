@@ -40,7 +40,28 @@ export interface HAPVoice {
 
 // ─── Inputs ──────────────────────────────────────────────────────────────────
 
+// Optional provenance extension. These are creator declarations, not verified claims.
+export interface HAPKnowledgeSource {
+  title: string;
+  kind: "original_writing" | "dataset" | "lecture" | "knowledge_base" | "training_material" | "other";
+  relationship: "own_work" | "licensed" | "public_domain" | "third_party";
+  reference?: string; // Private catalog ID, version, URI, or digest; no upload required.
+  contribution?: string; // What this source supplied to the resulting work.
+}
+
+export interface HAPKnowledgeContext {
+  schema_version: "1.0";
+  domain_expertise?: string;
+  sources: HAPKnowledgeSource[];
+  ai_methods: ("context" | "retrieval" | "instructions" | "fine_tuning" | "other")[];
+  preparation?: string;
+  ai_system?: string;
+  human_role?: string;
+  ai_role?: string;
+}
+
 export interface HAPInputs {
+  knowledge_context?: HAPKnowledgeContext;
   text?: string; // Original prose, poetry, or script; lyrics remains supported for music.
   lyrics?: string;
   note?: string;
